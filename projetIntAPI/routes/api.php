@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +30,9 @@ Route::put('members/edit/{id}',[MemberController::class, 'update']);
 Route::delete('members/delete/{id}',[MemberController::class, 'delete']);
 
 
-Route::get('admins',[AdminController::class, 'getAdmin']);
+Route::get('admins',[AdminController::class, 'list']);
+Route::get('admins/{id}',[AdminController::class, 'detail']);
+Route::post('admins/create',[AdminController::class, 'create']);
+Route::get('admins/edit/{id}',[AdminController::class, 'edit']);
+Route::put('admins/edit/{id}',[AdminController::class, 'update']);
+Route::delete('admins/delete/{id}',[AdminController::class, 'delete']);
