@@ -22,6 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //Route::get('members', 'App\Http\Controllers\MemberController@getMember');
 
-Route::get('member',[MemberController::class, 'getMember']);
+Route::get('members',[MemberController::class, 'list']);
+Route::get('members/{id}',[MemberController::class, 'detail']);
+Route::post('members/create',[MemberController::class, 'create']);
+Route::get('members/edit/{id}',[MemberController::class, 'edit']);
+Route::put('members/edit/{id}',[MemberController::class, 'update']);
+Route::delete('members/delete/{id}',[MemberController::class, 'delete']);
 
-Route::get('admin',[AdminController::class, 'getAdmin']);
+
+Route::get('admins',[AdminController::class, 'getAdmin']);

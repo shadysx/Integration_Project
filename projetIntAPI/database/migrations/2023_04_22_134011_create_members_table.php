@@ -8,7 +8,7 @@ class CreateMembersTable extends Migration
 {
     public function up()
     {
-        Schema::create('member', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table){
             $table->id();
             $table->string('affiliationNumber', 50)->unique();
             $table->string('lastName', 50);
