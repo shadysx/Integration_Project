@@ -8,8 +8,9 @@ class CreateMembersTable extends Migration
 {
     public function up()
     {
-        Schema::create('members', function (Blueprint $table) {
-            $table->string('affiliationNumber', 50)->primary();
+        Schema::create('member', function (Blueprint $table) {
+            $table->id();
+            $table->string('affiliationNumber', 50)->unique();
             $table->string('lastName', 50);
             $table->string('firstName', 50);
             $table->enum('gender', ['M', 'F']);
