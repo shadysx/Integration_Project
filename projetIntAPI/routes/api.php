@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,10 @@ Route::post('admins/create',[AdminController::class, 'create']);
 Route::get('admins/edit/{id}',[AdminController::class, 'edit']);
 Route::put('admins/edit/{id}',[AdminController::class, 'update']);
 Route::delete('admins/delete/{id}',[AdminController::class, 'delete']);
+
+Route::get('reservation',[ReservationController::class, 'list']);
+Route::get('reservation/{id}',[ReservationController::class, 'detail']);
+Route::post('reservation/create',[ReservationController::class, 'create']);
+Route::get('reservation/edit/{id}',[ReservationController::class, 'edit']);
+Route::put('reservation/edit/{id}',[ReservationController::class, 'update']);
+Route::delete('reservation/delete/{id}',[ReservationController::class, 'delete']);

@@ -60,7 +60,7 @@ class AdminController extends Controller
         {
             return response()->json([
                 'status' => 200,
-                'message' => "Student Created Succesfully"
+                'message' => "Admin Created Succesfully"
             ], 200);
         }
         else

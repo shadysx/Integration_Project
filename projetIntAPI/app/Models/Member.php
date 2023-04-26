@@ -36,6 +36,13 @@ class Member extends Model
         $this->attributes['password'] = bcrypt($password);
     }
 
+    public function courts()
+    {
+        return $this->belongsToMany(Court::class, 'reservation')
+            ->withPivot('date', 'starting_hour', 'member1_id', 'member2_id', 'member3_id', 'member4_id','court_id')
+            ->withTimestamps();
+    }
+
 
 
 }
