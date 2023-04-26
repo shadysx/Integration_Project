@@ -16,43 +16,41 @@ class ReservationController extends Controller
         //     echo $member->pivot->date . ' ' . $member->pivot->starting_hour . ' ' . $member->firstname . PHP_EOL;
         // }
         
-    }
-
-    
+    }    
 
     public function create(Request $request)
-    {
-        // $validator = Validator::make($request->all(), [
-        //     'affiliationNumber' => 'required|max:191',
-        //     'lastName' => 'required|max:191',
-        //     'firstName' => 'required|max:191',
-        //     'gender' => 'required|max:191',
-        //     'ranking' => 'required|max:191',
-        //     'dateOfBirth' => 'required|max:191',
-        //     'mobile' => 'required|digits:10',
-        //     'email' => 'required|max:191',
-        //     'password' => 'required|max:191',
-        //     'status' => 'required|max:191',
-        //     'street' => 'required|max:191',
-        //     'postalCode' => 'required|max:191',
-        //     'locality' => 'required|max:191',
-        // ]);
+    {             
 
-        // if($validator->fails())
-        // {
-        //     return response()->json([
-        //         'status' => 422,
-        //         'errors' => $validator->messages()
-        //     ],422);
-        // }
-        
-        
-        $reservation = Reservation::create([
+        $validator = Validator::make($request->all(), [
+            'starting_hour' => 'required',            
+            'date' => 'required',
+            'member1_id' => 'required',
+            'member2_id' => 'required',         
+            'court_id' => 'required'            
+        ]);      
 
-            //////
 
-        ]);
-        
+        if($validator->fails())
+        {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->messages()
+            ],422);
+        }
+        else
+        {
+            $reservation = Reservation::create([                
+                'starting_hour' => $request->starting_hour,
+                'ending_hour' => $request->ending_hour,
+                'date' => $request->date,
+                'member1_id' => $request->member1_id,
+                'member2_id' => $request->member2_id,
+                'member3_id' => $request->member3_id,
+                'member4_id' => $request->member4_id,
+                'court_id' => $request->court_id                
+            ]);
+        }       
+                
 
         if($reservation)
         {
@@ -114,7 +112,11 @@ class ReservationController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
-            //////////
+            'starting_hour' => 'required',            
+            'date' => 'required',
+            'member1_id' => 'required',
+            'member2_id' => 'required',         
+            'court_id' => 'required'    
         ]);
 
         if($validator->fails())
@@ -131,11 +133,15 @@ class ReservationController extends Controller
 
         if($reservation)
         {
-            $reservation->update([
-                 
-
-                //////////
-
+            $reservation->update([               
+                'starting_hour' => $request->starting_hour,
+                'ending_hour' => $request->ending_hour,
+                'date' => $request->date,
+                'member1_id' => $request->member1_id,
+                'member2_id' => $request->member2_id,
+                'member3_id' => $request->member3_id,
+                'member4_id' => $request->member4_id,
+                'court_id' => $request->court_id      
             ]);
 
 
