@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryMemberController;
 use App\Http\Controllers\ReservationController;
 
 /*
@@ -44,3 +46,17 @@ Route::post('reservation/create',[ReservationController::class, 'create']);
 Route::get('reservation/edit/{id}',[ReservationController::class, 'edit']);
 Route::put('reservation/edit/{id}',[ReservationController::class, 'update']);
 Route::delete('reservation/delete/{id}',[ReservationController::class, 'delete']);
+
+Route::get('category',[CategoryController::class, 'list']);
+Route::get('category/{id}',[CategoryController::class, 'detail']);
+Route::post('category/create',[CategoryController::class, 'create']);
+Route::get('category/edit/{id}',[CategoryController::class, 'edit']);
+Route::put('category/edit/{id}',[CategoryController::class, 'update']);
+Route::delete('category/delete/{id}',[CategoryController::class, 'delete']);
+
+Route::get('category_member',[CategoryMemberController::class, 'list']);
+Route::get('category_member/{id}',[CategoryMemberController::class, 'detail']);
+Route::post('category_member/create',[CategoryMemberController::class, 'create']);
+Route::get('category_member/edit/{id}',[CategoryMemberController::class, 'edit']);
+Route::put('category_member/edit/{id}',[CategoryMemberController::class, 'update']);
+Route::delete('category_member/delete/{id}',[CategoryMemberController::class, 'delete']);

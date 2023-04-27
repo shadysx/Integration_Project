@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\CategoryMember;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
 
-class CategoryController extends Controller
+class CategoryMemberController extends Controller
 {
     public function list() {
-        return response()->json(Category::all(), 200);
+        return response()->json(CategoryMember::all(), 200);
     }
 
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required'            
+            'member_id' => 'required',
+            'category_id' => 'required'                 
         ]);
 
         if($validator->fails())
@@ -28,14 +29,13 @@ class CategoryController extends Controller
         }
         else
         {
-            $category = Category::create([
-                'name' => $request->name,
-                'ageMin' => $request->ageMin,
-                'ageMax' => $request->ageMax
+            $categoryMember = CategoryMember::create([
+                'member_id' => $request->member_id,
+                'category_id' => $request->category_id     
             ]);
         }
 
-        if($category)
+        if($categoryMember)
         {
             return response()->json([
                 'status' => 200,
@@ -54,13 +54,13 @@ class CategoryController extends Controller
 
     public function detail($id)
     {
-        $category = Category::find($id);
+        $categoryMember = CategoryMember::find($id);
 
-        if($category)
+        if($categoryMember)
         {
             return response()->json([
                 'status' => 200,
-                'member' => $category
+                'member' => $categoryMember
             ]);
         }
         else
@@ -74,13 +74,13 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $category = Category::find($id);
+        $categoryMember = CategoryMember::find($id);
 
-        if($category)
+        if($categoryMember)
         {
             return response()->json([
                 'status' => 200,
-                'member' => $category
+                'member' => $categoryMember
             ]);
         }
         else
@@ -95,7 +95,8 @@ class CategoryController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => $request->name
+            'member_id' => 'required',
+            'category_id' => 'required'
         ]);
 
         if($validator->fails())
@@ -107,15 +108,14 @@ class CategoryController extends Controller
         }
         else
         {
-            $category = Category::find($id);            
+            $categoryMember = CategoryMember::find($id);            
         }
 
-        if($category)
+        if($categoryMember)
         {
-            $category->update([
-                'name' => $request->name,
-                'ageMin' => $request->ageMin,
-                'ageMax' => $request->ageMax
+            $categoryMember->update([
+                'member_id' => $request->member_id,
+                'category_id' => $request->category_id    
             ]);
 
 
@@ -136,11 +136,11 @@ class CategoryController extends Controller
 
     public function delete($id)
     {
-        $category = Category::find($id);
+        $categoryMember = CategoryMember::find($id);
 
-        if($category)
+        if($categoryMember)
         {
-            $category->delete();
+            $categoryMember->delete();
 
             return response()->json([
                 'status' => 200,

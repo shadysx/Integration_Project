@@ -20,17 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('member2_id');
             $table->unsignedBigInteger('member3_id')->nullable();
             $table->unsignedBigInteger('member4_id')->nullable();
-            $table->unsignedBigInteger('court_id');
+            $table->unsignedBigInteger('court_id');          
 
-            // $table->foreignId('member_id')->constrained()->onDelete('cascade');
-            // $table->foreignId('court_id')->constrained()->onDelete('cascade');
-            // $table->foreignId('member_id_1')->constrained()->onDelete('cascade');
-            // $table->foreignId('member_id_2')->constrained()->onDelete('cascade');
-            // $table->foreignId('member_id_3')->constrained()->onDelete('cascade');
-            // $table->foreignId('member_id_4')->constrained()->onDelete('cascade');
-                     
-            $table->unique(['id', 'court_id', 'date', 'starting_hour']);
-            
+            $table->unique(['id', 'court_id', 'date', 'starting_hour']);     
+                   
             $table->foreign('court_id')->references('id')->on('courts')->onDelete('cascade');
             $table->foreign('member1_id')->references('id')->on('members')->onDelete('cascade');
             $table->foreign('member2_id')->references('id')->on('members')->onDelete('cascade');
