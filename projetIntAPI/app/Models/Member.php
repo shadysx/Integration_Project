@@ -43,6 +43,13 @@ class Member extends Model
             ->withTimestamps();
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_member')
+            ->withPivot('member_id','category_id')
+            ->withTimestamps();
+    }
+
 
 
 }

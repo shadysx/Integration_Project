@@ -16,4 +16,11 @@ class Category extends Model
         'ageMin',
         'ageMax'
     ];
+
+    public function members()
+    {
+        return $this->belongsToMany(Member::class, 'members')
+            ->withPivot('member_id','category_id')
+            ->withTimestamps();
+    }
 }
