@@ -17,10 +17,10 @@ class Category extends Model
         'ageMax'
     ];
 
-    public function members()
+
+    //Working
+    public function users()
     {
-        return $this->belongsToMany(Member::class, 'members')
-            ->withPivot('member_id','category_id')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class);
     }
 }

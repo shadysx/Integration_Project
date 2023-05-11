@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class CategoryController extends Controller
 {
     public function list() {
-        return response()->json(Category::all(), 200);
+        return response()->json(Category::with('users')->get(), 200);
     }
 
     public function create(Request $request)

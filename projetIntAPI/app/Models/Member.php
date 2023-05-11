@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Member extends Model
+class Member extends Model implements JWTSubject
 {
     use HasFactory;
 
@@ -27,6 +28,16 @@ class Member extends Model
         'locality'
     ];
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
     protected $dates = ['dateOfBirth'];
 
     protected $hidden = ['password'];
@@ -38,15 +49,15 @@ class Member extends Model
 
     public function courts()
     {
-        return $this->belongsToMany(Court::class, 'reservation')
-            ->withPivot('date', 'starting_hour', 'member1_id', 'member2_id', 'member3_id', 'member4_id','court_id')
+        return $this->belongsToMany(Court::class, 'reservations')
+            ->withPivot('date', 'starting_hour', 'user1_id', 'user2_id', 'user3_id', 'user_4','court_id')
             ->withTimestamps();
     }
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_member')
-            ->withPivot('member_id','category_id')
+        return $this->belongsToMany(Category::class, 'category_user')
+            ->withPivot('user_id','category_id')
             ->withTimestamps();
     }
 

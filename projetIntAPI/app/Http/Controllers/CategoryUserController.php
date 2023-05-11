@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CategoryMember;
+use App\Models\CategoryUser;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
 
-class CategoryMemberController extends Controller
+class CategoryUserController extends Controller
 {
     public function list() {
-        return response()->json(CategoryMember::all(), 200);
+        return response()->json(CategoryUser::all(), 200);
     }
 
     public function create(Request $request)
@@ -29,7 +29,7 @@ class CategoryMemberController extends Controller
         }
         else
         {
-            $categoryMember = CategoryMember::create([
+            $categoryMember = CategoryUser::create([
                 'member_id' => $request->member_id,
                 'category_id' => $request->category_id     
             ]);
@@ -54,7 +54,7 @@ class CategoryMemberController extends Controller
 
     public function detail($id)
     {
-        $categoryMember = CategoryMember::find($id);
+        $categoryMember = CategoryUser::find($id);
 
         if($categoryMember)
         {
@@ -74,7 +74,7 @@ class CategoryMemberController extends Controller
 
     public function edit($id)
     {
-        $categoryMember = CategoryMember::find($id);
+        $categoryMember = CategoryUser::find($id);
 
         if($categoryMember)
         {
@@ -108,7 +108,7 @@ class CategoryMemberController extends Controller
         }
         else
         {
-            $categoryMember = CategoryMember::find($id);            
+            $categoryMember = CategoryUser::find($id);            
         }
 
         if($categoryMember)
@@ -136,7 +136,7 @@ class CategoryMemberController extends Controller
 
     public function delete($id)
     {
-        $categoryMember = CategoryMember::find($id);
+        $categoryMember = CategoryUser::find($id);
 
         if($categoryMember)
         {

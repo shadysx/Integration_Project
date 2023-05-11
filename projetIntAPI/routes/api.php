@@ -4,9 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryMemberController;
+use App\Http\Controllers\CourtController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +43,13 @@ Route::get('admins/edit/{id}',[AdminController::class, 'edit']);
 Route::put('admins/edit/{id}',[AdminController::class, 'update']);
 Route::delete('admins/delete/{id}',[AdminController::class, 'delete']);
 
+Route::get('users',[UserController::class, 'list']);
+Route::get('users/{id}',[UserController::class, 'detail']);
+Route::post('users/create',[UserController::class, 'create']);
+Route::get('users/edit/{id}',[UserController::class, 'edit']);
+Route::put('users/edit/{id}',[UserController::class, 'update']);
+Route::delete('users/delete/{id}',[UserController::class, 'delete']);
+
 Route::get('reservation',[ReservationController::class, 'list']);
 Route::get('reservation/{id}',[ReservationController::class, 'detail']);
 Route::post('reservation/create',[ReservationController::class, 'create']);
@@ -60,3 +70,8 @@ Route::post('category_member/create',[CategoryMemberController::class, 'create']
 Route::get('category_member/edit/{id}',[CategoryMemberController::class, 'edit']);
 Route::put('category_member/edit/{id}',[CategoryMemberController::class, 'update']);
 Route::delete('category_member/delete/{id}',[CategoryMemberController::class, 'delete']);
+
+Route::post('auth/login',[AuthController::class, 'login']);
+Route::post('auth/register',[AuthController::class, 'register']);
+
+Route::get('courts',[CourtController::class, 'list']);

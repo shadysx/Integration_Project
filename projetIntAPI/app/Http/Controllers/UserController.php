@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Member;
 
-
-class MemberController extends Controller
+class UserController extends Controller
 {
     public function list() {
-        return response()->json(Member::with("categories")->get(), 200);
+        return response()->json(User::with('courts')->get(), 200);
     }
 
     public function create(Request $request)
@@ -40,7 +39,7 @@ class MemberController extends Controller
         }
         else
         {
-            $member = Member::create([
+            $member = User::create([
                 'affiliationNumber'=> $request->affiliationNumber,  
                 'lastName' => $request->lastName, 
                 'firstName'=> $request->firstName, 
@@ -76,7 +75,7 @@ class MemberController extends Controller
 
     public function detail($id)
     {
-        $member = Member::find($id);
+        $member = User::find($id);
 
         if($member)
         {
@@ -89,14 +88,14 @@ class MemberController extends Controller
         {
             return response()->json([
                 'status' => 404,
-                'message' => "No such Member Found"
+                'message' => "No such User Found"
             ],404);
         }
     }
 
     public function edit($id)
     {
-        $member = Member::find($id);
+        $member = User::find($id);
 
         if($member)
         {
@@ -109,7 +108,7 @@ class MemberController extends Controller
         {
             return response()->json([
                 'status' => 404,
-                'message' => "No such Member Found"
+                'message' => "No such User Found"
             ],404);
         }
     }
@@ -141,7 +140,7 @@ class MemberController extends Controller
         }
         else
         {
-            $member = Member::find($id);            
+            $member = User::find($id);            
         }
 
         if($member)
@@ -180,7 +179,7 @@ class MemberController extends Controller
 
     public function delete($id)
     {
-        $member = Member::find($id);
+        $member = User::find($id);
 
         if($member)
         {
@@ -199,5 +198,4 @@ class MemberController extends Controller
             ], 404);
         }
     }
-
 }
