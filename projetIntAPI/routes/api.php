@@ -50,19 +50,19 @@ Route::get('users/edit/{id}',[UserController::class, 'edit']);
 Route::put('users/edit/{id}',[UserController::class, 'update']);
 Route::delete('users/delete/{id}',[UserController::class, 'delete']);
 
-Route::get('reservation',[ReservationController::class, 'list']);
-Route::get('reservation/{id}',[ReservationController::class, 'detail']);
-Route::post('reservation/create',[ReservationController::class, 'create']);
-Route::get('reservation/edit/{id}',[ReservationController::class, 'edit']);
-Route::put('reservation/edit/{id}',[ReservationController::class, 'update']);
-Route::delete('reservation/delete/{id}',[ReservationController::class, 'delete']);
+Route::get('reservations',[ReservationController::class, 'list']);
+Route::get('reservations/{id}',[ReservationController::class, 'detail']);
+Route::post('reservations/create',[ReservationController::class, 'create']);
+Route::get('reservations/edit/{id}',[ReservationController::class, 'edit']);
+Route::put('reservations/edit/{id}',[ReservationController::class, 'update']);
+Route::delete('reservations/delete/{id}',[ReservationController::class, 'delete']);
 
-Route::get('category',[CategoryController::class, 'list']);
-Route::get('category/{id}',[CategoryController::class, 'detail']);
-Route::post('category/create',[CategoryController::class, 'create']);
-Route::get('category/edit/{id}',[CategoryController::class, 'edit']);
-Route::put('category/edit/{id}',[CategoryController::class, 'update']);
-Route::delete('category/delete/{id}',[CategoryController::class, 'delete']);
+Route::get('categories',[CategoryController::class, 'list']);
+Route::get('categories/{id}',[CategoryController::class, 'detail']);
+Route::post('categories/create',[CategoryController::class, 'create']);
+Route::get('categories/edit/{id}',[CategoryController::class, 'edit']);
+Route::put('categories/edit/{id}',[CategoryController::class, 'update']);
+Route::delete('categories/delete/{id}',[CategoryController::class, 'delete']);
 
 Route::get('category_member',[CategoryMemberController::class, 'list']);
 Route::get('category_member/{id}',[CategoryMemberController::class, 'detail']);

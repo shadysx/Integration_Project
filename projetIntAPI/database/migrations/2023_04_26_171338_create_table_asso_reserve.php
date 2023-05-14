@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('court_user', function (Blueprint $table) {     
+        Schema::create('reservations', function (Blueprint $table) {     
             $table->id();                 
             $table->time('starting_hour');
             $table->time('ending_hour');

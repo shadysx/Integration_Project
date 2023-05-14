@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 use App\Models\Court;
-use App\Models\CourtUser;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
 
-class CourtUserController extends Controller
+class ReservationController extends Controller
 {
     public function list() {
 
-        return response()->json(CourtUser::all(), 200);
+        return response()->json(Reservation::all(), 200);
         // foreach ($court->members as $member) {
         //     echo $member->pivot->date . ' ' . $member->pivot->starting_hour . ' ' . $member->firstname . PHP_EOL;
         // }
@@ -39,7 +39,7 @@ class CourtUserController extends Controller
         }
         else
         {
-            $reservation = CourtUser::create([                
+            $reservation = Reservation::create([                
                 'starting_hour' => $request->starting_hour,
                 'ending_hour' => $request->ending_hour,
                 'date' => $request->date,
@@ -56,7 +56,7 @@ class CourtUserController extends Controller
         {
             return response()->json([
                 'status' => 200,
-                'message' => "CourtUser Created Succesfully"
+                'message' => "Reservation Created Succesfully"
             ], 200);
         }
         else
@@ -71,7 +71,7 @@ class CourtUserController extends Controller
 
     public function detail($id)
     {
-        $reservation = CourtUser::find($id);
+        $reservation = Reservation::find($id);
 
         if($reservation)
         {
@@ -84,14 +84,14 @@ class CourtUserController extends Controller
         {
             return response()->json([
                 'status' => 404,
-                'message' => "No such CourtUser Found"
+                'message' => "No such Reservation Found"
             ],404);
         }
     }
 
     public function edit($id)
     {
-        $reservation = CourtUser::find($id);
+        $reservation = Reservation::find($id);
 
         if($reservation)
         {
@@ -128,7 +128,7 @@ class CourtUserController extends Controller
         }
         else
         {
-            $reservation = CourtUser::find($id);            
+            $reservation = Reservation::find($id);            
         }
 
         if($reservation)
@@ -147,7 +147,7 @@ class CourtUserController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => "CourtUser Updated Succesfully"
+                'message' => "Reservation Updated Succesfully"
             ], 200);
         }
         else
@@ -162,7 +162,7 @@ class CourtUserController extends Controller
 
     public function delete($id)
     {
-        $reservation = CourtUser::find($id);
+        $reservation = Reservation::find($id);
 
         if($reservation)
         {
