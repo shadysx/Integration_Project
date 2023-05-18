@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public function list() {
-        return response()->json(User::with('courts')->get(), 200);
+        return response()->json(User::all(), 200);
     }
 
     public function create(Request $request)
