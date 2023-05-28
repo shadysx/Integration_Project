@@ -3,32 +3,25 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {
+  BrowserRouter,
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import HomeView from './View/HomeView/HomeView';
 import LoginView from './View/LoginView/LoginView';
 import { AuthProvider } from './contexts/AuthContext';
+import RootNavigation from './routes/RootNavigation';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomeView />,
-  },
-  {
-    path: "/login",
-    element: <LoginView/>
-  }
-]);
-
 root.render(
-  <AuthProvider>
-    <RouterProvider router={router} />
-  </AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <RootNavigation />
+    </AuthProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

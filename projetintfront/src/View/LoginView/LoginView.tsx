@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './LoginView.css'; // Import the CSS file
+import { AuthContext } from '../../contexts/AuthContext';
 
 const LoginView = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const { login } = useContext(AuthContext)
+
   const handleSubmit = (event) => {
     // Prevent refresh
     event.preventDefault();
     console.log(username, password)
+    login();
 
     // Perform login logic here, such as sending the username and password to a server
 
