@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CaterogyService } from '../services/CategoryService'
+import { Category } from './Interfaces/Interface';
 
 function Test() {
-  let categoryService = new CaterogyService()
+
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const FetchCategories = async () => {
+      const categoryService = new CaterogyService();
+      const fetchedCategories: Category[] = await categoryService.FetchCategories();
+      setCategories(fetchedCategories);
+    }
+    FetchCategories();
+  },[])
+
   return (
     <>
-      <div>{"Jambon"}</div>
-      <button onClick={() => categoryService.FetchCategories()}> Click ME UwU </button>
+      {categories.map((categorie, index) => {
+        return <div key={index}>{categorie.name}</div>
+      })}
     </>    
   )
 }
