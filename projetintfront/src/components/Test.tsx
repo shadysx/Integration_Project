@@ -1,8 +1,13 @@
 import React from 'react'
+import { CaterogyService } from '../services/CategoryService'
 
 function Test() {
+  let categoryService = new CaterogyService()
   return (
-    <div>Test</div>
+    <>
+      <div>{"Jambon"}</div>
+      <button onClick={() => categoryService.FetchCategories()}> Click ME UwU </button>
+    </>    
   )
 }
 
