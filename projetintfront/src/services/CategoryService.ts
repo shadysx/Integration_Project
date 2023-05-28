@@ -1,4 +1,4 @@
-import { Category } from "../components/Interfaces/Interface"
+import { Category } from "../Interfaces/Interface"
 
 export class CaterogyService
 {    

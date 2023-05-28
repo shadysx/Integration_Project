@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CaterogyService } from '../services/CategoryService'
-import { Category } from './Interfaces/Interface';
+import { Category } from '../Interfaces/Interface';
 
 function Test() {
 
