@@ -1,35 +1,36 @@
 import React, { useContext, useState } from 'react';
 import './LoginView.css'; // Import the CSS file
 import { AuthContext } from '../../contexts/AuthContext';
+import { Link, redirect } from 'react-router-dom';
 
 const LoginView = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('john.doe@email.com');
+  const [password, setPassword] = useState('password');
 
   const { login } = useContext(AuthContext)
 
   const handleSubmit = (event) => {
     // Prevent refresh
     event.preventDefault();
-    console.log(username, password)
-    login();
+    console.log(email, password)
+    login(email, password);    
 
     // Perform login logic here, such as sending the username and password to a server
 
     // Reset the form fields
-    setUsername('');
+    setEmail('');
     setPassword('');
   };
 
   return (
     <form onSubmit={handleSubmit} className='container'>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            id="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
           />
         </div>
         <div>
