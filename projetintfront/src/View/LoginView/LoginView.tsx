@@ -2,9 +2,10 @@ import React, { useContext, useState } from 'react';
 import './LoginView.css'; // Import the CSS file
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link, redirect } from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar';
 
 const LoginView = () => {
-  const [email, setEmail] = useState('john.doe@email.com');
+  const [email, setEmail] = useState('shady@email.com');
   const [password, setPassword] = useState('password');
 
   const { login } = useContext(AuthContext)
@@ -23,27 +24,29 @@ const LoginView = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='container'>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-      <button type="submit">Login</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} className='container'>
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input
+              type="text"
+              id="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </div>
+        <button type="submit">Login</button>
+      </form>
+    </>
   );
 };
 

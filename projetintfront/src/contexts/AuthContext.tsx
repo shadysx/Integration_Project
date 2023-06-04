@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { User } from '../Interfaces/Interface';
+import { useNavigate } from 'react-router-dom';
 
 type AuthContextType = {
   login: any,
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
   
+  const navigate = useNavigate();
 
 
   const login = async (email: string, password: string) => {   
@@ -43,6 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     // Perform logout logic, e.g., clear authentication token
+    navigate("/")
     setIsAuthenticated(false);
   };
 
