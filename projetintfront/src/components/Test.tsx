@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CaterogyService } from '../services/CategoryService'
+import { CategoriesService } from '../services/CaterogiesService'
 import { Category } from '../Interfaces/Interface';
 
 function Test() {
@@ -8,7 +8,7 @@ function Test() {
 
   useEffect(() => {
     const FetchCategories = async () => {
-      const categoryService = new CaterogyService();
+      const categoryService = new CategoriesService();
       const fetchedCategories: Category[] = await categoryService.FetchCategories();
       setCategories(fetchedCategories);
     }

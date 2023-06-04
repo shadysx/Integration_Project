@@ -5,7 +5,7 @@ import { Link, redirect } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const LoginView = () => {
-  const [email, setEmail] = useState('shady@email.com');
+  const [email, setEmail] = useState('john.doe@email.com');
   const [password, setPassword] = useState('password');
 
   const { login } = useContext(AuthContext)
