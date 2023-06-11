@@ -34,5 +34,27 @@ export class UserService
           console.log('Handled Error when updating a user:', error);
         }
       }
+
+      DeleteUser = async (userId: number) => {
+        try {
+          const response = await fetch(`http://localhost:8000/api/users/delete/${userId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to delete user');
+          }
+          
+          const data = await response.text();
+    
+          return data;
+        }
+        catch (error){
+          console.log('Handled Error when deleting a user:', error);
+        }
+      }
 }
 

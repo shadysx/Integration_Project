@@ -19,7 +19,6 @@ function UserView() {
   const FetchUsers = async () => {
     const userService = new UserService();
     const users: User[] = await userService.FetchUsers();
-    console.log("settin users: ", users)
     setUsers(users);
     //alert(JSON.stringify(users, null, 4));
   }
@@ -52,14 +51,18 @@ function UserView() {
           setOpen(true);
           setSelectedUser(params.row)
         };
-        const handleClickDelete = (e) => {
+        const handleClickDelete = async (e) => {
           alert(params.row);
+          const userService = new UserService();
+          await userService.DeleteUser(params.row.id)
+          await FetchUsers()
+
         };
           
           return (
             <Stack direction="row" spacing={2}>
               <Button variant="outlined" color="primary" size="small" onClick={handleClickEdit}>Edit</Button>
-              <Button variant="outlined" color="error" size="small" onClick={handleClickEdit}>Delete</Button>
+              <Button variant="outlined" color="error" size="small" onClick={handleClickDelete}>Delete</Button>
             </Stack>
           );
       },
