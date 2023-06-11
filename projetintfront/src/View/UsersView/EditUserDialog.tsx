@@ -46,18 +46,15 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     handleClose();
     // Add your logic to handle the form submission here
     const userService = new UserService();
     const { id, ...requestBody } = selectedUser;
     console.log("updated: ", requestBody);
-    userService.UpdateUser(requestBody, id);
-
-    setTimeout(() => {
-      fetchUsers()
-    }, 1000)
+    await userService.UpdateUser(requestBody, id);
+    await fetchUsers();
   };
 
   return (
