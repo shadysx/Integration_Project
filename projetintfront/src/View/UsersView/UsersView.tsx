@@ -16,15 +16,21 @@ function UserView() {
     setOpen(false);
   };
 
+  const FetchUsers = async () => {
+    const userService = new UserService();
+    const users: User[] = await userService.FetchUsers();
+    console.log("settin users: ", users)
+    setUsers(users);
+    //alert(JSON.stringify(users, null, 4));
+  }
+
   useEffect(() => {
-    const FetchUsers = async () => {
-      const userService = new UserService();
-      const users: User[] = await userService.FetchUsers();
-      setUsers(users);
-      //alert(JSON.stringify(users, null, 4));
-    }
     FetchUsers();
   },[])
+
+  const handleSetUser = (user) => {
+    setSelectedUser(user);
+  }
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -81,8 +87,10 @@ function UserView() {
       <DataTable/>
       <EditUserDialog 
         selectedUser={selectedUser}
+        setSelectedUser={handleSetUser}
         open={open}
         onClose={handleClose}
+        fetchUsers={FetchUsers}
       />
     </>
   )
