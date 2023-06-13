@@ -28,13 +28,18 @@ function UserView() {
   },[])
 
   const handleSetUser = (user) => {
-    setSelectedUser(user);
+    setSelectedUser(user);  
   }
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'firstName', headerName: 'First name', width: 130 },
     { field: 'lastName', headerName: 'Last name', width: 130 },
+    { field: 'dateOfBirth', headerName: 'Birthday', width: 130 },
+    { field: 'gender', headerName: 'Gender', width: 130 },
+    { field: 'isAdmin', headerName: 'IsAdmin', width: 130 },
+    { field: 'ranking', headerName: 'Rank', width: 130 },
+    
     {
       field: 'email',
       headerName: 'Email',

@@ -1,24 +1,10 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import Typography from '@mui/material/Typography';
-import { blue } from '@mui/material/colors';
 import { User } from '../../Interfaces/Interface';
 import { useState } from 'react';
 import "./EditUserDialog.css"
-import { VariableLikeDeclaration } from 'typescript';
 import { UserService } from '../../services/UserService';
-
-const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -46,13 +32,19 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     }));
   };
 
+  const handleIsAdminChange = () => {
+    setSelectedUser((prevState) => ({
+      ...prevState,
+      isAdmin: !prevState.isAdmin
+    }));
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     handleClose();
     // Add your logic to handle the form submission here
     const userService = new UserService();
     const { id, ...requestBody } = selectedUser;
-    console.log("updated: ", requestBody);
     await userService.UpdateUser(requestBody, id);
     await fetchUsers();
   };
@@ -83,7 +75,7 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       </select><br /><br />
       
       <label htmlFor="isAdmin">Admin:</label>
-      <input type="checkbox" id="isAdmin" name="isAdmin" checked={selectedUser?.isAdmin} onChange={handleChange} /><br /><br />
+      <input type="checkbox" id="isAdmin" name="isAdmin" checked={selectedUser?.isAdmin} onChange={handleIsAdminChange} /><br /><br />
       
       <label htmlFor="locality">Locality:</label>
       <input type="text" id="locality" name="locality" value={selectedUser?.locality} onChange={handleChange} required /><br /><br />
@@ -106,7 +98,6 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       <input type="submit" value="Update" />
     </form>
     </div>
-   
   </Dialog>
   );
 }
