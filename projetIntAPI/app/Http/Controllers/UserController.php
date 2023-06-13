@@ -129,6 +129,7 @@ class UserController extends Controller
             'street' => 'required|max:191',
             'postalCode' => 'required|max:191',
             'locality' => 'required|max:191',
+            'isAdmin' => 'required|max:191'
         ]);
 
         if($validator->fails())
@@ -158,8 +159,11 @@ class UserController extends Controller
                 'status'=> $request->status, 
                 'street'=> $request->street, 
                 'postalCode'=> $request->postalCode, 
-                'locality'=> $request->locality
+                'locality'=> $request->locality,
+                'isAdmin' => $request->isAdmin,
             ]);
+
+            error_log($request->isAdmin);
 
 
             return response()->json([

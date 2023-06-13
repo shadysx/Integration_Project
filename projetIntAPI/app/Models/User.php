@@ -25,11 +25,8 @@ class User extends Authenticatable implements JWTSubject
         'status', 
         'street',
         'postalCode', 
-        'locality'
-    ];
-
-    protected $hidden = [
-        'password'
+        'locality',
+        'isAdmin'
     ];
 
     public function getJWTIdentifier()
