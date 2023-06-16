@@ -7,7 +7,7 @@ import UsersView from '../View/UsersView/UsersView';
 import Navbar from '../components/Navbar/Navbar';
 import { Height } from '@mui/icons-material';
 import CategoriesView from '../View/CaterogyView/CategoriesView';
-
+import RegisterView from '../View/RegisterView/RegisterView';
 
 const RootNavigation = () => {
     const { isAuthenticated } = useContext(AuthContext)
@@ -18,8 +18,8 @@ const RootNavigation = () => {
 const GuestRoutes = () => {
     return (
         <Routes>
+            <Route path='/register' element={<RegisterView/>}/>
             <Route path='/' element={<LoginView/>}/>
-            {/* <Route path='*' element={<DefaultView/>} />             */}
         </Routes>
     )
 }

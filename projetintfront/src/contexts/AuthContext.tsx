@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 type AuthContextType = {
   login: any,
   logout: any,
+  register: any,
   isAuthenticated: boolean,
   isLoading: boolean,
   token: string,
@@ -43,6 +44,16 @@ export const AuthProvider = ({ children }) => {
 
   };
 
+  const register = async (user: User) => {
+    const response = await fetch("http://localhost:8000/api/auth/register", 
+    {method: 'POST', 
+    headers: {
+      'Content-Type': 'application/json'},
+      body: JSON.stringify({user})
+    })     
+    console.log(response)
+  }
+
   const logout = () => {
     // Perform logout logic, e.g., clear authentication token
     navigate("/")
@@ -50,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, error, isLoading}}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, error, isLoading, register}}>
       {children}
     </AuthContext.Provider>
   );
