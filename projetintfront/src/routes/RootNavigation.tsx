@@ -6,6 +6,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import UsersView from '../View/UsersView/UsersView';
 import Navbar from '../components/Navbar/Navbar';
 import { Height } from '@mui/icons-material';
+import CategoriesView from '../View/CaterogyView/CategoriesView';
 import RegisterView from '../View/RegisterView/RegisterView';
 
 const RootNavigation = () => {
@@ -30,6 +31,7 @@ const AuthRoutes = () => {
             <Routes>
                 <Route path='/' element={<HomeView/>}/>
                 <Route path='/users' element={<UsersView/>}/>
+                <Route path='/categories' element={<CategoriesView/>}></Route>
             </Routes>
         </div>
     )
