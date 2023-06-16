@@ -6,11 +6,11 @@ export interface Category{
 }
 
 export interface User{
-    id: number,
+    id?: number,
     lastName: string,
     firstName: string,
     affiliationNumber: string,
-    dateOfBirth: Date,
+    dateOfBirth: string,
     email: string,   
     gender: string,
     isAdmin: boolean
@@ -20,6 +20,7 @@ export interface User{
     ranking: string
     status: string
     street: string
+    password: string
 }
 
 interface Court{
