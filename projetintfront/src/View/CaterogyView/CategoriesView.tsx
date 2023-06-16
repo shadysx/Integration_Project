@@ -6,19 +6,32 @@ import Dialog from '@mui/material/Dialog';
 import "./CategoriesView.css"
 import { CategoriesService } from '../../services/CaterogiesService';
 import { Category } from '../../Interfaces/Interface';
+import EditCategoryDialog from './EditCategoryDialog';
 
 function CategoriesView() {
   const categoriesService = new CategoriesService();
   const[categories, setCategories] = useState<Category[]>([]);
+  const [openCreate, setOpenCreate] = React.useState(false);
+  const [selectedCategory, setSelectedCategory] = React.useState<Category>();
+  const [openEdit, setOpenEdit] = React.useState(false);
      
-  useEffect(() => {
-    const FetchCategories = async () => {      
-      const fetchedCategories: Category[] = await categoriesService.FetchCategories();
-      console.log(fetchedCategories)
-      setCategories(fetchedCategories);      
-    }
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const FetchCategories = async () => {      
+    const fetchedCategories: Category[] = await categoriesService.FetchCategories();
+    console.log(fetchedCategories)
+    setCategories(fetchedCategories);      
+  }
+  useEffect(() => {    
     FetchCategories();
   },[])   
+
+
+  const handleSetCategory = (user) => {
+    setSelectedCategory(user);  
+  }
     
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -46,10 +59,16 @@ function CategoriesView() {
             const currentRow = params.row;
             return alert(JSON.stringify(currentRow, null, 4));
           };
+
+          const handleClickEdit = (e) => {
+            setOpenEdit(true);
+            setSelectedCategory(params.row)
+          };
           
+
           return (
             <Stack direction="row" spacing={2}>
-              <Button variant="outlined" color="primary" size="small" onClick={onClick}>Edit</Button>
+              <Button variant="outlined" color="primary" size="small" onClick={handleClickEdit}>Edit</Button>
               <Button variant="outlined" color="error" size="small" onClick={onClick}>Delete</Button>
             </Stack>
           );
@@ -90,18 +109,17 @@ function CategoriesView() {
 
   return (
     <>
-      {/* <p>
-        {JSON.stringify(categories, null, 4)}
-      </p> */}
+      
       <div className='main'>
         <DataTable/>
-      </div>
-      
-      {/* <EditUserDialog 
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-      /> */}
+      </div>      
+      <EditCategoryDialog 
+        selectedCategory={selectedCategory}
+        setSelectedCategory={handleSetCategory}
+        open={openEdit}
+        onClose={handleCloseEdit}
+        fetchCategories={FetchCategories}
+      />
     </>
   )
 
