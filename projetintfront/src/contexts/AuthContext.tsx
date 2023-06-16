@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { User } from '../Interfaces/Interface';
 import { useNavigate } from 'react-router-dom';
+import { UserService } from '../services/UserService';
 
 type AuthContextType = {
   login: any,
@@ -23,10 +24,17 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>();
   
   const navigate = useNavigate();
+  let userService = new UserService();
 
+  const checkIfEmailExist = async (email): Promise<boolean> => {
+    const users = await userService.FetchUsers();
+
+    const emailExists = users.some(user => user.email === email);
+
+    return emailExists;
+  }
 
   const login = async (email: string, password: string) => {   
-        
     const response = await fetch("http://localhost:8000/api/auth/login", 
       {method: 'POST', 
       headers: {
@@ -40,18 +48,31 @@ export const AuthProvider = ({ children }) => {
       setToken(data.token);      
       setUser(data.user);      
       setIsAuthenticated(true);
+      navigate('/')
     }    
 
   };
 
   const register = async (user: User) => {
+    if (await checkIfEmailExist(user.email)){
+      console.log('email already exist')
+      return false;
+    }
+    console.log('first')
     const response = await fetch("http://localhost:8000/api/auth/register", 
     {method: 'POST', 
     headers: {
       'Content-Type': 'application/json'},
-      body: JSON.stringify({user})
+      body: JSON.stringify(user)
     })     
-    console.log(response)
+    if(response.ok)
+    {
+      setTimeout(() => {
+        login(user.email, user.password)
+      }, 1000)
+      console.log("Created success")
+      return true
+    }  
   }
 
   const logout = () => {
