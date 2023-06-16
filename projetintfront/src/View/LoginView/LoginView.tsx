@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import './LoginView.css'; // Import the CSS file
 import { AuthContext } from '../../contexts/AuthContext';
-import { Link, redirect } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const LoginView = () => {
@@ -9,6 +9,8 @@ const LoginView = () => {
   const [password, setPassword] = useState('password');
 
   const { login } = useContext(AuthContext)
+
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     // Prevent refresh
@@ -45,8 +47,9 @@ const LoginView = () => {
             />
           </div>
         <button type="submit">Login</button>
+        <h5 style={{cursor: "pointer"}} onClick={() => navigate('/register')}>Don't have an account yet?</h5>
       </form>
-    </>
+  </>
   );
 };
 
