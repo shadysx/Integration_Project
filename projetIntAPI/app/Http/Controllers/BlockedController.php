@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Court;
+use App\Models\Blocked;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CourtController extends Controller
+class BlockedController extends Controller
 {
-
     public function list() {
-        return response()->json(Court::all(), 200);
+        return response()->json(Blocked::all(), 200);
     }
 
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'number' => 'required'      
+            'begin_hour' => 'required',
+            'date' => 'required|max:191',
+            'duration' => 'required',
+            'reason' => 'required|max:191',
+            'user_id' => 'required',
+            'court_id' => 'required'            
         ]);
 
         if($validator->fails())
@@ -28,16 +32,21 @@ class CourtController extends Controller
         }
         else
         {
-            $court = Court::create([
-                'number' => $request->number
+            $blocked = Blocked::create([
+                'begin_hour' => $request->begin_hour,
+                'date' => $request->date,
+                'duration' => $request->duration,
+                'reason' => $request->reason,
+                'user_id' => $request->user_id,
+                'court_id' => $request->court_id
             ]);
         }
 
-        if($court)
+        if($blocked)
         {
             return response()->json([
                 'status' => 200,
-                'message' => "Court Created Succesfully"
+                'message' => "Blocked Created Succesfully"
             ], 200);
         }
         else
@@ -52,33 +61,33 @@ class CourtController extends Controller
 
     public function detail($id)
     {
-        $court = Court::find($id);
+        $blocked = Blocked::find($id);
 
-        if($court)
+        if($blocked)
         {
             return response()->json([
                 'status' => 200,
-                'court' => $court
+                'blocked' => $blocked
             ]);
         }
         else
         {
             return response()->json([
                 'status' => 404,
-                'message' => "No such Court Found"
+                'message' => "No such Blocked Found"
             ],404);
         }
     }
 
     public function edit($id)
     {
-        $court = Court::find($id);
+        $blocked = Blocked::find($id);
 
-        if($court)
+        if($blocked)
         {
             return response()->json([
                 'status' => 200,
-                'court' => $court
+                'blocked' => $blocked
             ]);
         }
         else
@@ -93,7 +102,12 @@ class CourtController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
-            'number' => 'required'      
+            'begin_hour' => 'required',
+            'date' => 'required|max:191',
+            'duration' => 'required',
+            'reason' => 'required|max:191',
+            'user_id' => 'required',
+            'court_id' => 'required'            
         ]);
 
         if($validator->fails())
@@ -105,18 +119,23 @@ class CourtController extends Controller
         }
         else
         {
-            $court = Court::find($id);            
+            $blocked = Blocked::find($id);            
         }
 
-        if($court)
+        if($blocked)
         {
-            $court->update([
-                'number' => $request->number
+            $blocked->update([
+                'begin_hour' => $request->begin_hour,
+                'date' => $request->date,
+                'duration' => $request->duration,
+                'reason' => $request->reason,
+                'user_id' => $request->user_id,
+                'court_id' => $request->court_id
             ]);       
 
             return response()->json([
                 'status' => 200,
-                'message' => "Court Updated Succesfully"
+                'message' => "Blocked Updated Succesfully"
             ], 200);
         }
         else
@@ -131,11 +150,11 @@ class CourtController extends Controller
 
     public function delete($id)
     {
-        $court = Court::find($id);
+        $blocked = Blocked::find($id);
 
-        if($court)
+        if($blocked)
         {
-            $court->delete();
+            $blocked->delete();
 
             return response()->json([
                 'status' => 200,
@@ -146,8 +165,9 @@ class CourtController extends Controller
         {
             return response()->json([
                 'status' => 404,
-                'message' => "No such Court Found"
+                'message' => "No such Blocked Found"
             ], 404);
         }
     }
+
 }

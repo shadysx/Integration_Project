@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlockedController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryMemberController;
 use App\Http\Controllers\CourtController;
@@ -71,7 +72,21 @@ Route::get('category_member/edit/{id}',[CategoryMemberController::class, 'edit']
 Route::put('category_member/edit/{id}',[CategoryMemberController::class, 'update']);
 Route::delete('category_member/delete/{id}',[CategoryMemberController::class, 'delete']);
 
+Route::get('courts',[CourtController::class, 'list']);
+Route::get('courts/{id}',[CourtController::class, 'detail']);
+Route::post('courts/create',[CourtController::class, 'create']);
+Route::get('courts/edit/{id}',[CourtController::class, 'edit']);
+Route::put('courts/edit/{id}',[CourtController::class, 'update']);
+Route::delete('courts/delete/{id}',[CourtController::class, 'delete']);
+
+Route::get('blockeds',[BlockedController::class, 'list']);
+Route::get('blockeds/{id}',[BlockedController::class, 'detail']);
+Route::post('blockeds/create',[BlockedController::class, 'create']);
+Route::get('blockeds/edit/{id}',[BlockedController::class, 'edit']);
+Route::put('blockeds/edit/{id}',[BlockedController::class, 'update']);
+Route::delete('blockeds/delete/{id}',[BlockedController::class, 'delete']);
+
+
 Route::post('auth/login',[AuthController::class, 'login']);
 Route::post('auth/register',[AuthController::class, 'register']);
 
-Route::get('courts',[CourtController::class, 'list']);

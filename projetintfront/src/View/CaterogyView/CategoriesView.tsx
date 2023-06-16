@@ -3,7 +3,6 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, Stack } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import EditUserDialog from '../../components/Dialog/EditUserDialog';
 import "./CategoriesView.css"
 import { CategoriesService } from '../../services/CaterogiesService';
 import { Category } from '../../Interfaces/Interface';
