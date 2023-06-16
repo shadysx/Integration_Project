@@ -98,7 +98,6 @@ function UserView() {
   }
   return (
     <>
-      <Button onClick={() => setOpenCreate(true)}>Create User</Button>
       <DataTable/>
       <EditUserDialog 
         selectedUser={selectedUser}

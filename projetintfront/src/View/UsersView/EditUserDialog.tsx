@@ -18,7 +18,7 @@ export default function EditUserDialog(props: SimpleDialogProps) {
   const { onClose, selectedUser, setSelectedUser, open, fetchUsers } = props;
 
   React.useEffect(() => {
-    console.log("Dialog: ", selectedUser)
+
   })
 
   const handleClose = () => {
@@ -76,9 +76,6 @@ export default function EditUserDialog(props: SimpleDialogProps) {
         <option value="F">Female</option>
         <option value="O">Other</option>
       </select><br /><br />
-      
-      <label htmlFor="isAdmin">Admin:</label>
-      <input type="checkbox" id="isAdmin" name="isAdmin" checked={selectedUser?.isAdmin} onChange={handleIsAdminChange} /><br /><br />
       
       <label htmlFor="locality">Locality:</label>
       <input type="text" id="locality" name="locality" value={selectedUser?.locality} onChange={handleChange} required /><br /><br />

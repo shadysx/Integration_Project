@@ -6,7 +6,7 @@ import Navbar from '../../components/Navbar/Navbar';
 
 const LoginView = () => {
   const [email, setEmail] = useState('john.doe@email.com');
-  const [password, setPassword] = useState('password');
+  const [password, setPassword] = useState('password1');
 
   const { login } = useContext(AuthContext)
 
