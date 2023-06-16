@@ -32,22 +32,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $user = User::create([
-            'affiliationNumber'=> $request->affiliationNumber,  
-            'lastName' => $request->lastName, 
-            'firstName'=> $request->firstName, 
-            'gender'=> $request->gender, 
-            'ranking'=> $request->ranking, 
-            'dateOfBirth'=> $request->dateOfBirth,  
-            'mobile' => $request->mobile, 
-            'email' => $request->email, 
-            'password'=> Hash::make($request->password), 
-            'status'=> $request->status, 
-            'street'=> $request->street, 
-            'postalCode'=> $request->postalCode, 
-            'locality'=> $request->locality
-        ]);
-
+        error_log($request);
         $validator = Validator::make($request->all(), [
             'affiliationNumber' => 'required|max:191',
             'lastName' => 'required|max:191',
@@ -82,7 +67,7 @@ class AuthController extends Controller
                 'dateOfBirth'=> $request->dateOfBirth,  
                 'mobile' => $request->mobile, 
                 'email' => $request->email, 
-                'password'=> $request->password, 
+                'password' => Hash::make($request->password),
                 'status'=> $request->status, 
                 'street'=> $request->street, 
                 'postalCode'=> $request->postalCode, 

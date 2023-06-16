@@ -53,12 +53,20 @@ const RegisterView = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
+
+    if(formData.password != confirmationPassword){
+      alert("Passwords dont match")
+    }
     
     const affiliationNumber = await generateAffiliationNumber()
 
     formData.affiliationNumber = affiliationNumber;
     console.log(formData);
-    register(formData);
+    let isSuccess = await register(formData);
+
+    if(!isSuccess){
+      alert('Email already in use')
+    }
   };
 
   return (
