@@ -6,14 +6,20 @@ import Dialog from '@mui/material/Dialog';
 import EditUserDialog from './EditUserDialog';
 import { UserService } from '../../services/UserService';
 import { User } from '../../Interfaces/Interface';
+import CreateUserDialog from './CreateUserDialog';
 
 function UserView() {
-  const [open, setOpen] = React.useState(false);
+  const [openCreate, setOpenCreate] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<User>();
   const [users, setUsers] = React.useState<User[]>([]);
   
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+  const handleCloseCreate = () => {
+    setOpenCreate(false);
   };
 
   const FetchUsers = async () => {
@@ -53,7 +59,7 @@ function UserView() {
       
       renderCell: (params) => {
         const handleClickEdit = (e) => {
-          setOpen(true);
+          setOpenEdit(true);
           setSelectedUser(params.row)
         };
         const handleClickDelete = async (e) => {
@@ -92,12 +98,20 @@ function UserView() {
   }
   return (
     <>
+      <Button onClick={() => setOpenCreate(true)}>Create User</Button>
       <DataTable/>
       <EditUserDialog 
         selectedUser={selectedUser}
         setSelectedUser={handleSetUser}
-        open={open}
-        onClose={handleClose}
+        open={openEdit}
+        onClose={handleCloseEdit}
+        fetchUsers={FetchUsers}
+      />
+      <CreateUserDialog 
+        selectedUser={{} as User}
+        setSelectedUser={handleSetUser}
+        open={openCreate}
+        onClose={handleCloseCreate}
         fetchUsers={FetchUsers}
       />
     </>

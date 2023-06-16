@@ -18,10 +18,28 @@ export default function EditUserDialog(props: SimpleDialogProps) {
   const { onClose, selectedUser, setSelectedUser, open, fetchUsers } = props;
 
   React.useEffect(() => {
-    console.log("Dialog: ", selectedUser)
-  })
+    setSelectedUser({
+        affiliationNumber: "001000999",
+        lastName: "Doe",
+        firstName: "John",
+        gender: "M",
+        ranking: "A+",
+        dateOfBirth: "1990-01-01",
+        mobile: "1234567890",
+        email: "shady@email.com",
+        status: "Active",
+        street: "123 Main St",
+        postalCode: "12345",
+        locality: "City1",
+        created_at: null,
+        updated_at: null,
+        password: "password"
+    })
+  },[])
 
   const handleClose = () => {
+
+    console.log("hey", selectedUser)
     onClose(selectedUser);
   };
   const handleChange = (e) => {
@@ -44,14 +62,13 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     handleClose();
     // Add your logic to handle the form submission here
     const userService = new UserService();
-    const { id, ...requestBody } = selectedUser;
-    await userService.UpdateUser(requestBody, id);
+    await userService.CreateUser(selectedUser);
     await fetchUsers();
   };
 
   return (
     <Dialog onClose={handleClose} open={open} >
-    <DialogTitle className="dialog-title">Edit User</DialogTitle>
+    <DialogTitle className="dialog-title">Create User</DialogTitle>
     <div className='dialog'>
     <form onSubmit={handleSubmit}  className="dialog-form">
       <label htmlFor="lastName">Last Name:</label>
@@ -67,7 +84,7 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       <input type="email" id="email" name="email" value={selectedUser?.email} onChange={handleChange} required /><br /><br />
       
       <label htmlFor="birthday">Birthday:</label>
-      <input type="date" id="birthday" name="birthday" value={selectedUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
+        <input type="date" id="birthday" name="birthday" value={selectedUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
 
       <label htmlFor="gender">Gender:</label>
       <select id="gender" name="gender" value={selectedUser?.gender} onChange={handleChange} required>
@@ -98,7 +115,7 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       <label htmlFor="street">Street:</label>
       <input type="text" id="street" name="street" value={selectedUser?.street} onChange={handleChange} required /><br /><br />
       
-      <input type="submit" value="Update" />
+      <input type="submit" value="Create" />
     </form>
     </div>
   </Dialog>

@@ -10,7 +10,7 @@ export interface User{
     lastName: string,
     firstName: string,
     affiliationNumber: string,
-    dateOfBirth: Date,
+    dateOfBirth: string,
     email: string,   
     gender: string,
     isAdmin: boolean
