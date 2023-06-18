@@ -21,6 +21,9 @@ export interface User{
     status: string
     street: string
     password: string
+    categories?: Category[]
+    categoryName?: string
+
 }
 
 interface Court{

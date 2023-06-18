@@ -5,6 +5,15 @@ export class UserService
     FetchUsers = async () => {
         let response = await fetch("http://localhost:8000/api/users");
         let users: User[] = await response.json();
+
+        users = users.map(user => {
+          if (user.categories && user.categories.length > 0) {
+            user.categoryName = user.categories[0].name;
+          }
+          return user;
+        });
+
+        console.log('Users with category', users)
         return users;
     }
 

@@ -4,7 +4,7 @@ import { Button, Stack } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import "./CategoriesView.css"
-import { CategoriesService } from '../../services/CaterogiesService';
+import { CategoriesService } from '../../services/CategoriesService';
 import { Category } from '../../Interfaces/Interface';
 
 function CategoriesView() {

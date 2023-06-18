@@ -6,7 +6,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import UsersView from '../View/UsersView/UsersView';
 import Navbar from '../components/Navbar/Navbar';
 import { Height } from '@mui/icons-material';
-import CategoriesView from '../View/CaterogyView/CategoriesView';
+import CategoriesView from '../View/CategoriesView/CategoriesView';
 import RegisterView from '../View/RegisterView/RegisterView';
 
 const RootNavigation = () => {
