@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
-const ComboBox = ({ options }) => {
-  const [selectedOption, setSelectedOption] = useState('');
+const ComboBox = ({ options, currentValue, onChange }) => {
+  const [selectedOption, setSelectedOption] = useState(currentValue);
 
   const handleChange = (event) => {
-    setSelectedOption(event.target.value);
+    const selectedValue = event.target.value;
+    setSelectedOption(selectedValue);
+    onChange(selectedValue)
   };
 
   return (

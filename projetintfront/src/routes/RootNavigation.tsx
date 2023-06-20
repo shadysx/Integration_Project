@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar/Navbar';
 import { Height } from '@mui/icons-material';
 import CategoriesView from '../View/CategoriesView/CategoriesView';
 import RegisterView from '../View/RegisterView/RegisterView';
+import CourtsView from '../View/CourtsView/CourtsView';
 
 const RootNavigation = () => {
     const { isAuthenticated } = useContext(AuthContext)
@@ -32,6 +33,7 @@ const AuthRoutes = () => {
                 <Route path='/' element={<HomeView/>}/>
                 <Route path='/users' element={<UsersView/>}/>
                 <Route path='/categories' element={<CategoriesView/>}></Route>
+                <Route path='/courts' element={<CourtsView/>}></Route>
             </Routes>
         </div>
     )

@@ -7,7 +7,5 @@ export class CategoriesService
         let categories: Category[] = await response.json();
         return categories;
     }
-
-
 }
 

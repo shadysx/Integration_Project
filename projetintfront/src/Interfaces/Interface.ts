@@ -26,8 +26,9 @@ export interface User{
 
 }
 
-interface Court{
-
+export interface Court{
+    id?: number,
+    number: number
 }
 
 interface Reservation{

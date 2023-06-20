@@ -7,6 +7,7 @@ import "./EditUserDialog.css"
 import { UserService } from '../../services/UserService';
 import ComboBox from '../../components/ComboBox';
 import { CategoriesService } from '../../services/CategoriesService';
+import { Helper } from '../../Helpers/Helper';
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -31,7 +32,7 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       setCategoryNames(nameList)
     }
     FetchCategoryNames()
-  })
+  },[])
 
   const handleClose = () => {
     onClose(selectedUser);
@@ -43,6 +44,16 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       [name]: value
     }));
   };
+
+  const handleCategoryChange = async (categoryName: string) => {
+    const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
+    setSelectedUser((prevUser) => {
+      return {
+        ...prevUser,
+        categories: categoryId ? [categoryId] : [] // Update the categories with the new categoryId
+      };
+    });
+  }
 
   const handleIsAdminChange = () => {
     setSelectedUser((prevState) => ({
@@ -105,7 +116,7 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       <input type="text" id="street" name="street" value={selectedUser?.street} onChange={handleChange} required /><br /><br />
 
       <label htmlFor="categoryName">Categorie:</label>
-      <ComboBox options={categoryNames}/>
+      <ComboBox options={categoryNames} currentValue={selectedUser?.categoryName} onChange={handleCategoryChange}/>
       
       <input type="submit" value="Update" />
     </form>
