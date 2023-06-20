@@ -4,33 +4,35 @@ import { Dialog, DialogTitle } from '@mui/material';
 import { CategoriesService } from '../../services/CategoriesService';
 import { AuthContext } from '../../contexts/AuthContext';
 import "./CategoryDialog.css"
+import { stringify } from 'querystring';
 
 
-interface CategoryDialogProps {
-    open: boolean;
-    selectedCategory: Category;
-    setSelectedCategory: (category: any) => void;
+ interface CategoryDialogProp {
+    open: boolean;    
     onClose: (value: Category) => void;
     fetchCategories: () => void;
   }
 
-export default function EditCategoryDialog(props: CategoryDialogProps){
-    const { onClose, selectedCategory, setSelectedCategory, open, fetchCategories } = props;
-    
-    React.useEffect(() => {
-        console.log("Dialog: ", selectedCategory)
-      })
+export default function CreateCategoryDialog(props: CategoryDialogProp){
+    const { onClose, open, fetchCategories } = props; 
+    const [selectedCategory, setSelectedCategory] = React.useState<Category>({name: "", ageMax: 0, ageMin: 0});
+
+
+    React.useEffect(() => {      
+        
+      },[])
     const handleClose = () => {
     onClose(selectedCategory);
     };
 
     const handleSubmit = async (event) => {
+      console.log(" TEST :" + selectedCategory);
       event.preventDefault();
       handleClose();
       // Add your logic to handle the form submission here
       const categoryService = new CategoriesService();
-      const { id, ...requestBody } = selectedCategory;
-      await categoryService.UpdateCategory(requestBody, id);
+      const { id, ...requestBody } = selectedCategory;      
+      await categoryService.CreateCategory(requestBody);
       await fetchCategories();
     };
 
@@ -40,12 +42,11 @@ export default function EditCategoryDialog(props: CategoryDialogProps){
         ...prevState,
         [name]: value
       }));
-    };    
-      
-    
+    };  
+
     return (
         <Dialog onClose={handleClose} open={open} >
-        <DialogTitle className="dialog-title">Edit Category</DialogTitle>
+        <DialogTitle className="dialog-title">Create Category</DialogTitle>
         <div className='dialog'>
         <form onSubmit={handleSubmit}  className="dialog-form">         
           
@@ -59,7 +60,7 @@ export default function EditCategoryDialog(props: CategoryDialogProps){
           <input type="number" id="ageMax" name="ageMax" value={selectedCategory?.ageMax} onChange={handleChange} required /><br />          
           
           <div className="inputDiv">
-            <input className="buttonSubmit" type="submit" value="Update" />
+            <input className="buttonSubmit" type="submit" value="Create" />
             <input className ="buttonCancel" type="button" value="Cancel" onClick={handleClose} />
           </div>
           
@@ -67,4 +68,7 @@ export default function EditCategoryDialog(props: CategoryDialogProps){
         </div>
         </Dialog>
   );
+  
 }
+
+ 

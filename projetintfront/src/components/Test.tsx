@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CategoriesService } from '../services/CaterogiesService'
+import { CategoriesService } from '../services/CategoriesService'
 import { Category } from '../Interfaces/Interface';
 
 function Test() {

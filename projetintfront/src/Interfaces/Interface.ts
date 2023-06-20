@@ -1,5 +1,5 @@
 export interface Category{
-    id: string,
+    id?: number,
     name: string,
     ageMin: number,
     ageMax: number
@@ -30,3 +30,5 @@ interface Court{
 interface Reservation{
 
 }
+
+
