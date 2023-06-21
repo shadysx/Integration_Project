@@ -3,7 +3,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { Court, Reservation, User } from '../../Interfaces/Interface';
 import { useState } from 'react';
-import "./EditCourtDialog.css"
+import "./EditReservationDialog.css"
 import { UserService } from '../../services/UserService';
 import ComboBox from '../../components/ComboBox';
 import { CategoriesService } from '../../services/CategoriesService';
@@ -53,9 +53,10 @@ export default function EditReservationDialog(props: SimpleDialogProps) {
     <DialogTitle className="dialog-title">Edit Reservation</DialogTitle>
     <div className='dialog'>
     <form onSubmit={handleSubmit}  className="dialog-form">
-      <label htmlFor="lastName">Number:</label>
-      <input type="number" id="number" name="number" value={selectedReservation?.id} onChange={handleChange} required /><br /><br />
-      
+      <label htmlFor="starting_hour">Starting Hour:</label>
+      <input type="time" id="starting_hour" name="starting_hour" value={selectedReservation?.starting_hour} onChange={handleChange} required /><br /><br />
+      <label htmlFor="ending_hour">Ending Hour:</label>
+      <input type="time" id="ending_hour" name="ending_hour" value={selectedReservation?.ending_hour} onChange={handleChange} required /><br /><br /> 
       <input type="submit" value="Update" />
     </form>
     </div>

@@ -40,9 +40,9 @@ export interface CategoryDTO {
 
 export interface Reservation{
     id?: number,
-    starting_hour: Date,
-    ending_hour: Date,
-    date: Date,
+    starting_hour: string,
+    ending_hour: string,
+    date: string,
     user1_id: number,
     user2_id: number,
     user3_id?: number,

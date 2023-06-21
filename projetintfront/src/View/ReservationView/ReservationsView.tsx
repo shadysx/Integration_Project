@@ -4,6 +4,7 @@ import { Button, Stack } from '@mui/material';
 import { UserService } from '../../services/UserService';
 import { Reservation, User } from '../../Interfaces/Interface';
 import { ReservationService } from '../../services/ReservationService';
+import EditReservationDialog from './EditReservationDialog';
 
 function ReservationsView() {
   const [openCreate, setOpenCreate] = React.useState(false);
@@ -31,10 +32,6 @@ function ReservationsView() {
   useEffect(() => {
     FetchReservations();
   },[])
-
-  const handleSetUser = (reservation) => {
-    setReservations(reservation);  
-  }
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -108,14 +105,14 @@ function ReservationsView() {
   return (
     <>
       <DataTable/>
-      {/* <EditUserDialog 
-        selectedUser={selectedUser}
-        setSelectedUser={handleSetUser}
+      <EditReservationDialog 
+        selectedReservation={selectedReservation}
+        setSelectedReservation={setSelectedReservation}
         open={openEdit}
         onClose={handleCloseEdit}
-        fetchUsers={FetchUsers}
+        fetchReservations={FetchReservations}
       />
-      <CreateUserDialog 
+      {/* <CreateUserDialog 
         selectedUser={{} as User}
         setSelectedUser={handleSetUser}
         open={openCreate}
