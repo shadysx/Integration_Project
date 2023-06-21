@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public function list() {
-        return response()->json(User::all(), 200);
+        return response()->json(User::with('categories')->get(), 200);
     }
 
     public function create(Request $request)
@@ -143,7 +143,7 @@ class UserController extends Controller
         }
         else
         {
-            $member = User::find($id);            
+            $member = User::with('categories')->find($id);         
         }
 
         if($member)
@@ -167,6 +167,8 @@ class UserController extends Controller
 
             error_log($request->isAdmin);
 
+            $categoryIds = $request->input('categories', []); // Assuming the categories are sent as an array of IDs
+            $member->categories()->sync($categoryIds);
 
             return response()->json([
                 'status' => 200,

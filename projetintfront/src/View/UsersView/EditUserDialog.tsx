@@ -5,6 +5,9 @@ import { User } from '../../Interfaces/Interface';
 import { useState } from 'react';
 import "./EditUserDialog.css"
 import { UserService } from '../../services/UserService';
+import ComboBox from '../../components/ComboBox';
+import { CategoriesService } from '../../services/CategoriesService';
+import { Helper } from '../../Helpers/Helper';
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -16,10 +19,20 @@ export interface SimpleDialogProps {
 
 export default function EditUserDialog(props: SimpleDialogProps) {
   const { onClose, selectedUser, setSelectedUser, open, fetchUsers } = props;
+  const [categoryNames, setCategoryNames] = useState([]);
 
   React.useEffect(() => {
-    console.log("Dialog: ", selectedUser)
-  })
+    const FetchCategoryNames = async () => {
+      const categoriesService = new CategoriesService()
+      const _categoryNames = await categoriesService.FetchCategories()
+      let nameList = [];
+      _categoryNames.map(category => {
+        nameList.push(category.name)
+      })
+      setCategoryNames(nameList)
+    }
+    FetchCategoryNames()
+  },[])
 
   const handleClose = () => {
     onClose(selectedUser);
@@ -31,6 +44,16 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       [name]: value
     }));
   };
+
+  const handleCategoryChange = async (categoryName: string) => {
+    const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
+    setSelectedUser((prevUser) => {
+      return {
+        ...prevUser,
+        categories: categoryId ? [categoryId] : [] // Update the categories with the new categoryId
+      };
+    });
+  }
 
   const handleIsAdminChange = () => {
     setSelectedUser((prevState) => ({
@@ -60,9 +83,6 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       <label htmlFor="firstName">First Name:</label>
       <input type="text" id="firstName" name="firstName" value={selectedUser?.firstName} onChange={handleChange} required /><br /><br />
       
-      <label htmlFor="affiliationNumber">Affiliation Number:</label>
-      <input type="text" id="affiliationNumber" name="affiliationNumber" value={selectedUser?.affiliationNumber} onChange={handleChange} required /><br /><br />
-      
       <label htmlFor="email">Email:</label>
       <input type="email" id="email" name="email" value={selectedUser?.email} onChange={handleChange} required /><br /><br />
       
@@ -76,9 +96,6 @@ export default function EditUserDialog(props: SimpleDialogProps) {
         <option value="F">Female</option>
         <option value="O">Other</option>
       </select><br /><br />
-      
-      <label htmlFor="isAdmin">Admin:</label>
-      <input type="checkbox" id="isAdmin" name="isAdmin" checked={selectedUser?.isAdmin} onChange={handleIsAdminChange} /><br /><br />
       
       <label htmlFor="locality">Locality:</label>
       <input type="text" id="locality" name="locality" value={selectedUser?.locality} onChange={handleChange} required /><br /><br />
@@ -97,6 +114,9 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       
       <label htmlFor="street">Street:</label>
       <input type="text" id="street" name="street" value={selectedUser?.street} onChange={handleChange} required /><br /><br />
+
+      <label htmlFor="categoryName">Categorie:</label>
+      <ComboBox options={categoryNames} currentValue={selectedUser?.categoryName} onChange={handleCategoryChange}/>
       
       <input type="submit" value="Update" />
     </form>

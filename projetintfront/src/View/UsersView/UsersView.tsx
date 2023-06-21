@@ -7,6 +7,7 @@ import EditUserDialog from './EditUserDialog';
 import { UserService } from '../../services/UserService';
 import { User } from '../../Interfaces/Interface';
 import CreateUserDialog from './CreateUserDialog';
+import { CategoriesService } from '../../services/CategoriesService';
 
 function UserView() {
   const [openCreate, setOpenCreate] = React.useState(false);
@@ -21,6 +22,8 @@ function UserView() {
   const handleCloseCreate = () => {
     setOpenCreate(false);
   };
+
+
 
   const FetchUsers = async () => {
     const userService = new UserService();
@@ -45,6 +48,7 @@ function UserView() {
     { field: 'gender', headerName: 'Gender', width: 130 },
     { field: 'isAdmin', headerName: 'IsAdmin', width: 130 },
     { field: 'ranking', headerName: 'Rank', width: 130 },
+    { field: 'categoryName', headerName: 'Category', width: 130 },
     
     {
       field: 'email',
@@ -98,7 +102,6 @@ function UserView() {
   }
   return (
     <>
-      <Button onClick={() => setOpenCreate(true)}>Create User</Button>
       <DataTable/>
       <EditUserDialog 
         selectedUser={selectedUser}

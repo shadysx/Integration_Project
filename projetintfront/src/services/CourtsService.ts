@@ -1,69 +1,67 @@
-import { User } from "../Interfaces/Interface"
+import { Court } from "../Interfaces/Interface"
 
-export class UserService
+export class CourtsService
 {    
-    FetchUsers = async () => {
-        let response = await fetch("http://localhost:8000/api/users");
-        let users: User[] = await response.json();
-        return users;
+    FetchCourts = async () => {
+        let response = await fetch("http://localhost:8000/api/courts");
+        let courts: Court[] = await response.json();
+        return courts;
     }
 
-    CreateUser = async (user: User) => {
+    CreateCourt = async (court: Court) => {
       try {
-        const response = await fetch(`http://localhost:8000/api/auth/register`, {
+        const response = await fetch(`http://localhost:8000/api/courts/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(user)
+          body: JSON.stringify(court)
         });
         
         console.log(response)
         if (!response.ok) {
-          throw new Error('Failed to create user');
+          throw new Error('Failed to create court');
         }
         
         const data = await response.json();
-
-        console.log("userUpdate: ", data)
     
         return data;
       }
       catch (error){
-        console.log('Handled Error when creating a user:', error);
+        console.log('Handled Error when creating a court:', error);
       }
     }
 
-    UpdateUser = async (user: User, userId: number) => {
+    UpdateCourt = async (court: Court, courtId: number) => {
         try {
-          const response = await fetch(`http://localhost:8000/api/users/edit/${userId}`, {
+          const response = await fetch(`http://localhost:8000/api/courts/edit/${courtId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify(court)
           });
           
           console.log(response)
 
           if (!response.ok) {
-            throw new Error('Failed to update user');
+            throw new Error('Failed to update court');
           }
           
           const data = await response.json();
 
-          console.log("userUpdate: ", data)
+          console.log("courtUpdate: ", data)
       
           return data;
         }
         catch (error){
-          console.log('Handled Error when updating a user:', error);
+          console.log('Handled Error when updating a court:', error);
         }
       }
 
-      DeleteUser = async (userId: number) => {
+      DeleteCourt = async (courtId: number) => {
         try {
-          const response = await fetch(`http://localhost:8000/api/users/delete/${userId}`, {
+          const response = await fetch(`http://localhost:8000/api/courts/delete/${courtId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -71,7 +69,7 @@ export class UserService
           });
           
           if (!response.ok) {
-            throw new Error('Failed to delete user');
+            throw new Error('Failed to delete court');
           }
           
           const data = await response.text();
@@ -79,7 +77,7 @@ export class UserService
           return data;
         }
         catch (error){
-          console.log('Handled Error when deleting a user:', error);
+          console.log('Handled Error when deleting a court:', error);
         }
       }
 }

@@ -42,6 +42,10 @@ const navigate = useNavigate();
                 color="inherit"
                 onClick={() => navigate("/categories")} 
                 >Categories</Button>
+            <Button 
+                color="inherit"
+                onClick={() => navigate("/courts")} 
+                >Courts</Button>
         </div>
         <Button 
             style={{}}

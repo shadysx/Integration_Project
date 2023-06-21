@@ -21,10 +21,14 @@ export interface User{
     status: string
     street: string
     password: string
+    categories?: Category[]
+    categoryName?: string
+
 }
 
-interface Court{
-
+export interface Court{
+    id?: number,
+    number: number
 }
 
 interface Reservation{
