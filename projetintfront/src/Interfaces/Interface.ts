@@ -31,8 +31,17 @@ export interface Court{
     number: number
 }
 
-interface Reservation{
 
+
+export interface Reservation{
+    id?: number,
+    startingHour: Date,
+    endingHour: Date,
+    date: Date,
+    user1Id: number,
+    user2Id: number,
+    user3Id?: number,
+    user4Id?: number,
+    courtId: number
 }
-
 
