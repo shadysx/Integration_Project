@@ -1,5 +1,5 @@
 import { Helper } from "../Helpers/Helper";
-import { User } from "../Interfaces/Interface"
+import { Category, User } from "../Interfaces/Interface"
 
 export class UserService
 {    
@@ -10,7 +10,8 @@ export class UserService
         //Assign category
         users = users.map(user => {
           if (user.categories && user.categories.length > 0) {
-            user.categoryName = user.categories[0].name;
+            user.categoryName = (user.categories[0]).name ;
+            user.categoryId = [user.categories[0].id]
           }
           return user;
         });

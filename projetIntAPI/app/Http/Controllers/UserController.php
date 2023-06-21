@@ -165,9 +165,7 @@ class UserController extends Controller
                 'isAdmin' => $request->isAdmin,
             ]);
 
-            error_log($request->isAdmin);
-
-            $categoryIds = $request->input('categories', []); // Assuming the categories are sent as an array of IDs
+            $categoryIds = $request->input('categoryId', []); // Assuming the categories are sent as an array of IDs
             $member->categories()->sync($categoryIds);
 
             return response()->json([

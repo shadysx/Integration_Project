@@ -25,7 +25,8 @@ class Member extends Model implements JWTSubject
         'status', 
         'street',
         'postalCode', 
-        'locality'
+        'locality',
+        'categoryId'
     ];
 
     public function getJWTIdentifier()

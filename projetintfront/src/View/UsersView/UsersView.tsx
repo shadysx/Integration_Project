@@ -34,7 +34,12 @@ function UserView() {
 
   useEffect(() => {
     FetchUsers();
+    console.log('main', selectedUser)
   },[])
+
+  useEffect(() => {
+    console.log('main', selectedUser)
+  })
 
   const handleSetUser = (user) => {
     setSelectedUser(user);  

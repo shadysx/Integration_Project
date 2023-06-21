@@ -34,6 +34,10 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     FetchCategoryNames()
   },[])
 
+  React.useEffect(() => {
+
+  })
+
   const handleClose = () => {
     onClose(selectedUser);
   };
@@ -47,10 +51,11 @@ export default function EditUserDialog(props: SimpleDialogProps) {
 
   const handleCategoryChange = async (categoryName: string) => {
     const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
+    console.log('Category Name: ', categoryName, ' CategoryID: ', categoryId)
     setSelectedUser((prevUser) => {
       return {
         ...prevUser,
-        categories: categoryId ? [categoryId] : [] // Update the categories with the new categoryId
+        categoryId: [categoryId] // Update the categories with the new categoryId
       };
     });
   }
@@ -68,6 +73,8 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     // Add your logic to handle the form submission here
     const userService = new UserService();
     const { id, ...requestBody } = selectedUser;
+
+    console.log('Submited: ', requestBody)
     await userService.UpdateUser(requestBody, id);
     await fetchUsers();
   };

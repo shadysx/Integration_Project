@@ -10,8 +10,10 @@ export class Helper {
         console.log('Found Category', foundCategory.id)
 
         if (foundCategory) {
+            console.log("Found Category: ", foundCategory)
             return foundCategory.id;
           } else {
+            console.log("Not Found Category: ", foundCategory)
             return null;
           }
     }

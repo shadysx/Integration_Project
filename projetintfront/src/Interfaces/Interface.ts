@@ -1,8 +1,8 @@
 export interface Category{
     id?: number,
-    name: string,
-    ageMin: number,
-    ageMax: number
+    name?: string,
+    ageMin?: number,
+    ageMax?: number
 }
 
 export interface User{
@@ -24,6 +24,7 @@ export interface User{
     categories?: Category[]
     categoryName?: string,
     fullName?: string
+    categoryId?: number[];
 
 }
 
@@ -32,6 +33,9 @@ export interface Court{
     number: number
 }
 
+export interface CategoryDTO {
+    id: number[]
+}
 
 
 export interface Reservation{
