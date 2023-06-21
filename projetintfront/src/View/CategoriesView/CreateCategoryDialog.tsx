@@ -47,7 +47,7 @@ export default function CreateCategoryDialog(props: CategoryDialogProp){
     return (
         <Dialog onClose={handleClose} open={open} >
         <DialogTitle className="dialog-title">Create Category</DialogTitle>
-        <div className='dialog'>
+        <div className='dialogCategory'>
         <form onSubmit={handleSubmit}  className="dialog-form">         
           
           <label htmlFor="name">Name :</label>
