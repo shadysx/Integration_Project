@@ -38,6 +38,28 @@ function ReservationsView() {
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'starting_hour', headerName: 'Starting Hour', width: 120 },
+    { field: 'ending_hour', headerName: 'Ending Hour', width: 120 },
+    { field: 'date', headerName: 'Date', width: 120 },
+    { field: 'court_id', headerName: 'Court Number', width: 120 },
+    { field: 'user1_id', headerName: 'Player 1', width: 70 },
+    { field: 'user2_id', headerName: 'Player 2', width: 70 },
+    { field: 'user3_id', headerName: 'Player 3', width: 70 },
+    { field: 'user4_id', headerName: 'Player 4', width: 70 },
+
+
+
+    // export interface Reservation{
+    //     id?: number,
+    //     startingHour: Date,
+    //     endingHour: Date,
+    //     date: Date,
+    //     user1Id: number,
+    //     user2Id: number,
+    //     user3Id?: number,
+    //     user4Id?: number,
+    //     courtId: number
+    // }
     {
       field: 'action',
       headerName: 'Action',
@@ -51,8 +73,8 @@ function ReservationsView() {
         };
         const handleClickDelete = async (e) => {
           alert(params.row);
-          const userService = new UserService();
-          await userService.DeleteUser(params.row.id)
+          const reservationService = new ReservationService();
+          await reservationService.DeleteReservation(params.row.id)
           await FetchReservations()
 
         };

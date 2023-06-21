@@ -1,5 +1,6 @@
-import { Category } from "../Interfaces/Interface";
+import { Category, User } from "../Interfaces/Interface";
 import { CategoriesService } from "../services/CategoriesService";
+import { UserService } from "../services/UserService";
 
 export class Helper {
     static async ConvertCategoryNameToId(categoryName: string){
@@ -13,7 +14,15 @@ export class Helper {
           } else {
             return null;
           }
+    }
 
+    static async ConvertUserIdToLastNameAndFirstName(id: number) {
+        const usersService = new UserService();
+        let users: User[] = await usersService.FetchUsers();
+        let foundUser = users.find(user => user.id = id)
+        console.log("here")
+
+        return `${foundUser.lastName} ${foundUser.firstName}`
     }
 } 
 

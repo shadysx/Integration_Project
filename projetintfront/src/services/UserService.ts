@@ -1,3 +1,4 @@
+import { Helper } from "../Helpers/Helper";
 import { User } from "../Interfaces/Interface"
 
 export class UserService
@@ -6,6 +7,7 @@ export class UserService
         let response = await fetch("http://localhost:8000/api/users");
         let users: User[] = await response.json();
 
+        //Assign category
         users = users.map(user => {
           if (user.categories && user.categories.length > 0) {
             user.categoryName = user.categories[0].name;
@@ -13,7 +15,12 @@ export class UserService
           return user;
         });
 
-        console.log('Users with category', users)
+        for (const user of users) {
+          user.fullName = `${user.lastName} ${user.firstName}` 
+          console.log("test");
+        }
+
+        console.log('Users with category and full name', users)
         return users;
     }
 

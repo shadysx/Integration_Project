@@ -22,7 +22,8 @@ export interface User{
     street: string
     password: string
     categories?: Category[]
-    categoryName?: string
+    categoryName?: string,
+    fullName?: string
 
 }
 
@@ -35,13 +36,13 @@ export interface Court{
 
 export interface Reservation{
     id?: number,
-    startingHour: Date,
-    endingHour: Date,
+    starting_hour: Date,
+    ending_hour: Date,
     date: Date,
-    user1Id: number,
-    user2Id: number,
-    user3Id?: number,
-    user4Id?: number,
-    courtId: number
+    user1_id: number,
+    user2_id: number,
+    user3_id?: number,
+    user4_id?: number,
+    court_id: number
 }
 

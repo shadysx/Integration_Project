@@ -5,6 +5,7 @@ export class ReservationService
     FetchReservations = async () => {
         let response = await fetch("http://localhost:8000/api/reservations");
         let reservations: Reservation[] = await response.json();
+
         return reservations;
     }
 
@@ -32,7 +33,7 @@ export class ReservationService
       }
     }
 
-    UpdateUser = async (reservation: Reservation, reservationId: number) => {
+    UpdateReservation = async (reservation: Reservation, reservationId: number) => {
         try {
           const response = await fetch(`http://localhost:8000/api/reservations/edit/${reservationId}`, {
             method: 'PUT',
@@ -57,7 +58,7 @@ export class ReservationService
         }
       }
 
-      DeleteUser = async (reservationId: number) => {
+      DeleteReservation = async (reservationId: number) => {
         try {
           const response = await fetch(`http://localhost:8000/api/reservations/delete/${reservationId}`, {
             method: 'DELETE',
