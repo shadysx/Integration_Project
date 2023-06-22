@@ -1,16 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, Stack } from '@mui/material';
 import { UserService } from '../../services/UserService';
 import { Reservation, User } from '../../Interfaces/Interface';
 import { ReservationService } from '../../services/ReservationService';
 import EditReservationDialog from './EditReservationDialog';
+import CreateReservationDialog from './CreateReservationDialog';
 
 function ReservationsView() {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
-  const [selectedReservation, setSelectedReservation] = React.useState<Reservation>();
+  const [selectedReservation, setSelectedReservation] = React.useState<Reservation>({
+    starting_hour: "09:00:00",
+    ending_hour: "11:00:00",
+    date: "2023-06-22",
+    court_id: 1,
+    user1_id: null,
+    user2_id: null,
+    user1_name: "",
+    user2_name: ""
+  });
   const [reservations, setReservations] = React.useState<Reservation[]>([]);
+  const [usersFullNames, setUsersFullNames] = useState<string[]>([]);
+  const [forceUpdate, setForceUpdate] = useState<boolean>(false)
   
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -21,17 +33,32 @@ function ReservationsView() {
   };
 
 
+  const FetchUsers = async () => {
+    const userService = new UserService();
+    const users: User[] = await userService.FetchUsers();
+    //alert(JSON.stringify(users, null, 4));
+    const usersFullNamesTemp: string[] = users.map((user) => user.fullName);
+    setUsersFullNames(usersFullNamesTemp)
+  }
 
   const FetchReservations = async () => {
     const reservationsService = new ReservationService();
     const reservations: Reservation[] = await reservationsService.FetchReservations();
     setReservations(reservations);
-    //alert(JSON.stringify(users, null, 4));
   }
 
   useEffect(() => {
     FetchReservations();
+    FetchUsers();
+
+
   },[])
+
+  useEffect(() => {
+    console.log("reservationView: ", reservations)
+    setForceUpdate(!forceUpdate)
+
+  },[reservations])
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -39,24 +66,13 @@ function ReservationsView() {
     { field: 'ending_hour', headerName: 'Ending Hour', width: 120 },
     { field: 'date', headerName: 'Date', width: 120 },
     { field: 'court_id', headerName: 'Court Number', width: 120 },
-    { field: 'user1_id', headerName: 'Player 1', width: 70 },
-    { field: 'user2_id', headerName: 'Player 2', width: 70 },
-    { field: 'user3_id', headerName: 'Player 3', width: 70 },
-    { field: 'user4_id', headerName: 'Player 4', width: 70 },
+    // { field: 'user1_id', headerName: 'Player 1', width: 70 },
+    // { field: 'user2_id', headerName: 'Player 2', width: 70 },
+    // { field: 'user3_id', headerName: 'Player 3', width: 70 },
+    // { field: 'user4_id', headerName: 'Player 4', width: 70 },
+    { field: 'user1_name', headerName: 'Player 1', width: 120 },
+    { field: 'user2_name', headerName: 'Player 2', width: 120 },
 
-
-
-    // export interface Reservation{
-    //     id?: number,
-    //     startingHour: Date,
-    //     endingHour: Date,
-    //     date: Date,
-    //     user1Id: number,
-    //     user2Id: number,
-    //     user3Id?: number,
-    //     user4Id?: number,
-    //     courtId: number
-    // }
     {
       field: 'action',
       headerName: 'Action',
@@ -104,6 +120,7 @@ function ReservationsView() {
   }
   return (
     <>
+      <Button onClick={() => setOpenCreate(true)}>Add</Button>
       <DataTable/>
       <EditReservationDialog 
         selectedReservation={selectedReservation}
@@ -111,14 +128,17 @@ function ReservationsView() {
         open={openEdit}
         onClose={handleCloseEdit}
         fetchReservations={FetchReservations}
+        usersFullNames={usersFullNames}
       />
-      {/* <CreateUserDialog 
-        selectedUser={{} as User}
-        setSelectedUser={handleSetUser}
+      <CreateReservationDialog 
+        selectedReservation={selectedReservation}
+        setSelectedReservation={setSelectedReservation}
         open={openCreate}
         onClose={handleCloseCreate}
-        fetchUsers={FetchUsers}
-      /> */}
+        fetchReservations={FetchReservations}
+        usersFullNames={usersFullNames}
+
+      />
     </>
   )
 }

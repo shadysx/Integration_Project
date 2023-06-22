@@ -34,12 +34,12 @@ export const AuthProvider = ({ children }) => {
     return emailExists;
   }
 
-  const login = async (email: string, password: string) => {   
+  const login = async (affiliationNumber: string, password: string) => {   
     const response = await fetch("http://localhost:8000/api/auth/login", 
       {method: 'POST', 
       headers: {
         'Content-Type': 'application/json'},
-        body: JSON.stringify({email, password})
+        body: JSON.stringify({affiliationNumber, password})
       })    
 
     if(response.ok)
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   };
 
-  const register = async (user: User) => {
+  const register = async (user: User) : Promise<boolean> => {
     if (await checkIfEmailExist(user.email)){
       console.log('email already exist')
       return false;

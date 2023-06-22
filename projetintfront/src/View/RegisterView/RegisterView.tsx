@@ -5,6 +5,9 @@ import { Link, redirect, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import { User } from '../../Interfaces/Interface';
 import { UserService } from '../../services/UserService';
+import ComboBox from '../../components/ComboBox';
+import { CategoriesService } from '../../services/CategoriesService';
+import { Helper } from '../../Helpers/Helper';
 
 const RegisterView = () => {
   const [email, setEmail] = useState('');
@@ -18,7 +21,7 @@ const RegisterView = () => {
     lastName: 'Laurent',
     firstName: 'Klein',
     dateOfBirth: '1996-06-16',
-    email: 'laurent@gmail.com',
+    email: 'john.doe@email.com',
     gender: 'M',
     locality: 'Verviers',
     mobile: '0498843317',
@@ -28,6 +31,7 @@ const RegisterView = () => {
     affiliationNumber: '',
     isAdmin: false,
     ranking: "Beginner",
+    hasPaidDues: false,
     status: "Active"
   });
 
@@ -38,6 +42,31 @@ const RegisterView = () => {
       [name]: value
     }));
   };
+  const [categoryNames, setCategoryNames] = useState([]);
+
+  React.useEffect(() => {
+    const FetchCategoryNames = async () => {
+      const categoriesService = new CategoriesService()
+      const _categoryNames = await categoriesService.FetchCategories()
+      let nameList = [];
+      _categoryNames.map(category => {
+        nameList.push(category.name)
+      })
+      setCategoryNames(nameList)
+    }
+    FetchCategoryNames()
+  },[])
+
+  const handleCategoryChange = async (categoryName: string) => {
+    const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
+    console.log('Category Name: ', categoryName, ' CategoryID: ', categoryId)
+    setFormData((prevUser) => {
+      return {
+        ...prevUser,
+        categoryId: [categoryId] // Update the categories with the new categoryId
+      };
+    });
+  }
 
   const generateAffiliationNumber = async (): Promise<string> => {
     const userService = new UserService()
@@ -45,9 +74,9 @@ const RegisterView = () => {
 
     const maxId = users.reduce((max, user) => (user.id > max ? user.id : max), 0) + 1 ;
 
-    const formattedId = maxId.toString().padStart(8, '0');
+    const formattedId = maxId.toString().padStart(5, '0');
 
-    return formattedId;
+    return "23" + formattedId;
   }
 
   const handleSubmit = async (e) => {
@@ -56,6 +85,7 @@ const RegisterView = () => {
 
     if(formData.password != confirmationPassword){
       alert("Passwords dont match")
+      return
     }
     
     const affiliationNumber = await generateAffiliationNumber()
@@ -127,6 +157,9 @@ const RegisterView = () => {
           <input type="password" name="passwordConfirmation" value={confirmationPassword} onChange={(e) => setConfirmationPassword(e.target.value)} />
         </label>
         <br />
+
+        <label htmlFor="categoryName">Categorie:</label>
+        <ComboBox options={categoryNames} currentValue={formData?.categoryName} onChange={handleCategoryChange}/>
         <button type="submit">Register</button>
         <h5 style={{cursor: "pointer"}} onClick={() => navigate('/')}>Already have an account?</h5>
       </form>

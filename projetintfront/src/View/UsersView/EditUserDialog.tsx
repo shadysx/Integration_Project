@@ -60,13 +60,12 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     });
   }
 
-  const handleIsAdminChange = () => {
+  const handleHasPaidDuesChange = () => {
     setSelectedUser((prevState) => ({
       ...prevState,
-      isAdmin: !prevState.isAdmin
+      hasPaidDues: !prevState.hasPaidDues
     }));
   }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     handleClose();
@@ -121,6 +120,9 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       
       <label htmlFor="street">Street:</label>
       <input type="text" id="street" name="street" value={selectedUser?.street} onChange={handleChange} required /><br /><br />
+
+      <label htmlFor="hasPaidDues">Has paid: </label>
+      <input type="checkbox" id="hasPaidDues" name="hasPaidDues" checked={selectedUser?.hasPaidDues} onChange={handleHasPaidDuesChange} /><br /><br />
 
       <label htmlFor="categoryName">Categorie:</label>
       <ComboBox options={categoryNames} currentValue={selectedUser?.categoryName} onChange={handleCategoryChange}/>

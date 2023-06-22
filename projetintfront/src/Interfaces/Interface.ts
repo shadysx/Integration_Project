@@ -23,7 +23,8 @@ export interface User{
     password: string
     categories?: Category[]
     categoryName?: string,
-    fullName?: string
+    fullName?: string,
+    hasPaidDues: boolean,
     categoryId?: number[];
 
 }
@@ -47,6 +48,10 @@ export interface Reservation{
     user2_id: number,
     user3_id?: number,
     user4_id?: number,
+    user1_name?: string,
+    user2_name?: string,
+    user3_name?: string,
+    user4_name?: string,
     court_id: number
 }
 

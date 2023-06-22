@@ -24,8 +24,8 @@ class ReservationController extends Controller
         $validator = Validator::make($request->all(), [
             'starting_hour' => 'required',            
             'date' => 'required',
-            'member1_id' => 'required',
-            'member2_id' => 'required',         
+            'user1_id' => 'required',
+            'user2_id' => 'required',         
             'court_id' => 'required'            
         ]);      
 
@@ -43,10 +43,10 @@ class ReservationController extends Controller
                 'starting_hour' => $request->starting_hour,
                 'ending_hour' => $request->ending_hour,
                 'date' => $request->date,
-                'member1_id' => $request->member1_id,
-                'member2_id' => $request->member2_id,
-                'member3_id' => $request->member3_id,
-                'member4_id' => $request->member4_id,
+                'user1_id' => $request->user1_id,
+                'user2_id' => $request->user2_id,
+                'user3_id' => $request->user3_id,
+                'user4_id' => $request->user4_id,
                 'court_id' => $request->court_id                
             ]);
         }       

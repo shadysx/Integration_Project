@@ -18,10 +18,8 @@ export class UserService
 
         for (const user of users) {
           user.fullName = `${user.lastName} ${user.firstName}` 
-          console.log("test");
         }
 
-        console.log('Users with category and full name', users)
         return users;
     }
 

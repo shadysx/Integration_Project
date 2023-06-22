@@ -1,13 +1,33 @@
+import { Helper } from "../Helpers/Helper";
 import { Reservation } from "../Interfaces/Interface";
+import { UserService } from "./UserService";
 
 export class ReservationService
 {    
-    FetchReservations = async () => {
-        let response = await fetch("http://localhost:8000/api/reservations");
-        let reservations: Reservation[] = await response.json();
-
-        return reservations;
+  FetchReservations = async () => {
+    let response = await fetch("http://localhost:8000/api/reservations");
+    let reservations: Reservation[] = await response.json();
+  
+    let retVal: Reservation[] = [];
+  
+    for (const res of reservations) {
+      let user1Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user1_id);
+      let user2Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user2_id);
+      // let user3Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user3_id);
+      // let user4Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user4_id);
+  
+      res.user1_name = user1Name;
+      res.user2_name = user2Name;
+  
+      retVal.push(res);
+      // res.user3_name = user3Name;
+      // res.user4_name = user4Name;
     }
+  
+    console.log('reservations after fetch', retVal);
+    return retVal;
+  }
+  
 
     CreateReservation = async (reservation: Reservation) => {
       try {

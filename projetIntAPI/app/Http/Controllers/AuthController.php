@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('affiliationNumber', 'password'))) {
             return response([
                 'message' => 'Invalid credentials!'
             ], Response::HTTP_UNAUTHORIZED);
@@ -75,7 +75,8 @@ class AuthController extends Controller
             ]);
         }
 
-
+        $categoryIds = $request->input('categoryId', []); // Assuming the categories are sent as an array of IDs
+        $member->categories()->sync($categoryIds);
 
         if($member)
         {

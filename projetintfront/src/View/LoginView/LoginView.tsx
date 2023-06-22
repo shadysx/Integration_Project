@@ -5,8 +5,8 @@ import { Link, redirect, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const LoginView = () => {
-  const [email, setEmail] = useState('john.doe@email.com');
-  const [password, setPassword] = useState('password1');
+  const [affiliationNumber, setAffiliationNumber] = useState('2300001');
+  const [password, setPassword] = useState('password');
 
   const { login } = useContext(AuthContext)
 
@@ -15,13 +15,11 @@ const LoginView = () => {
   const handleSubmit = (event) => {
     // Prevent refresh
     event.preventDefault();
-    console.log(email, password)
-    login(email, password);    
 
     // Perform login logic here, such as sending the username and password to a server
-
+    login(affiliationNumber, password)
     // Reset the form fields
-    setEmail('');
+    setAffiliationNumber('');
     setPassword('');
   };
 
@@ -29,12 +27,12 @@ const LoginView = () => {
     <>
       <form onSubmit={handleSubmit} className='container'>
           <div>
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email">Affiliation Number:</label>
             <input
               type="text"
-              id="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              id="affiliationNumber"
+              value={affiliationNumber}
+              onChange={(event) => setAffiliationNumber(event.target.value)}
             />
           </div>
           <div>

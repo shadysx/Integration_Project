@@ -21,10 +21,28 @@ export class Helper {
     static async ConvertUserIdToLastNameAndFirstName(id: number) {
         const usersService = new UserService();
         let users: User[] = await usersService.FetchUsers();
-        let foundUser = users.find(user => user.id = id)
+        let foundUser = users.find(user => user.id === id)
         console.log("here")
 
-        return `${foundUser.lastName} ${foundUser.firstName}`
+        if(foundUser){
+          return `${foundUser.lastName} ${foundUser.firstName}`
+        } else {
+          return null
+        }
+
     }
+
+    static async ConvertUserFullNameToId(fullName: string) {
+      const usersService = new UserService();
+      let users: User[] = await usersService.FetchUsers();
+      console.log("fullname in helper", fullName)
+      console.log('users in helper', users)
+      let foundUser = users.find(user => user.fullName === fullName)
+      if (foundUser) {
+          return foundUser.id;
+        } else {
+          return null;
+        }
+  }
 } 
 
