@@ -22,14 +22,12 @@ export class Helper {
         const usersService = new UserService();
         let users: User[] = await usersService.FetchUsers();
         let foundUser = users.find(user => user.id === id)
-        console.log("here")
 
         if(foundUser){
           return `${foundUser.lastName} ${foundUser.firstName}`
         } else {
           return null
         }
-
     }
 
     static async ConvertUserFullNameToId(fullName: string) {
