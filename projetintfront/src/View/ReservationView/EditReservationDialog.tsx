@@ -11,6 +11,7 @@ import { Helper } from '../../Helpers/Helper';
 import { CourtsService } from '../../services/CourtsService';
 import { ReservationService } from '../../services/ReservationService';
 import { AuthContext } from '../../contexts/AuthContext';
+import { SelectChangeEvent } from '@mui/material';
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -40,6 +41,10 @@ export default function EditReservationDialog(props: SimpleDialogProps) {
       ...prevState,
       [name]: value
     }));
+  };
+
+  const handleCourtChange = (event: SelectChangeEvent<typeof selectedReservation.court_id>) => {
+    setSelectedReservation(prevReservation => ({...prevReservation, court_id: event.target.value}));
   };
 
   const handleSubmit = async (event) => {

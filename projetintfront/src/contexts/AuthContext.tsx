@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserService } from '../services/UserService';
 import AlertPopup from '../components/ErrorPopup/AlertPopup';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Backdrop } from '@mui/material';
 
 type AuthContextType = {
   login: any,
@@ -103,10 +104,18 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, isLoading, register, setAlert}}>    
-      {isLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress/></div> : children}  
-      {alert.open && (
-        <AlertPopup error={alert.description} type={alert.type} onClose={() => setAlert(prevAlert => ({ ...prevAlert, open: false }))} />
-      )}
-    </AuthContext.Provider>
+    {isLoading && 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    }  
+    {children}
+    {alert.open && (
+      <AlertPopup error={alert.description} type={alert.type} onClose={() => setAlert(prevAlert => ({ ...prevAlert, open: false }))} />
+    )}
+  </AuthContext.Provider>
   );
 };

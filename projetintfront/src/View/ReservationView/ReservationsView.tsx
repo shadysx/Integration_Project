@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, SelectChangeEvent, Stack } from '@mui/material';
 import { UserService } from '../../services/UserService';
@@ -6,6 +6,7 @@ import { Reservation, User } from '../../Interfaces/Interface';
 import { ReservationService } from '../../services/ReservationService';
 import EditReservationDialog from './EditReservationDialog';
 import CreateReservationDialog from './CreateReservationDialog';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function ReservationsView() {
   const [openCreate, setOpenCreate] = React.useState(false);
@@ -14,18 +15,21 @@ function ReservationsView() {
     starting_hour: "09:00:00",
     ending_hour: "11:00:00",
     date: "2023-06-22",
-    court_id: 1,
+    court_id: null,
     user1_id: null,
     user2_id: null,
     user3_id: null,
     user4_id: null,
     user1_name: "",
     user2_name: "",
-    court_number: 0
+    court_number: 0,
+    duration: "01:00:00"
   });
   const [reservations, setReservations] = React.useState<Reservation[]>([]);
   const [usersFullNames, setUsersFullNames] = useState<string[]>([]);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false)
+
+  const { setAlert, user } = useContext(AuthContext);
   
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -38,7 +42,7 @@ function ReservationsView() {
       starting_hour: "09:00:00",
       ending_hour: "11:00:00",
       date: "2023-06-22",
-      court_id: 1,
+      court_id: null,
       user1_id: null,
       user2_id: null,
       user3_id: null,
@@ -89,7 +93,7 @@ function ReservationsView() {
     { field: 'user3_name', headerName: 'Player 3', width: 120 },
     { field: 'user4_name', headerName: 'Player 4', width: 120 },
 
-    {
+    user.isAdmin && {
       field: 'action',
       headerName: 'Action',
       width: 180,
@@ -153,8 +157,6 @@ function ReservationsView() {
         open={openCreate}
         onClose={handleCloseCreate}
         fetchReservations={FetchReservations}
-        usersFullNames={usersFullNames}
-
       />
     </>
   )

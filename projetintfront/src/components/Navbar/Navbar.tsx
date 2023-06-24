@@ -38,6 +38,10 @@ const navigate = useNavigate();
                   color="inherit"
                   onClick={() => navigate("/users")} 
                   >Members</Button>
+            <Button 
+                  color="inherit"
+                  onClick={() => navigate("/reservations")} 
+                  >Reservations</Button>
             {isAdmin == true && (
             <>
 
@@ -49,10 +53,7 @@ const navigate = useNavigate();
                   color="inherit"
                   onClick={() => navigate("/courts")} 
                   >Courts</Button>
-              <Button 
-                  color="inherit"
-                  onClick={() => navigate("/reservations")} 
-                  >Reservations</Button>
+
             </>
             )}
 

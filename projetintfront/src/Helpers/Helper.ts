@@ -54,7 +54,12 @@ export class Helper {
       } else {
         return null
       }
-
     }
+    static CalculateDuration = (startingHour: string, endingHour: string): number => {
+      let start = new Date(`2000-01-01T${startingHour}`);
+      let end = new Date(`2000-01-01T${endingHour}`);
+      return (end.getTime() - start.getTime()) / (1000 * 60 * 60); // Convert milliseconds to hours
+    }
+
 } 
 

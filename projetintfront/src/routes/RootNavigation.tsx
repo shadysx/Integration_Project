@@ -51,7 +51,6 @@ const AdminRoutes = () => {
 
             <Route path='/categories' element={<CategoriesView/>}></Route>
             <Route path='/courts' element={<CourtsView/>}></Route>
-            <Route path='/reservations' element={<ReservationsView/>}></Route>
         </>
 
     )

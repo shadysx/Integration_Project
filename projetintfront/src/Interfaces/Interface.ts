@@ -53,7 +53,8 @@ export interface Reservation{
     user3_name?: string,
     user4_name?: string,
     court_id: number,
-    court_number?: number
+    court_number?: number,
+    duration?: string
 }
 
 export interface Alert {
