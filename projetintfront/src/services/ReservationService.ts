@@ -13,15 +13,17 @@ export class ReservationService
     for (const res of reservations) {
       let user1Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user1_id);
       let user2Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user2_id);
-      // let user3Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user3_id);
-      // let user4Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user4_id);
+      let user3Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user3_id);
+      let user4Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user4_id);
+      let courtNumber = await Helper.ConvertCourtIdToNumber(res.court_id)
   
       res.user1_name = user1Name;
       res.user2_name = user2Name;
-  
+      res.user3_name = user3Name;
+      res.user4_name = user4Name;
+      res.court_number = courtNumber;
+
       retVal.push(res);
-      // res.user3_name = user3Name;
-      // res.user4_name = user4Name;
     }
   
     console.log('reservations after fetch', retVal);
@@ -39,14 +41,7 @@ export class ReservationService
           body: JSON.stringify(reservation)
         });
         
-        console.log(response)
-        if (!response.ok) {
-          throw new Error('Failed to create reservation');
-        }
-        
-        const data = await response.json();
-
-        return data;
+        return response;
       }
       catch (error){
         console.log('Handled Error when creating a reservation:', error);

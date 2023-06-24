@@ -52,6 +52,12 @@ export interface Reservation{
     user2_name?: string,
     user3_name?: string,
     user4_name?: string,
-    court_id: number
+    court_id: number,
+    court_number?: number
 }
 
+export interface Alert {
+    type: string,
+    description: string
+    open: boolean,
+}

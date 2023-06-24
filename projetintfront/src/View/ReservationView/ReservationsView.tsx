@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { Button, Stack } from '@mui/material';
+import { Button, SelectChangeEvent, Stack } from '@mui/material';
 import { UserService } from '../../services/UserService';
 import { Reservation, User } from '../../Interfaces/Interface';
 import { ReservationService } from '../../services/ReservationService';
@@ -17,8 +17,11 @@ function ReservationsView() {
     court_id: 1,
     user1_id: null,
     user2_id: null,
+    user3_id: null,
+    user4_id: null,
     user1_name: "",
-    user2_name: ""
+    user2_name: "",
+    court_number: 0
   });
   const [reservations, setReservations] = React.useState<Reservation[]>([]);
   const [usersFullNames, setUsersFullNames] = useState<string[]>([]);
@@ -30,7 +33,22 @@ function ReservationsView() {
 
   const handleCloseCreate = () => {
     setOpenCreate(false);
+    // Reset the ids to avoid errors
+    setSelectedReservation({
+      starting_hour: "09:00:00",
+      ending_hour: "11:00:00",
+      date: "2023-06-22",
+      court_id: 1,
+      user1_id: null,
+      user2_id: null,
+      user3_id: null,
+      user4_id: null,
+      user1_name: "",
+      user2_name: "",
+      court_number: 0
+    })
   };
+
 
 
   const FetchUsers = async () => {
@@ -65,13 +83,11 @@ function ReservationsView() {
     { field: 'starting_hour', headerName: 'Starting Hour', width: 120 },
     { field: 'ending_hour', headerName: 'Ending Hour', width: 120 },
     { field: 'date', headerName: 'Date', width: 120 },
-    { field: 'court_id', headerName: 'Court Number', width: 120 },
-    // { field: 'user1_id', headerName: 'Player 1', width: 70 },
-    // { field: 'user2_id', headerName: 'Player 2', width: 70 },
-    // { field: 'user3_id', headerName: 'Player 3', width: 70 },
-    // { field: 'user4_id', headerName: 'Player 4', width: 70 },
+    { field: 'court_number', headerName: 'Court Number', width: 120 },
     { field: 'user1_name', headerName: 'Player 1', width: 120 },
     { field: 'user2_name', headerName: 'Player 2', width: 120 },
+    { field: 'user3_name', headerName: 'Player 3', width: 120 },
+    { field: 'user4_name', headerName: 'Player 4', width: 120 },
 
     {
       field: 'action',
@@ -108,6 +124,7 @@ function ReservationsView() {
         <DataGrid
           rows={reservations}
           columns={columns}
+          editMode='row'
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },

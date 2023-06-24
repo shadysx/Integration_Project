@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './RegisterView.css'; // Import the CSS file
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link, redirect, useNavigate } from 'react-router-dom';
@@ -8,10 +8,13 @@ import { UserService } from '../../services/UserService';
 import ComboBox from '../../components/ComboBox';
 import { CategoriesService } from '../../services/CategoriesService';
 import { Helper } from '../../Helpers/Helper';
+import { Alert, AlertTitle } from '@mui/material';
+import AlertPopup from '../../components/ErrorPopup/AlertPopup';
+
 
 const RegisterView = () => {
-  const [email, setEmail] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('password');
+  const [categoryNames, setCategoryNames] = useState([]);
 
   const { register } = useContext(AuthContext);
 
@@ -42,7 +45,7 @@ const RegisterView = () => {
       [name]: value
     }));
   };
-  const [categoryNames, setCategoryNames] = useState([]);
+
 
   React.useEffect(() => {
     const FetchCategoryNames = async () => {
@@ -56,6 +59,10 @@ const RegisterView = () => {
     }
     FetchCategoryNames()
   },[])
+
+  useEffect(() => {
+    console.log("Register user", formData)
+  })
 
   const handleCategoryChange = async (categoryName: string) => {
     const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
@@ -93,10 +100,6 @@ const RegisterView = () => {
     formData.affiliationNumber = affiliationNumber;
     console.log(formData);
     let isSuccess = await register(formData);
-
-    if(!isSuccess){
-      alert('Email already in use')
-    }
   };
 
   return (
@@ -113,8 +116,8 @@ const RegisterView = () => {
           <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
         </label>
         <br />
-        <label htmlFor="birthday">Birthday:</label>
-        <input type="date" id="birthday" name="birthday" value={formData.dateOfBirth} onChange={handleChange} required /><br /><br />
+        <label htmlFor="dateOfBirth">Birthday:</label>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required /><br /><br />
         <br />
         <label>
           Email:

@@ -54,27 +54,35 @@ function UserView() {
 
   const columns: GridColDef[] = [
     { field: 'affiliationNumber', headerName: 'Affiliation Number', width: 150 },
-    { field: 'hasPaidDues', headerName: 'Has Paid', width: 130  ,
-    renderCell: (params) => {
-    const hasPaid = params.value === 1; // Check if isAdmin value is 1
-    return <Checkbox checked={hasPaid} disabled />;
-  },},
-    { field: 'firstName', headerName: 'First name', width: 130 },
+
+    { field: 'firstName', headerName: 'First name', width: 130},
     { field: 'lastName', headerName: 'Last name', width: 130 },
     { field: 'dateOfBirth', headerName: 'Birthday', width: 130 },
     { field: 'gender', headerName: 'Gender', width: 130 },
-    { field: 'isAdmin', headerName: 'IsAdmin', width: 130  ,
-      renderCell: (params) => {
-      const isAdmin = params.value === 1; // Check if isAdmin value is 1
-      return <Checkbox checked={isAdmin} disabled />;
-    },},
     { field: 'ranking', headerName: 'Rank', width: 130 },
     { field: 'categoryName', headerName: 'Category', width: 130 },
-
     {
       field: 'email',
       headerName: 'Email',
       width: 200,
+    },
+    user.isAdmin && {
+      field: 'isAdmin',
+      headerName: 'IsAdmin',
+      width: 130,
+      renderCell: (params) => {
+        const isAdmin = params.value === 1; // Check if isAdmin value is 1
+        return <Checkbox checked={isAdmin} disabled />;
+      },
+    },
+    user.isAdmin && {
+      field: 'hasPaidDues',
+      headerName: 'Has Paid',
+      width: 130,
+      renderCell: (params) => {
+        const hasPaid = params.value === 1; // Check if hasPaidDues value is 1
+        return <Checkbox checked={hasPaid} disabled />;
+      },
     },
     user.isAdmin && (
       {
@@ -111,6 +119,7 @@ function UserView() {
     return (
       <div style={{ height: '600px', width: '100%' }}>
         <DataGrid
+          editMode='row'
           rows={users}
           columns={columns}
           initialState={{

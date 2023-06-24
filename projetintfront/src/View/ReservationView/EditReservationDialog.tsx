@@ -10,6 +10,7 @@ import { CategoriesService } from '../../services/CategoriesService';
 import { Helper } from '../../Helpers/Helper';
 import { CourtsService } from '../../services/CourtsService';
 import { ReservationService } from '../../services/ReservationService';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -22,6 +23,8 @@ export interface SimpleDialogProps {
 
 export default function EditReservationDialog(props: SimpleDialogProps) {
   const { onClose, selectedReservation, setSelectedReservation, open, fetchReservations } = props;
+
+  const { setAlert } = React.useContext(AuthContext);
 
   const handleClose = () => {
     onClose(selectedReservation);
@@ -43,11 +46,28 @@ export default function EditReservationDialog(props: SimpleDialogProps) {
     event.preventDefault();
     handleClose();
     // Add your logic to handle the form submission here
+    if(UsersInReservationCount() != 2 || UsersInReservationCount() != 4)
+      setAlert({type: "error", description: "Can only be even number of players", open: true})
+
     const reservationsService = new ReservationService();
     const { id, ...requestBody } = selectedReservation;
+    
     await reservationsService.UpdateReservation(requestBody, id);
     await fetchReservations();
   };
+
+  const UsersInReservationCount = () => {
+    const userIDs = [
+      selectedReservation.user1_id,
+      selectedReservation.user2_id,
+      selectedReservation.user3_id,
+      selectedReservation.user4_id
+    ];
+  
+    const count = userIDs.filter((userID) => userID !== null).length;
+  
+    return count;
+  }
 
   return (
     <Dialog onClose={handleClose} open={open} >

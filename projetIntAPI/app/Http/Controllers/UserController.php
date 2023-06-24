@@ -132,7 +132,8 @@ class UserController extends Controller
             'postalCode' => 'required|max:191',
             'locality' => 'required|max:191',
             'isAdmin' => 'required|max:191',
-            'hasPaidDues' => 'required|max:191'
+            'hasPaidDues' => 'required|max:191',
+            'categoryId' => 'required|max:191',
         ]);
 
         error_log($request);

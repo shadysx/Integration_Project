@@ -3,10 +3,12 @@ import './LoginView.css'; // Import the CSS file
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
+import AlertPopup from '../../components/ErrorPopup/AlertPopup';
 
 const LoginView = () => {
   const [affiliationNumber, setAffiliationNumber] = useState('2300001');
   const [password, setPassword] = useState('password');
+
 
   const { login } = useContext(AuthContext)
 
@@ -21,10 +23,12 @@ const LoginView = () => {
     // Reset the form fields
     setAffiliationNumber('');
     setPassword('');
+
   };
 
   return (
     <>
+
       <form onSubmit={handleSubmit} className='container'>
           <div>
             <label htmlFor="email">Affiliation Number:</label>

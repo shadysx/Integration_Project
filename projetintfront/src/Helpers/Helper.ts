@@ -1,5 +1,6 @@
 import { Category, User } from "../Interfaces/Interface";
 import { CategoriesService } from "../services/CategoriesService";
+import { CourtsService } from "../services/CourtsService";
 import { UserService } from "../services/UserService";
 
 export class Helper {
@@ -42,5 +43,18 @@ export class Helper {
           return null;
         }
   }
+
+    static async ConvertCourtIdToNumber(courtId: number){
+      const courtsService = new CourtsService()
+      let courts = await courtsService.FetchCourts()
+      let foundCourt = courts.find(court => court.id == courtId)
+
+      if(foundCourt){
+        return foundCourt.number
+      } else {
+        return null
+      }
+
+    }
 } 
 

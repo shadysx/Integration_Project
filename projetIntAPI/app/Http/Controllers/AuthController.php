@@ -26,7 +26,8 @@ class AuthController extends Controller
 
         return response([
             'token' => $token,
-            'user' => $user
+            'user' => $user,
+            'message' => 'Successfully Logged in!'
         ]);
     }
 
@@ -41,12 +42,13 @@ class AuthController extends Controller
             'ranking' => 'required|max:191',
             'dateOfBirth' => 'required|max:191',
             'mobile' => 'required|digits:10',
-            'email' => 'required|max:191',
+            'email' => 'required|max:191|unique:users,email',
             'password' => 'required|max:191',
             'status' => 'required|max:191',
             'street' => 'required|max:191',
             'postalCode' => 'required|max:191',
             'locality' => 'required|max:191',
+            'categoryId' => 'required|max:191',
         ]);
 
         if($validator->fails())
