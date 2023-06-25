@@ -1,3 +1,4 @@
+//#region Imports
 import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, SelectChangeEvent, Stack } from '@mui/material';
@@ -9,8 +10,13 @@ import CreateReservationDialog from './CreateReservationDialog';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CourtsService } from '../../services/CourtsService';
 import moment from 'moment';
+//#endregion
 
 function ReservationsView() {
+
+  useEffect(() => {
+    console.log("MAIN: Selected reservation:  ", selectedReservation)
+  })
 
   //#region States/Constants
   const defaultReservation: Reservation = {
@@ -35,23 +41,71 @@ function ReservationsView() {
   const [selectedReservation, setSelectedReservation] = useState<Reservation>(defaultReservation);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [usersFullNames, setUsersFullNames] = useState<string[]>([]);
-  const [forceUpdate, setForceUpdate] = useState<boolean>(false);
+  const [selectedMembersId, setSelectedMembersId] = useState<string[]>([]);
 
   const { setAlert, user } = useContext(AuthContext);
   //#endregion
 
+  //#region UseEffects
+  useEffect(() => {
+    //Keep the users reservation user list up to date
+    fillReservationMembersFromSelectedMembersIds()
+  },[selectedMembersId])
+  //#endregion 
+
   //#region Methods
   const handleCloseEdit = () => {
+    setOpenEdit(false);
     // Reset the fields to avoid errors
     setSelectedReservation(defaultReservation);
-    setOpenEdit(false);
+    setSelectedMembersId([])
   };
 
   const handleCloseCreate = () => {
     setOpenCreate(false);
     // Reset the fields to avoid errors
     setSelectedReservation(defaultReservation);
+    setSelectedMembersId([])
   };
+
+  // Handle members selection change
+  const handleSelectedMembersChange = (event: SelectChangeEvent) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedMembersId(
+      typeof value === 'string' ? value.split(',') : value
+    );
+    console.log('changed members', event.target.value);
+  };
+
+  
+    // Fill the reservation members based on the selected members 
+    const fillReservationMembersFromSelectedMembersIds = () => {
+      setSelectedReservation((prevReservation) => ({
+        ...prevReservation,
+        user1_id: null,
+        user2_id: null,
+        user3_id: null,
+        user4_id: null,
+      }));
+    
+      if (selectedMembersId.length === 2) {
+        setSelectedReservation((prevReservation) => ({
+          ...prevReservation,
+          user1_id: parseInt(selectedMembersId[0], 10),
+          user2_id: parseInt(selectedMembersId[1], 10)
+        }));
+      } else if (selectedMembersId.length === 4) {
+        setSelectedReservation((prevReservation) => ({
+          ...prevReservation,
+          user1_id: parseInt(selectedMembersId[0], 10),
+          user2_id: parseInt(selectedMembersId[1], 10),
+          user3_id: parseInt(selectedMembersId[2], 10),
+          user4_id: parseInt(selectedMembersId[3], 10)
+        }));
+      }
+    }
   //#endregion
 
   //#region Fetching 
@@ -211,15 +265,17 @@ function ReservationsView() {
       }
     
       // Check if there is already a reservation for the selected court and time
-      const existingReservation = reservations.find(
-        (reservation) =>
-          reservation.court_id === selectedReservation.court_id &&
-          reservation.date === selectedReservation.date &&
+      const existingReservation = reservations.find((reservation) =>
+        reservation.court_id === selectedReservation.court_id &&
+        reservation.date === selectedReservation.date &&
+        (
           (reservation.starting_hour <= selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
           (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour <= reservation.ending_hour)
+        )
       );
     
       if (existingReservation) {
+        console.log('Existing reservation: ', existingReservation)
         setAlert({ type: "error", description: "There is already a reservation for this court and time", open: true });
         return false;
       }
@@ -324,12 +380,15 @@ function ReservationsView() {
         selectedReservation={selectedReservation}
         setSelectedReservation={setSelectedReservation}
         open={openCreate}
-        onClose={handleCloseCreate}
+        handleClose={handleCloseCreate}
         fetchReservations={fetchReservations}
         IsReservationLegit={() => isReservationLegit(false)}
         users={users}
         courts={courts}
         defaultReservation={defaultReservation}
+        handleSelectedMembersChange={handleSelectedMembersChange}
+        selectedMembersId={selectedMembersId}
+        fillReservationMembersFromSelectedMembersIds={fillReservationMembersFromSelectedMembersIds}
       />
     </>
   )

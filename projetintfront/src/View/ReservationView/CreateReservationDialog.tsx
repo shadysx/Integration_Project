@@ -19,67 +19,33 @@ export interface SimpleDialogProps {
   open: boolean;
   selectedReservation: Reservation;
   setSelectedReservation: (reservation: any) => void;
-  onClose: (value: Reservation) => void;
+  handleClose: () => void;
   fetchReservations: () => void;
   IsReservationLegit: () => boolean
+  handleSelectedMembersChange: (event: SelectChangeEvent) => void
+  fillReservationMembersFromSelectedMembersIds: () => void
   users: User[]
   courts: Court[]
+  selectedMembersId: string[],
   defaultReservation: Reservation
 }
 
 export default function CreateReservationDialog(props: SimpleDialogProps) {
-  const [membersSelected, setMembersSelected] = React.useState<string[]>([]);
-  const { onClose, selectedReservation, setSelectedReservation, open, fetchReservations, IsReservationLegit, users, courts, defaultReservation} = props;
+
+  const { 
+    handleClose,
+    selectedReservation,
+    setSelectedReservation,
+    open,
+    fetchReservations,
+    IsReservationLegit,
+    users,
+    courts,
+    selectedMembersId,
+    handleSelectedMembersChange,
+  } = props;
 
   const { setAlert } = useContext(AuthContext);
-
-  // This function resets the reservation fields
-  // Call this on closeDialog
-  const resetReservationFields = () => {
-    setSelectedReservation(defaultReservation);
-    setMembersSelected([]);
-  }
-
-  // Close the dialog and reset the reservation fields
-  const handleClose = () => {
-    onClose(selectedReservation);
-    resetReservationFields();
-  };
-
-  // Update the selected reservation when members are selected
-  useEffect(() => {
-    fillReservationMembersFromSelectedMembersIds();
-    console.log("selectedReservation after filled by combobox", selectedReservation);
-  }, [membersSelected]);
-
-  // Fill the reservation members based on the selected members
-  const fillReservationMembersFromSelectedMembersIds = () => {
-    console.log('selected amount', membersSelected.length);
-    console.log("useeffect", membersSelected);
-    setSelectedReservation((prevReservation) => ({
-      ...prevReservation,
-      user1_id: null,
-      user2_id: null,
-      user3_id: null,
-      user4_id: null,
-    }));
-    
-    if (membersSelected.length === 2) {
-      setSelectedReservation((prevReservation) => ({
-        ...prevReservation,
-        user1_id: membersSelected[0],
-        user2_id: membersSelected[1]
-      }));
-    } else if (membersSelected.length === 4) {
-      setSelectedReservation((prevReservation) => ({
-        ...prevReservation,
-        user1_id: membersSelected[0],
-        user2_id: membersSelected[1],
-        user3_id: membersSelected[2],
-        user4_id: membersSelected[3]
-      }));
-    }
-  }
 
   // Handle input change for reservation fields
   const handleChange = (e) => {
@@ -90,24 +56,13 @@ export default function CreateReservationDialog(props: SimpleDialogProps) {
     }));
   };
 
-
-
   // Handle court selection change
   const handleCourtChange = (event: SelectChangeEvent<typeof selectedReservation.court_id>) => {
     setSelectedReservation(prevReservation => ({...prevReservation, court_id: event.target.value}));
     console.log('changed court', event.target.value);
   };
 
-  // Handle members selection change
-  const handleMembersChange = (event: SelectChangeEvent) => {
-    const {
-      target: { value },
-    } = event;
-    setMembersSelected(
-      typeof value === 'string' ? value.split(',') : value
-    );
-    console.log('changed members', event.target.value);
-  };
+
 
   // Handle form submission
   const handleSubmit = async (event) => {
@@ -142,11 +97,7 @@ export default function CreateReservationDialog(props: SimpleDialogProps) {
   
       await fetchReservations();
     }
-
   };
-
-
-  
 
   return (
     <Dialog onClose={handleClose} open={open} >
@@ -160,7 +111,7 @@ export default function CreateReservationDialog(props: SimpleDialogProps) {
           <label htmlFor="ending_hour">Ending Hour:</label>
           <input type="time" id="ending_hour" name="ending_hour" value={selectedReservation?.ending_hour} onChange={handleChange} required /><br /><br />
           <SelectCourtsComboBox courtsList={courts} handleChange={handleCourtChange} />
-          <SelectMembersComboBox membersList={users} handleChange={handleMembersChange} membersSelected={membersSelected} />
+          <SelectMembersComboBox membersList={users} handleChange={handleSelectedMembersChange} membersSelected={selectedMembersId} />
           <input type="submit" value="Create" />
         </form>
       </div>

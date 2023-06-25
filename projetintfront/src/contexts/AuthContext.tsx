@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         setIsLoading(false); // Set loading to false after API request is complete
         navigate('/');
-      }, 2000);
+      }, 1200);
     } else {
       const data = await response.json();
       setAlert({ open: true, description: data.message, type: "error" });
