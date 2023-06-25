@@ -1,7 +1,10 @@
 import React, { createContext, useState } from 'react';
-import { User } from '../Interfaces/Interface';
+import { Alert, User } from '../Interfaces/Interface';
 import { useNavigate } from 'react-router-dom';
 import { UserService } from '../services/UserService';
+import AlertPopup from '../components/ErrorPopup/AlertPopup';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Backdrop } from '@mui/material';
 
 type AuthContextType = {
   login: any,
@@ -11,7 +14,7 @@ type AuthContextType = {
   isLoading: boolean,
   token: string,
   user: User,
-  error: string
+  setAlert: (alert: Alert) => void 
 }
 
 export const AuthContext = createContext<AuthContextType>(null);
@@ -20,8 +23,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>();
-  const [error, setError] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [alert, setAlert] = useState<Alert>({open: false, description: '', type: ''});
   
   const navigate = useNavigate();
   let userService = new UserService();
@@ -34,31 +37,39 @@ export const AuthProvider = ({ children }) => {
     return emailExists;
   }
 
-  const login = async (email: string, password: string) => {   
-    const response = await fetch("http://localhost:8000/api/auth/login", 
-      {method: 'POST', 
+  const login = async (affiliationNumber: string, password: string) => {
+
+  
+    const response = await fetch("http://localhost:8000/api/auth/login", {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'},
-        body: JSON.stringify({email, password})
-      })    
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ affiliationNumber, password })
+    });
+  
+    if (response.ok) {
+      setIsLoading(true); // Set loading to true before making the API request
+      const data = await response.json();
+  
+      setToken(data.token);
+      setUser(data.user);
 
-    if(response.ok)
-    {
-      const data = await response.json()
-      setToken(data.token);      
-      setUser(data.user);      
-      setIsAuthenticated(true);
-      navigate('/')
-    }    
-
-  };
-
-  const register = async (user: User) => {
-    if (await checkIfEmailExist(user.email)){
-      console.log('email already exist')
-      return false;
+      setTimeout(() => {
+        setAlert({ open: true, description: data.message, type: "success" });
+        setIsAuthenticated(true);
+        setIsLoading(false); // Set loading to false after API request is complete
+        navigate('/');
+      }, 1200);
+    } else {
+      const data = await response.json();
+      setAlert({ open: true, description: data.message, type: "error" });
     }
-    console.log('first')
+  
+  };
+  
+
+  const register = async (user: User) : Promise<boolean> => {
     const response = await fetch("http://localhost:8000/api/auth/register", 
     {method: 'POST', 
     headers: {
@@ -68,22 +79,43 @@ export const AuthProvider = ({ children }) => {
     if(response.ok)
     {
       setTimeout(() => {
-        login(user.email, user.password)
+        login(user.affiliationNumber, user.password)
       }, 1000)
-      console.log("Created success")
+      setAlert({open: true, description: 'Successfull registration!', type: "success"})
       return true
     }  
+    else {
+      let res = await response.json();
+      let firstError = res.errors[Object.keys(res.errors)[0]]
+      setAlert({open: true, description: firstError, type: "error"})
+    }
   }
 
   const logout = () => {
     // Perform logout logic, e.g., clear authentication token
-    navigate("/")
-    setIsAuthenticated(false);
+    setIsLoading(true); // Set loading to true before making the API request
+    setTimeout(() => {
+      navigate("/")
+      setIsAuthenticated(false);
+      setIsLoading(false); // Set loading to false after API request is complete
+    }, 800)
+
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, error, isLoading, register}}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, isLoading, register, setAlert}}>    
+    {isLoading && 
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    }  
+    {children}
+    {alert.open && (
+      <AlertPopup error={alert.description} type={alert.type} onClose={() => setAlert(prevAlert => ({ ...prevAlert, open: false }))} />
+    )}
+  </AuthContext.Provider>
   );
 };

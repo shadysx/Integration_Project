@@ -1,36 +1,54 @@
+import { Helper } from "../Helpers/Helper";
+import React, {useContext} from 'react';
 import { Reservation } from "../Interfaces/Interface";
+import { UserService } from "./UserService";
+import moment from 'moment';
+import { AuthContext } from "../contexts/AuthContext";
 
 export class ReservationService
 {    
-    FetchReservations = async () => {
-        let response = await fetch("http://localhost:8000/api/reservations");
-        let reservations: Reservation[] = await response.json();
 
-        return reservations;
+  FetchReservations = async () => {
+    let response = await fetch("http://localhost:8000/api/reservations");
+    let reservations: Reservation[] = await response.json();
+  
+    let retVal: Reservation[] = [];
+  
+    for (const res of reservations) {
+      let user1Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user1_id);
+      let user2Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user2_id);
+      let user3Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user3_id);
+      let user4Name = await Helper.ConvertUserIdToLastNameAndFirstName(res.user4_id);
+      let courtNumber = await Helper.ConvertCourtIdToNumber(res.court_id)
+  
+      res.user1_name = user1Name;
+      res.user2_name = user2Name;
+      res.user3_name = user3Name;
+      res.user4_name = user4Name;
+      res.court_number = courtNumber;
+
+      retVal.push(res);
     }
+  
+    console.log('reservations after fetch', retVal);
+    return retVal;
+  }
 
-    CreateReservation = async (reservation: Reservation) => {
-      try {
-        const response = await fetch(`http://localhost:8000/api/reservations/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(reservation)
-        });
-        
-        console.log(response)
-        if (!response.ok) {
-          throw new Error('Failed to create reservation');
+    CreateReservation = async (reservation: Reservation, setAlert) => {
+        try {
+          const response = await fetch(`http://localhost:8000/api/reservations/create`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reservation)
+          });
+
+          return response;
+
+        } catch (error){
+          console.log('Handled Error when creating a reservation:', error);
         }
-        
-        const data = await response.json();
-
-        return data;
-      }
-      catch (error){
-        console.log('Handled Error when creating a reservation:', error);
-      }
     }
 
     UpdateReservation = async (reservation: Reservation, reservationId: number) => {

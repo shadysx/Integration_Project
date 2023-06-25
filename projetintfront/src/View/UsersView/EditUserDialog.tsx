@@ -34,6 +34,10 @@ export default function EditUserDialog(props: SimpleDialogProps) {
     FetchCategoryNames()
   },[])
 
+  React.useEffect(() => {
+
+  })
+
   const handleClose = () => {
     onClose(selectedUser);
   };
@@ -47,27 +51,29 @@ export default function EditUserDialog(props: SimpleDialogProps) {
 
   const handleCategoryChange = async (categoryName: string) => {
     const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
+    console.log('Category Name: ', categoryName, ' CategoryID: ', categoryId)
     setSelectedUser((prevUser) => {
       return {
         ...prevUser,
-        categories: categoryId ? [categoryId] : [] // Update the categories with the new categoryId
+        categoryId: [categoryId] // Update the categories with the new categoryId
       };
     });
   }
 
-  const handleIsAdminChange = () => {
+  const handleHasPaidDuesChange = () => {
     setSelectedUser((prevState) => ({
       ...prevState,
-      isAdmin: !prevState.isAdmin
+      hasPaidDues: !prevState.hasPaidDues
     }));
   }
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     handleClose();
     // Add your logic to handle the form submission here
     const userService = new UserService();
     const { id, ...requestBody } = selectedUser;
+
+    console.log('Submited: ', requestBody)
     await userService.UpdateUser(requestBody, id);
     await fetchUsers();
   };
@@ -86,8 +92,8 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       <label htmlFor="email">Email:</label>
       <input type="email" id="email" name="email" value={selectedUser?.email} onChange={handleChange} required /><br /><br />
       
-      <label htmlFor="birthday">Birthday:</label>
-      <input type="date" id="birthday" name="birthday" value={selectedUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
+      <label htmlFor="dateOfBirth">Birthday:</label>
+      <input type="dateOfBirth" id="dateOfBirth" name="dateOfBirth" value={selectedUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
 
       <label htmlFor="gender">Gender:</label>
       <select id="gender" name="gender" value={selectedUser?.gender} onChange={handleChange} required>
@@ -114,6 +120,9 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       
       <label htmlFor="street">Street:</label>
       <input type="text" id="street" name="street" value={selectedUser?.street} onChange={handleChange} required /><br /><br />
+
+      <label htmlFor="hasPaidDues">Has paid: </label>
+      <input type="checkbox" id="hasPaidDues" name="hasPaidDues" checked={selectedUser?.hasPaidDues} onChange={handleHasPaidDuesChange} /><br /><br />
 
       <label htmlFor="categoryName">Categorie:</label>
       <ComboBox options={categoryNames} currentValue={selectedUser?.categoryName} onChange={handleCategoryChange}/>

@@ -11,9 +11,10 @@ import RegisterView from '../View/RegisterView/RegisterView';
 import CourtsView from '../View/CourtsView/CourtsView';
 import ReservationsView from '../View/ReservationView/ReservationsView';
 
+
+
 const RootNavigation = () => {
     const { isAuthenticated } = useContext(AuthContext)
-
     return isAuthenticated ? <AuthRoutes/> : <GuestRoutes/>
 }
 
@@ -27,17 +28,31 @@ const GuestRoutes = () => {
 }
 
 const AuthRoutes = () => {
+    const { user } = useContext(AuthContext)
     return (
         <div>
-            <Navbar/>
+            <Navbar isAdmin={user.isAdmin}/>
             <Routes>
                 <Route path='/' element={<HomeView/>}/>
                 <Route path='/users' element={<UsersView/>}/>
-                <Route path='/categories' element={<CategoriesView/>}></Route>
-                <Route path='/courts' element={<CourtsView/>}></Route>
                 <Route path='/reservations' element={<ReservationsView/>}></Route>
+                {user.isAdmin && (
+                    AdminRoutes()
+                )}
             </Routes>
         </div>
+    )
+}
+
+const AdminRoutes = () => {
+    return (
+        <>
+            <Route path='/' element={<HomeView/>}/>
+
+            <Route path='/categories' element={<CategoriesView/>}></Route>
+            <Route path='/courts' element={<CourtsView/>}></Route>
+        </>
+
     )
 }
 

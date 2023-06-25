@@ -7,6 +7,7 @@ const ComboBox = ({ options, currentValue, onChange }) => {
     const selectedValue = event.target.value;
     setSelectedOption(selectedValue);
     onChange(selectedValue)
+    console.log("Combo ", selectedValue)
   };
 
   return (

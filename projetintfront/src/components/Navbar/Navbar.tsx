@@ -12,13 +12,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-function Navbar() {
-const { logout} = useContext(AuthContext)
+function Navbar({ isAdmin }) {
+const { logout, user} = useContext(AuthContext)
 const navigate = useNavigate();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static">
+    <AppBar position="static" color={isAdmin ? "secondary" : 'primary'}>
       <Toolbar style={{justifyContent: "space-between"}}>
         <div>
             <IconButton
@@ -35,27 +35,37 @@ const navigate = useNavigate();
                 onClick={() => navigate("/")} 
                 >Home</Button>
             <Button 
-                color="inherit"
-                onClick={() => navigate("/users")} 
-                >Users</Button>
+                  color="inherit"
+                  onClick={() => navigate("/users")} 
+                  >Members</Button>
             <Button 
-                color="inherit"
-                onClick={() => navigate("/categories")} 
-                >Categories</Button>
-            <Button 
-                color="inherit"
-                onClick={() => navigate("/courts")} 
-                >Courts</Button>
-            <Button 
-                color="inherit"
-                onClick={() => navigate("/reservations")} 
-                >Reservations</Button>
+                  color="inherit"
+                  onClick={() => navigate("/reservations")} 
+                  >Reservations</Button>
+            {isAdmin == true && (
+            <>
+
+              <Button 
+                  color="inherit"
+                  onClick={() => navigate("/categories")} 
+                  >Categories</Button>
+              <Button 
+                  color="inherit"
+                  onClick={() => navigate("/courts")} 
+                  >Courts</Button>
+
+            </>
+            )}
+
         </div>
+        <>
         <Button 
             style={{}}
             color="inherit"
             onClick={() => logout()} 
             >Logout</Button>
+        </>
+
       </Toolbar>
     </AppBar>
   </Box>

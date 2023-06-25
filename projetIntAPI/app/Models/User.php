@@ -26,7 +26,9 @@ class User extends Authenticatable implements JWTSubject
         'street',
         'postalCode', 
         'locality',
-        'isAdmin'
+        'isAdmin',
+        "categoryId",
+        "hasPaidDues"
     ];
 
     public function getJWTIdentifier()

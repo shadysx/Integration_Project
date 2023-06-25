@@ -131,9 +131,12 @@ class UserController extends Controller
             'street' => 'required|max:191',
             'postalCode' => 'required|max:191',
             'locality' => 'required|max:191',
-            'isAdmin' => 'required|max:191'
+            'isAdmin' => 'required|max:191',
+            'hasPaidDues' => 'required|max:191',
+            'categoryId' => 'required|max:191',
         ]);
 
+        error_log($request);
         if($validator->fails())
         {
             return response()->json([
@@ -163,11 +166,11 @@ class UserController extends Controller
                 'postalCode'=> $request->postalCode, 
                 'locality'=> $request->locality,
                 'isAdmin' => $request->isAdmin,
+                'hasPaidDues' => $request->hasPaidDues,
+
             ]);
 
-            error_log($request->isAdmin);
-
-            $categoryIds = $request->input('categories', []); // Assuming the categories are sent as an array of IDs
+            $categoryIds = $request->input('categoryId', []); // Assuming the categories are sent as an array of IDs
             $member->categories()->sync($categoryIds);
 
             return response()->json([
