@@ -4,15 +4,71 @@ import "./UserProfileView.css"
 import { AuthContext } from '../../contexts/AuthContext';
 import Button from '@mui/material/Button';
 import KeyIcon from '@mui/icons-material/Key';
+import { CategoriesService } from '../../services/CategoriesService';
+import ComboBox from '../../components/ComboBox';
+import { Helper } from '../../Helpers/Helper';
+import { UserService } from '../../services/UserService';
+import { User } from '../../Interfaces/Interface';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function UserProfileView() {
 
-  const { user } = React.useContext(AuthContext);
-  const [ currentUser , setCurrentUser ] = useState(user)
+  const { user, isLoading, setIsLoading ,setAlert } = React.useContext(AuthContext);
+  const [ categoryNames, setCategoryNames] = useState([]);
+  const [ currentUser , setCurrentUser ] = useState<User>({
+    affiliationNumber: "",
+    lastName: "",
+    firstName: "",
+    gender: "",
+    ranking: "",
+    dateOfBirth: "",
+    mobile: "",
+    email: "",
+    status: "",
+    street: "",
+    postalCode: "",
+    locality: "",
+    password: "",
+    categoryName: "",
+    isAdmin: false,
+    hasPaidDues: false
+})  
+  
+  const navigate = useNavigate()
   
 
-  console.log(currentUser)
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+  
+      const categoriesService = new CategoriesService();
+      const _categoryNames = await categoriesService.FetchCategories();
+      let nameList = [];
+      _categoryNames.map((category) => {
+        nameList.push(category.name);
+      });
+      setCategoryNames(nameList);
+  
+      await FetchUser();
+  
+      setIsLoading(false);
+    };
+  
+    fetchData();
+  }, []);
+
+  
+
+  const FetchUser = async () => {
+    const userService = new UserService();
+    const u = await userService.FetchUsersById(user.id);
+    setCurrentUser(u);
+    console.log(u)
+  }
+
+  
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,8 +78,41 @@ export default function UserProfileView() {
     }));
   };
 
+
+  const handleCategoryChange = async (categoryName: string) => {
+    const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
+    console.log('Category Name: ', categoryName, ' CategoryID: ', categoryId)
+    setCurrentUser((prevUser) => {
+      return {
+        ...prevUser,
+        categoryId: [categoryId] // Update the categories with the new categoryId
+      };
+    });
+  }
+
+  const handleHasPaidDuesChange = () => {
+    setCurrentUser((prevState) => ({
+      ...prevState,
+      hasPaidDues: !prevState.hasPaidDues
+    }));
+  }
+
+  const handleSubmit = async (event) => {
+    
+    event.preventDefault();    
+    // Add your logic to handle the form submission here
+    const userService = new UserService();
+    const { id, ...requestBody } = currentUser;
+
+    console.log('Submited: ', requestBody)
+    await userService.UpdateUser(requestBody, id);
+    navigate("/");
+
+    
+  };
+
   return (        
-      <form action="/modifier" method="post">
+      <form>
         <div className="editUserForm">
           <div className="left">
             <div>
@@ -32,64 +121,53 @@ export default function UserProfileView() {
             <div className='divDescription'>
               <h3>{currentUser.firstName} {currentUser.lastName.toUpperCase()}</h3>
               <p>Numéro d'affiliation : {currentUser.affiliationNumber}</p>
-              <p>Classement : {currentUser.ranking}</p>
-              <Button variant='contained'> <KeyIcon/> Modifier Mot de passe</Button>
+              <p>Classement : {currentUser.categoryName}</p>
+              <Button variant='contained' color={user.isAdmin ? "secondary" : 'primary'}> <KeyIcon/> &#8205; &#8205; {"Modifier Mot de passe"}</Button>
             </div>
               
-            </div>
+          </div>
 
-            <div className="middle">
-              <h2>Edit Profile</h2>
+          <div className="middle">
+            <h2>Edit Profile</h2>
+            
+            <label htmlFor="dateOfBirth">Birthday:</label>
+            <input type="dateOfBirth" id="dateOfBirth" name="dateOfBirth" value={currentUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
+
+            <label htmlFor="email">Email:</label>
+            <input type="email" id="email" name="email" value={currentUser?.email} onChange={handleChange} required /><br /><br />
+      
+
+            <label htmlFor="gender">Gender:</label>
+            <select id="gender" name="gender" value={currentUser?.gender} onChange={handleChange} required>
+              <option value="">Select</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other</option>
+            </select><br /><br />
+            
+            <label htmlFor="locality">Locality:</label>
+            <input type="text" id="locality" name="locality" value={currentUser?.locality} onChange={handleChange} required /><br /><br />
+            
+            <label htmlFor="mobile">Mobile:</label>
+            <input type="tel" id="mobile" name="mobile" value={currentUser?.mobile} onChange={handleChange} required /><br /><br />
+            
+            <label htmlFor="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" name="postalCode" value={currentUser?.postalCode} onChange={handleChange} required /><br /><br />
+            
+                  
+            <label htmlFor="categoryName">Categorie:</label>
+            <ComboBox options={categoryNames} currentValue={currentUser?.categoryName} onChange={handleCategoryChange}/><br/><br/>
+                        
+            <label htmlFor="street">Street:</label>
+            <input type="text" id="street" name="street" value={currentUser?.street} onChange={handleChange} required /><br /><br />
+
+            <label htmlFor="hasPaidDues">Has paid: </label>
+            <input type="checkbox" id="hasPaidDues" name="hasPaidDues" checked={currentUser?.hasPaidDues} onChange={handleHasPaidDuesChange} /><br /><br />
+
+            
+            <Button className="buttonUpdate" variant='contained' color={user.isAdmin ? "secondary" : 'primary'} onClick={handleSubmit}>Update</Button>  
+            
               
-              <label htmlFor="dateOfBirth">Date de naissance :</label>
-              <input type="date" id="dateOfBirth" name="dateOfBirth" required/><br/>
-
-              <label htmlFor="email">Email :</label>
-              <input type="email" id="email" name="email" required/><br/>
-
-              <label htmlFor="gender">Genre :</label>
-              <select id="gender" name="gender" required>
-                <option value="male">Masculin</option>
-                <option value="female">Féminin</option>
-                <option value="other">Autre</option>
-              </select>
-
-              <label htmlFor="isAdmin">Est administrateur :</label>
-              <input type="checkbox" id="isAdmin" name="isAdmin"/><br/>
-
-              <label htmlFor="locality">Localité :</label>
-              <input type="text" id="locality" name="locality" required/><br/>
-
-              <label htmlFor="mobile">Numéro de téléphone mobile :</label>
-              <input type="text" id="mobile" name="mobile" required/><br/>
-
-              <label htmlFor="postalCode">Code postal :</label>
-              <input type="text" id="postalCode" name="postalCode" required/><br/>
-
-              <label htmlFor="ranking">Classement :</label>
-              <input type="text" id="ranking" name="ranking" required/><br/>
-
-              <label htmlFor="status">Statut :</label>
-              <input type="text" id="status" name="status" required/><br/>
-
-              <label htmlFor="street">Rue :</label>
-              <input type="text" id="street" name="street" required/><br/>
-
-              <label htmlFor="password">Mot de passe :</label>
-              <input type="password" id="password" name="password" required/><br/>
-
-              <label htmlFor="categories">Catégories :</label>
-              <select id="categories" name="categoryId" multiple>
-                {/* <!-- Remplacez les options par vos propres catégories --> */}
-                <option value="1">Catégorie 1</option>
-                <option value="2">Catégorie 2</option>
-                <option value="3">Catégorie 3</option>
-              </select>
-
-              <label htmlFor="hasPaidDues">Cotisations payées :</label>
-              <input type="checkbox" id="hasPaidDues" name="hasPaidDues"/><br/>
-
-              <button type="submit">Enregistrer</button>    
           </div>    
         </div>
           

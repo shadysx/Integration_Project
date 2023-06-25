@@ -23,6 +23,11 @@ export class UserService
         return users;
     }
 
+    FetchUsersById = async (userId: number): Promise<User> => {
+      let users = await this.FetchUsers();
+      return users.find(user => user.id = userId)
+    }
+
     CreateUser = async (user: User) => {
       try {
         const response = await fetch(`http://localhost:8000/api/auth/register`, {
