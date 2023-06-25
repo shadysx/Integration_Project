@@ -85,7 +85,5 @@ export class CategoriesService
             console.log('Handled Error when deleting a category:', error);
           }
         }
-
-
 }
 
