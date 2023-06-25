@@ -8,11 +8,12 @@ import EditReservationDialog from './EditReservationDialog';
 import CreateReservationDialog from './CreateReservationDialog';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CourtsService } from '../../services/CourtsService';
+import moment from 'moment';
 
 function ReservationsView() {
 
   //#region States/Constants
-  const defaultReservation = {
+  const defaultReservation: Reservation = {
     starting_hour: "09:00:00",
     ending_hour: "10:00:00",
     date: "2023-06-22",
@@ -25,67 +26,65 @@ function ReservationsView() {
     user2_name: "",
     court_number: 0,
     duration: "01:00:00"
-  }
+  };
 
-  const [openCreate, setOpenCreate] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const [courts, setCourts] = useState<Court[]>([]);
-  const [selectedReservation, setSelectedReservation] = React.useState<Reservation>(defaultReservation);
-  const [reservations, setReservations] = React.useState<Reservation[]>([]);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation>(defaultReservation);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [usersFullNames, setUsersFullNames] = useState<string[]>([]);
-  const [forceUpdate, setForceUpdate] = useState<boolean>(false)
+  const [forceUpdate, setForceUpdate] = useState<boolean>(false);
 
   const { setAlert, user } = useContext(AuthContext);
   //#endregion
 
-
   //#region Methods
   const handleCloseEdit = () => {
+    // Reset the fields to avoid errors
+    setSelectedReservation(defaultReservation);
     setOpenEdit(false);
   };
 
   const handleCloseCreate = () => {
     setOpenCreate(false);
-    // Reset the ids to avoid errors
-    setSelectedReservation(defaultReservation)
+    // Reset the fields to avoid errors
+    setSelectedReservation(defaultReservation);
   };
   //#endregion
 
-
   //#region Fetching 
-  const FetchUsers = async () => {
+  const fetchUsers = async () => {
     const userService = new UserService();
     const users: User[] = await userService.FetchUsers();
-    //alert(JSON.stringify(users, null, 4));
     const usersFullNamesTemp: string[] = users.map((user) => user.fullName);
-    setUsersFullNames(usersFullNamesTemp)
-    setUsers(users)
-  }
+    setUsersFullNames(usersFullNamesTemp);
+    setUsers(users);
+  };
 
-  const FetchReservations = async () => {
+  const fetchReservations = async () => {
     const reservationsService = new ReservationService();
     const reservations: Reservation[] = await reservationsService.FetchReservations();
     setReservations(reservations);
-  }
+  };
 
-  const FetchCourts = async () => {
+  const fetchCourts = async () => {
     const courtsService = new CourtsService();
-    const courts: Court[] = await courtsService.FetchCourts()
-    setCourts(courts)
-  }
+    const courts: Court[] = await courtsService.FetchCourts();
+    setCourts(courts);
+  };
 
   useEffect(() => {
-    FetchReservations();
-    FetchUsers();
-    FetchCourts()
-  },[])
-
-  //#endregion 
+    fetchReservations();
+    fetchUsers();
+    fetchCourts();
+  }, []);
+  //#endregion
 
   //#region Check Constraints
     // Count the number of users in the reservation
-    const UsersInReservationCount = () => {
+    const usersInReservationCount = () => {
       const userIDs = [
         selectedReservation.user1_id,
         selectedReservation.user2_id,
@@ -97,84 +96,142 @@ function ReservationsView() {
   
       return count;
     }
-
-  const IsReservationLegit = (isUpdate) => {
-  
-
-    if (UsersInReservationCount() !== 2 && UsersInReservationCount() !== 4) {
-      setAlert({ type: "error", description: "Numbers of players incorrect (2,4)", open: true });
-      return false;
-    }
-  
-    const startingHour = parseInt(selectedReservation.starting_hour.slice(0, 2));
-    const endingHour = parseInt(selectedReservation.ending_hour.slice(0, 2));
-    const durationInMinutes = (endingHour - startingHour) * 60; // Convert to minutes
-  
-    if (startingHour < 9 || endingHour > 22) {
-      setAlert({ type: "error", description: "Reservation time should be between 9:00 and 22:00", open: true });
-      return false;
-    }
-  
-    if (UsersInReservationCount() === 2 && durationInMinutes > 60) {
-      setAlert({ type: "error", description: "Reservation duration cannot exceed 1 hour with 2 members", open: true });
-      return false;
-    }
-  
-    if (UsersInReservationCount() === 4 && durationInMinutes > 120) {
-      setAlert({ type: "error", description: "Reservation duration cannot exceed 2 hours with 4 members", open: true });
-      return false;
-    }
-    const selectedDate = new Date(selectedReservation.date);
-    const dayOfWeek = selectedDate.getDay();
-  
-    // Check if the selected date is a weekday (Monday to Friday)
-    if (dayOfWeek === 0 || dayOfWeek === 6) {
-      setAlert({ type: "error", description: "Reservations can only be made on weekdays", open: true });
-      return false;
-    }
+    const isReservationTimeExceeded = (): boolean => {
+      // Checking if the user will exceed the maximum reservation hours for the week
     
-    const reservationUsers = [
-      selectedReservation.user1_id,
-      selectedReservation.user2_id,
-      selectedReservation.user3_id,
-      selectedReservation.user4_id
-    ].filter((userId) => userId !== null);
-  
-    let unpaidUsers = [];
-  
-    for (let userId of reservationUsers) {
-      let user = users.find(user => user.id === userId);
-      if (user && !user.hasPaidDues) {
-        unpaidUsers.push(user.fullName);
+      // Filter the reservations for the given user ID
+      const concernedReservationsForUser = reservations.filter(
+        (reservation) =>
+          reservation.user1_id === user.id ||
+          reservation.user2_id === user.id ||
+          reservation.user3_id === user.id ||
+          reservation.user4_id === user.id
+      );
+    
+      // Get the current date and time at the start of the week (Sunday at 00:00:00)
+      const now = new Date();
+      const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+    
+      // Filter the reservations to only include those from the current week
+      const concernedReservationsForUserForTheSelectedWeek = concernedReservationsForUser.filter(
+        (reservation) => new Date(reservation.date) >= startOfWeek
+      );
+    
+      // Calculate the total reservation hours for singles and doubles
+      let totalHoursSingles = 0;
+      let totalHoursDoubles = 0;
+    
+      for (const reservation of concernedReservationsForUserForTheSelectedWeek) {
+        // Calculate the reservation duration
+        const duration = moment.duration(moment(reservation.ending_hour, 'HH:mm:ss').diff(moment(reservation.starting_hour, 'HH:mm:ss'))).asHours();
+    
+        if (reservation.user3_id || reservation.user4_id) {
+          // This is a doubles reservation
+          totalHoursDoubles += duration;
+        } else {
+          // This is a singles reservation
+          totalHoursSingles += duration;
+        }
       }
-    }
-  
-    if (unpaidUsers.length > 0) {
-      setAlert({ type: "error", description: `These members have not paid their dues: ${unpaidUsers.join(", ")}`, open: true });
-      return false;
-    }
-
-    if(!isUpdate){
+    
+      // Calculate the proposed reservation duration
+      const proposedDuration = moment.duration(moment(selectedReservation.ending_hour, 'HH:mm:ss').diff(moment(selectedReservation.starting_hour, 'HH:mm:ss'))).asHours();
+    
+      // Check if this is a doubles or singles reservation
+      if (selectedReservation.user3_id || selectedReservation.user4_id) {
+        // This is a proposed doubles reservation
+        if (totalHoursDoubles + proposedDuration > 4) {
+          return false; // Exceeds maximum doubles reservation hours per week
+        }
+      } else {
+        // This is a proposed singles reservation
+        if (totalHoursSingles + proposedDuration > 2) {
+          return false; // Exceeds maximum singles reservation hours per week
+        }
+      }
+    
+      // If none of the checks fail, the user will not exceed their reservation time for this week
+      return true;
+    };
+    
+    const isReservationLegit = (isUpdate: boolean): boolean => {
+      if (usersInReservationCount() !== 2 && usersInReservationCount() !== 4) {
+        setAlert({ type: "error", description: "Numbers of players incorrect (2,4)", open: true });
+        return false;
+      }
+    
+      const startingHour = parseInt(selectedReservation.starting_hour.slice(0, 2));
+      const endingHour = parseInt(selectedReservation.ending_hour.slice(0, 2));
+      const durationInMinutes = (endingHour - startingHour) * 60; // Convert to minutes
+    
+      if (startingHour < 9 || endingHour > 22) {
+        setAlert({ type: "error", description: "Reservation time should be between 9:00 and 22:00", open: true });
+        return false;
+      }
+    
+      if (usersInReservationCount() === 2 && durationInMinutes > 60) {
+        setAlert({ type: "error", description: "Reservation duration cannot exceed 1 hour with 2 members", open: true });
+        return false;
+      }
+    
+      if (usersInReservationCount() === 4 && durationInMinutes > 120) {
+        setAlert({ type: "error", description: "Reservation duration cannot exceed 2 hours with 4 members", open: true });
+        return false;
+      }
+    
+      const selectedDate = new Date(selectedReservation.date);
+      const dayOfWeek = selectedDate.getDay();
+    
+      // Check if the selected date is a weekday (Monday to Friday)
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        setAlert({ type: "error", description: "Reservations can only be made on weekdays", open: true });
+        return false;
+      }
+    
+      // Get all the users on the reservation
+      const reservationUsers = [
+        selectedReservation.user1_id,
+        selectedReservation.user2_id,
+        selectedReservation.user3_id,
+        selectedReservation.user4_id,
+      ].filter((userId) => userId !== null);
+    
+      const unpaidUsers = [];
+    
+      for (const userId of reservationUsers) {
+        const user = users.find((user) => user.id === userId);
+        if (user && !user.hasPaidDues) {
+          unpaidUsers.push(user.fullName);
+        }
+      }
+    
+      if (unpaidUsers.length > 0) {
+        setAlert({ type: "error", description: `These members have not paid their dues: ${unpaidUsers.join(", ")}`, open: true });
+        return false;
+      }
+    
       // Check if there is already a reservation for the selected court and time
       const existingReservation = reservations.find(
         (reservation) =>
           reservation.court_id === selectedReservation.court_id &&
           reservation.date === selectedReservation.date &&
-          (
-            (reservation.starting_hour <= selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
-            (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour <= reservation.ending_hour)
-          )
-        );
-
+          (reservation.starting_hour <= selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
+          (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour <= reservation.ending_hour)
+      );
+    
       if (existingReservation) {
         setAlert({ type: "error", description: "There is already a reservation for this court and time", open: true });
         return false;
       }
-    }
- 
-  
-    return true;
-  }
+    
+      // Check if the current user will exceed reservation time
+      if (!isReservationTimeExceeded()) {
+        setAlert({ open: true, description: "You have reached your maximum reservation hours for the week.", type: "error" });
+        return false;
+      }
+    
+      return true;
+    };
 
   //#endregion
 
@@ -208,7 +265,7 @@ function ReservationsView() {
             try {
               const reservationService = new ReservationService();
               await reservationService.DeleteReservation(params.row.id)
-              await FetchReservations()
+              await fetchReservations()
             } catch (error) {
               console.log('Error deleting reservation:', error);
             }
@@ -260,7 +317,7 @@ function ReservationsView() {
         setSelectedReservation={setSelectedReservation}
         open={openEdit}
         onClose={handleCloseEdit}
-        fetchReservations={FetchReservations}
+        fetchReservations={fetchReservations}
         usersFullNames={usersFullNames}
       />
       <CreateReservationDialog 
@@ -268,8 +325,8 @@ function ReservationsView() {
         setSelectedReservation={setSelectedReservation}
         open={openCreate}
         onClose={handleCloseCreate}
-        fetchReservations={FetchReservations}
-        IsReservationLegit={() => IsReservationLegit(false)}
+        fetchReservations={fetchReservations}
+        IsReservationLegit={() => isReservationLegit(false)}
         users={users}
         courts={courts}
         defaultReservation={defaultReservation}
