@@ -1,0 +1,41 @@
+.editUserForm {
+    width: 98%;
+    padding: 10px;
+    display: flex;    
+    flex-direction: row;
+}
+
+
+.left {
+    width: 30%;
+    display: flex;        
+    align-items: center;
+    margin-top: 10%;
+    margin-left: 10%;
+    padding-right: 5%;
+    flex-direction: column;
+    
+}
+
+.divDescription{
+    display: flex;
+    flex-direction: column;    
+    align-items: center;  
+    
+}
+
+.divDescription p {
+    margin-top: -5px;
+}
+
+.left img{
+    padding-left: 10%;
+    width: 80%;
+    
+}
+
+.middle{
+    width: 38%;    
+}
+
+
