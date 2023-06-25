@@ -28,7 +28,7 @@ function CategoriesView() {
   }
   useEffect(() => {    
     FetchCategories();
-  },[])   
+  },[])    
 
 
   const handleSetCategory = (category) => {
@@ -120,7 +120,8 @@ function CategoriesView() {
 
   return (
     <>
-      <input className ="buttonCreate" type="button" value="Create" onClick={handleCreate} />
+      <Button onClick={() => setOpenCreate(true)}>Add</Button>
+      
       <div className='main'>
         <DataTable/>
       </div>      

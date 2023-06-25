@@ -10,6 +10,7 @@ import CategoriesView from '../View/CategoriesView/CategoriesView';
 import RegisterView from '../View/RegisterView/RegisterView';
 import CourtsView from '../View/CourtsView/CourtsView';
 import ReservationsView from '../View/ReservationView/ReservationsView';
+import UserProfileView from '../View/UsersView/UserProfileView';
 
 
 
@@ -36,6 +37,7 @@ const AuthRoutes = () => {
                 <Route path='/' element={<HomeView/>}/>
                 <Route path='/users' element={<UsersView/>}/>
                 <Route path='/reservations' element={<ReservationsView/>}></Route>
+                <Route path='/profile' element={<UserProfileView/>}></Route>
                 {user.isAdmin && (
                     AdminRoutes()
                 )}

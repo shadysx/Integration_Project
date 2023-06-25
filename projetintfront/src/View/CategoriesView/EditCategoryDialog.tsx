@@ -46,7 +46,7 @@ export default function EditCategoryDialog(props: CategoryDialogProps){
     return (
         <Dialog onClose={handleClose} open={open} >
         <DialogTitle className="dialog-title">Edit Category</DialogTitle>
-        <div className='dialog'>
+        <div className='dialogCategory'>
         <form onSubmit={handleSubmit}  className="dialog-form">         
           
           <label htmlFor="name">Name :</label>

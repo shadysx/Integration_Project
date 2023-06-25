@@ -15,6 +15,7 @@ type AuthContextType = {
   token: string,
   user: User,
   setAlert: (alert: Alert) => void 
+  setIsLoading: (value: boolean) => void
 }
 
 export const AuthContext = createContext<AuthContextType>(null);
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, isLoading, register, setAlert}}>    
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, user, token, isLoading, setIsLoading, register, setAlert}}>    
     {isLoading && 
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
