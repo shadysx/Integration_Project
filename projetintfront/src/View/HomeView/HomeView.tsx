@@ -41,7 +41,7 @@ function HomeView() {
     <Container>
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Welcome, {user.email}
+          Welcome, {user.firstName}
         </Typography>
         <Box sx={{ my: 4 }}>
           <Grid container spacing={4}>
