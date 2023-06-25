@@ -23,7 +23,6 @@ export interface SimpleDialogProps {
   fetchReservations: () => void;
   IsReservationLegit: () => boolean
   handleSelectedMembersChange: (event: SelectChangeEvent) => void
-  fillReservationMembersFromSelectedMembersIds: () => void
   users: User[]
   courts: Court[]
   selectedMembersId: string[],

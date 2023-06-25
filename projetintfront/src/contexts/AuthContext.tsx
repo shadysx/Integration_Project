@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Alert, User } from '../Interfaces/Interface';
 import { useNavigate } from 'react-router-dom';
 import { UserService } from '../services/UserService';
@@ -27,18 +27,9 @@ export const AuthProvider = ({ children }) => {
   const [alert, setAlert] = useState<Alert>({open: false, description: '', type: ''});
   
   const navigate = useNavigate();
-  let userService = new UserService();
 
-  const checkIfEmailExist = async (email): Promise<boolean> => {
-    const users = await userService.FetchUsers();
-
-    const emailExists = users.some(user => user.email === email);
-
-    return emailExists;
-  }
 
   const login = async (affiliationNumber: string, password: string) => {
-
   
     const response = await fetch("http://localhost:8000/api/auth/login", {
       method: 'POST',
@@ -119,3 +110,4 @@ export const AuthProvider = ({ children }) => {
   </AuthContext.Provider>
   );
 };
+

@@ -14,10 +14,6 @@ import moment from 'moment';
 
 function ReservationsView() {
 
-  useEffect(() => {
-    console.log("MAIN: Selected reservation:  ", selectedReservation)
-  })
-
   //#region States/Constants
   const defaultReservation: Reservation = {
     starting_hour: "09:00:00",
@@ -150,26 +146,36 @@ function ReservationsView() {
   
       return count;
     }
-    const isReservationTimeExceeded = (): boolean => {
+    const isReservationTimeExceeded = (isUpdate): boolean => {
       // Checking if the user will exceed the maximum reservation hours for the week
     
       // Filter the reservations for the given user ID
       const concernedReservationsForUser = reservations.filter(
         (reservation) =>
-          reservation.user1_id === user.id ||
+          (reservation.user1_id === user.id ||
           reservation.user2_id === user.id ||
           reservation.user3_id === user.id ||
-          reservation.user4_id === user.id
+          reservation.user4_id === user.id) && 
+          (!isUpdate || reservation.id !== selectedReservation.id) // Exclude the reservation being updated if it's an update operation
       );
     
+
+      const selectedReservationDate = new Date(selectedReservation.date);
       // Get the current date and time at the start of the week (Sunday at 00:00:00)
-      const now = new Date();
-      const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+      const startOfWeek = new Date(Date.UTC(selectedReservationDate.getUTCFullYear(), selectedReservationDate.getUTCMonth(), selectedReservationDate.getUTCDate() - (selectedReservationDate.getUTCDay() -1)));
     
       // Filter the reservations to only include those from the current week
       const concernedReservationsForUserForTheSelectedWeek = concernedReservationsForUser.filter(
-        (reservation) => new Date(reservation.date) >= startOfWeek
+        (reservation) => {
+          const reservationDate = new Date(reservation.date);
+          const startOfReservationDate = new Date(Date.UTC(reservationDate.getFullYear(), reservationDate.getMonth(), reservationDate.getDate()));
+
+          console.log("startOfReservationDate", startOfReservationDate, "startOfweek", startOfWeek)
+          return startOfReservationDate >= startOfWeek;
+        }
       );
+    
+      console.log('MyResOfTheWeek: ', concernedReservationsForUserForTheSelectedWeek)
     
       // Calculate the total reservation hours for singles and doubles
       let totalHoursSingles = 0;
@@ -249,6 +255,12 @@ function ReservationsView() {
         selectedReservation.user3_id,
         selectedReservation.user4_id,
       ].filter((userId) => userId !== null);
+
+      // Ensure that the user creating the reservation is in the reservation
+      if (!reservationUsers.includes(user.id) && !user.isAdmin) {
+      setAlert({ type: "error", description: "You must be a participant in the reservation you are creating.", open: true });
+        return false;
+      }
     
       const unpaidUsers = [];
     
@@ -265,15 +277,16 @@ function ReservationsView() {
       }
     
       // Check if there is already a reservation for the selected court and time
-      const existingReservation = reservations.find((reservation) =>
+        const existingReservation = reservations.find((reservation) =>
+        (!isUpdate || (isUpdate && reservation.id !== selectedReservation.id)) &&
         reservation.court_id === selectedReservation.court_id &&
         reservation.date === selectedReservation.date &&
         (
-          (reservation.starting_hour <= selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
-          (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour <= reservation.ending_hour)
+          (reservation.starting_hour < selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
+          (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour < reservation.ending_hour)
         )
       );
-    
+
       if (existingReservation) {
         console.log('Existing reservation: ', existingReservation)
         setAlert({ type: "error", description: "There is already a reservation for this court and time", open: true });
@@ -281,7 +294,7 @@ function ReservationsView() {
       }
     
       // Check if the current user will exceed reservation time
-      if (!isReservationTimeExceeded()) {
+      if (!isReservationTimeExceeded(isUpdate) && !user.isAdmin) {
         setAlert({ open: true, description: "You have reached your maximum reservation hours for the week.", type: "error" });
         return false;
       }
@@ -372,9 +385,14 @@ function ReservationsView() {
         selectedReservation={selectedReservation}
         setSelectedReservation={setSelectedReservation}
         open={openEdit}
-        onClose={handleCloseEdit}
+        handleClose={handleCloseEdit}
         fetchReservations={fetchReservations}
-        usersFullNames={usersFullNames}
+        IsReservationLegit={() => isReservationLegit(true)}
+        users={users}
+        courts={courts}
+        defaultReservation={defaultReservation}
+        handleSelectedMembersChange={handleSelectedMembersChange}
+        selectedMembersId={selectedMembersId}
       />
       <CreateReservationDialog 
         selectedReservation={selectedReservation}
@@ -388,7 +406,6 @@ function ReservationsView() {
         defaultReservation={defaultReservation}
         handleSelectedMembersChange={handleSelectedMembersChange}
         selectedMembersId={selectedMembersId}
-        fillReservationMembersFromSelectedMembersIds={fillReservationMembersFromSelectedMembersIds}
       />
     </>
   )
