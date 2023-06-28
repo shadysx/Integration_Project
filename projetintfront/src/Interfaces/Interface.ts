@@ -26,7 +26,6 @@ export interface User{
     fullName?: string,
     hasPaidDues: boolean,
     categoryId?: number[];
-
 }
 
 export interface Court{
@@ -37,7 +36,6 @@ export interface Court{
 export interface CategoryDTO {
     id: number[]
 }
-
 
 export interface Reservation{
     id?: number,

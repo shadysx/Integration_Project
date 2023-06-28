@@ -53,8 +53,7 @@ function UserView() {
     { field: 'firstName', headerName: 'First name', width: 130},
     { field: 'lastName', headerName: 'Last name', width: 130 },
     { field: 'dateOfBirth', headerName: 'Birthday', width: 130 },
-    { field: 'gender', headerName: 'Gender', width: 130 },
-    { field: 'ranking', headerName: 'Rank', width: 130 },
+    { field: 'gender', headerName: 'Gender', width: 130 },    
     { field: 'categoryName', headerName: 'Category', width: 130 },
     {
       field: 'email',

@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         setIsLoading(false); // Set loading to false after API request is complete
         navigate('/');
-      }, 1200);
+      }, 700);
     } else {
       const data = await response.json();
       setAlert({ open: true, description: data.message, type: "error" });
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     {
       setTimeout(() => {
         login(user.affiliationNumber, user.password)
-      }, 1000)
+      }, 700)
       setAlert({open: true, description: 'Successfull registration!', type: "success"})
       return true
     }  
