@@ -10,12 +10,14 @@ import { Helper } from '../../Helpers/Helper';
 import { UserService } from '../../services/UserService';
 import { User } from '../../Interfaces/Interface';
 import { useNavigate } from 'react-router-dom';
+import EditPasswordDialog from './EditPasswordDialog';
 
 
 export default function UserProfileView() {
 
   const { user, isLoading, setIsLoading ,setAlert } = React.useContext(AuthContext);
   const [ categoryNames, setCategoryNames] = useState([]);
+  const [openEdit, setOpenEdit] = React.useState(false);
   const [ currentUser , setCurrentUser ] = useState<User>({
     affiliationNumber: "",
     lastName: "",
@@ -59,7 +61,16 @@ export default function UserProfileView() {
     fetchData();
   }, []);
 
-  
+
+  const handleOpenEdit = () => {
+    setOpenEdit(true);   
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
+
+
+
 
   const FetchUser = async () => {
     const userService = new UserService();
@@ -111,7 +122,8 @@ export default function UserProfileView() {
     
   };
 
-  return (        
+  return (   
+    <>     
       <form>
         <div className="editUserForm">
           <div className="left">
@@ -122,7 +134,12 @@ export default function UserProfileView() {
               <h3>{currentUser.firstName} {currentUser.lastName.toUpperCase()}</h3>
               <p>Numéro d'affiliation : {currentUser.affiliationNumber}</p>
               <p>Classement : {currentUser.categoryName}</p>
-              <Button variant='contained' color={user.isAdmin ? "secondary" : 'primary'}> <KeyIcon/> &#8205; &#8205; {"Modifier Mot de passe"}</Button>
+              <Button 
+                variant='contained' 
+                color={user.isAdmin ? "secondary" : 'primary'}
+                onClick={handleOpenEdit}> 
+                <KeyIcon/> &#8205; &#8205; {"Modifier Mot de passe"}
+              </Button>
             </div>
               
           </div>
@@ -169,11 +186,17 @@ export default function UserProfileView() {
             
               
           </div>    
-        </div>
-          
+        </div>       
 
         
-      </form>    
+      </form>
+      
+      <EditPasswordDialog
+          user={currentUser}
+          open={openEdit}
+          onClose={handleCloseEdit}
+        />
+      </>
   );
 }
 
