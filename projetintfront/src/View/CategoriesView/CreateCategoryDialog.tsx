@@ -52,7 +52,7 @@ export default function CreateCategoryDialog(props: CategoryDialogProp){
         setAlert({open:true, type:"error", description:"Age Max should be equal or smaller than 100"});
         return;
       }     
-
+      setAlert({ type: "success", description: "Category created successfully!", open: true });
       handleClose();
       await categoryService.CreateCategory(requestBody);
       await fetchCategories();

@@ -99,6 +99,7 @@ function UserView() {
             if (window.confirm("Are you sure you want to delete this Member ?")) {              
               const userService = new UserService();
               await userService.DeleteUser(params.row.id)
+              setAlert({ type: "success", description: "Member deleted successfully!", open: true });
               await FetchUsers()           
             }          
           };

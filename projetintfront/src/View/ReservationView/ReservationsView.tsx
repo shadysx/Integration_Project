@@ -368,9 +368,10 @@ function ReservationsView() {
     
         const handleClickDelete = async (e) => {
           if (window.confirm("Are you sure you want to delete this reservation ?")) {
-            try {
+            try {              
               const reservationService = new ReservationService();
               await reservationService.DeleteReservation(params.row.id)
+              setAlert({ type: "success", description: "Reservation deleted successfully!", open: true });
               await fetchReservations()
             } catch (error) {
               console.log('Error deleting reservation:', error);

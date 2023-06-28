@@ -51,7 +51,7 @@ export default function EditCategoryDialog(props: CategoryDialogProps){
         setAlert({open:true, type:"error", description:"Age Max should be equal or smaller than 100"});
         return;
       }     
-
+      setAlert({ type: "success", description: "Category updated successfully!", open: true });
       handleClose();
       await categoryService.UpdateCategory(requestBody, id);
       await fetchCategories();

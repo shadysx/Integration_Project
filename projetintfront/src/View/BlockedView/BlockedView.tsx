@@ -160,6 +160,7 @@ function BlockedView() {
             try {
               const blockedsService = new BlockedsService();
               await blockedsService.DeleteBlocked(params.row.id)
+              setAlert({ type: "success", description: "Blocked Court deleted successfully!", open: true });
               await fetchBlockedCourts()
             } catch (error) {
               console.log('Error deleting blocked court:', error);

@@ -55,7 +55,7 @@ export default function CreateCourtDialog(props: SimpleDialogProps) {
       setAlert({open: true, type: 'error', description:'A existing court have already this number' })
       return;
     }
-    
+    setAlert({ type: "success", description: "Court created successfully!", open: true });
     handleClose();    
     await courtsService.CreateCourt(court);
     await fetchCourts();
@@ -67,7 +67,7 @@ export default function CreateCourtDialog(props: SimpleDialogProps) {
     <div className='dialog'>
     <form onSubmit={handleSubmit}  className="dialog-form">
       <label htmlFor="lastName">Number:</label>
-      <input type="number" id="number" name="number" value={court?.number} onChange={handleChange} required /><br /><br />
+      <input type="number" id="number" name="number" value={court?.number} onChange={handleChange} required /><br />
       
       <input type="submit" value="Create" />
     </form>

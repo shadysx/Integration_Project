@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, Stack } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -8,6 +8,7 @@ import { CategoriesService } from '../../services/CategoriesService';
 import { Category } from '../../Interfaces/Interface';
 import EditCategoryDialog from './EditCategoryDialog';
 import CreateCategoryDialog from './CreateCategoryDialog';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function CategoriesView() {
   const categoriesService = new CategoriesService();
@@ -15,6 +16,7 @@ function CategoriesView() {
   const [selectedCategory, setSelectedCategory] = React.useState<Category>();
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
+  const { setAlert } = useContext(AuthContext);
    
      
   const handleCloseEdit = () => {
@@ -62,6 +64,7 @@ function CategoriesView() {
               const currentRow = params.row;            
             //return alert(JSON.stringify(currentRow, null, 4));
             await categoriesService.DeleteCategory(currentRow.id);
+            setAlert({ type: "success", description: "Category deleted successfully!", open: true });
             await FetchCategories()
 	          }
             
