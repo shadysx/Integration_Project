@@ -10,12 +10,14 @@ import { Helper } from '../../Helpers/Helper';
 import { UserService } from '../../services/UserService';
 import { User } from '../../Interfaces/Interface';
 import { useNavigate } from 'react-router-dom';
+import EditPasswordDialog from './EditPasswordDialog';
 
 
 export default function UserProfileView() {
 
   const { user, isLoading, setIsLoading ,setAlert } = React.useContext(AuthContext);
   const [ categoryNames, setCategoryNames] = useState([]);
+  const [openEdit, setOpenEdit] = React.useState(false);
   const [ currentUser , setCurrentUser ] = useState<User>({
     affiliationNumber: "",
     lastName: "",
@@ -35,8 +37,7 @@ export default function UserProfileView() {
     hasPaidDues: false
 })  
   
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate()  
 
 
   React.useEffect(() => {
@@ -59,17 +60,19 @@ export default function UserProfileView() {
     fetchData();
   }, []);
 
-  
+  const handleOpenEdit = () => {
+    setOpenEdit(true);   
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
 
   const FetchUser = async () => {
     const userService = new UserService();
     const u = await userService.FetchUsersById(user.id);
     setCurrentUser(u);
-    console.log(u)
   }
-
-  
-  
+    
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentUser((prevState) => ({
@@ -77,7 +80,6 @@ export default function UserProfileView() {
       [name]: value
     }));
   };
-
 
   const handleCategoryChange = async (categoryName: string) => {
     const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
@@ -90,6 +92,14 @@ export default function UserProfileView() {
     });
   }
 
+  const handleGenderChange = (event) => {
+    const selectedGender = event.target.value;
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      gender: selectedGender,
+    }));
+  };  
+
   const handleHasPaidDuesChange = () => {
     setCurrentUser((prevState) => ({
       ...prevState,
@@ -99,19 +109,17 @@ export default function UserProfileView() {
 
   const handleSubmit = async (event) => {
     
-    event.preventDefault();    
-    // Add your logic to handle the form submission here
+    event.preventDefault();        
     const userService = new UserService();
     const { id, ...requestBody } = currentUser;
 
     console.log('Submited: ', requestBody)
-    await userService.UpdateUser(requestBody, id);
-    navigate("/");
-
-    
+    userService.UpdateUser(requestBody, id);
+    navigate("/");    
   };
 
-  return (        
+  return (   
+    <>     
       <form>
         <div className="editUserForm">
           <div className="left">
@@ -122,7 +130,12 @@ export default function UserProfileView() {
               <h3>{currentUser.firstName} {currentUser.lastName.toUpperCase()}</h3>
               <p>Numéro d'affiliation : {currentUser.affiliationNumber}</p>
               <p>Classement : {currentUser.categoryName}</p>
-              <Button variant='contained' color={user.isAdmin ? "secondary" : 'primary'}> <KeyIcon/> &#8205; &#8205; {"Modifier Mot de passe"}</Button>
+              <Button 
+                variant='contained' 
+                color={user.isAdmin ? "secondary" : 'primary'}
+                onClick={handleOpenEdit}> 
+                <KeyIcon/> &#8205; &#8205; {"Modifier Mot de passe"}
+              </Button>
             </div>
               
           </div>
@@ -136,10 +149,8 @@ export default function UserProfileView() {
             <label htmlFor="email">Email:</label>
             <input type="email" id="email" name="email" value={currentUser?.email} onChange={handleChange} required /><br /><br />
       
-
             <label htmlFor="gender">Gender:</label>
-            <select id="gender" name="gender" value={currentUser?.gender} onChange={handleChange} required>
-              <option value="">Select</option>
+            <select id="gender" name="gender" value={currentUser?.gender} onChange={handleGenderChange} required>            
               <option value="M">Male</option>
               <option value="F">Female</option>
               <option value="O">Other</option>
@@ -153,27 +164,28 @@ export default function UserProfileView() {
             
             <label htmlFor="postalCode">Postal Code:</label>
             <input type="text" id="postalCode" name="postalCode" value={currentUser?.postalCode} onChange={handleChange} required /><br /><br />
-            
-                  
+                              
             <label htmlFor="categoryName">Categorie:</label>
             <ComboBox options={categoryNames} currentValue={currentUser?.categoryName} onChange={handleCategoryChange}/><br/><br/>
                         
             <label htmlFor="street">Street:</label>
             <input type="text" id="street" name="street" value={currentUser?.street} onChange={handleChange} required /><br /><br />
 
-            <label htmlFor="hasPaidDues">Has paid: </label>
-            <input type="checkbox" id="hasPaidDues" name="hasPaidDues" checked={currentUser?.hasPaidDues} onChange={handleHasPaidDuesChange} /><br /><br />
-
-            
             <Button className="buttonUpdate" variant='contained' color={user.isAdmin ? "secondary" : 'primary'} onClick={handleSubmit}>Update</Button>  
             
               
           </div>    
-        </div>
-          
+        </div>       
 
         
-      </form>    
+      </form>
+      
+      <EditPasswordDialog
+          user={currentUser}
+          open={openEdit}
+          onClose={handleCloseEdit}
+        />
+      </>
   );
 }
 

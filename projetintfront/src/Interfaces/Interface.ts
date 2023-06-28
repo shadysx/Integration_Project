@@ -57,6 +57,16 @@ export interface Reservation{
     duration?: string
 }
 
+export interface BlockedCourt{
+    id?: number,
+    begin_hour: string,
+    date: string,    
+    duration?: string
+    reason?: string,    
+    user_id: number,
+    court_id?: number   
+}
+
 export interface Alert {
     type: string,
     description: string

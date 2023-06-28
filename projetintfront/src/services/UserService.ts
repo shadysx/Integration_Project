@@ -24,8 +24,9 @@ export class UserService
     }
 
     FetchUsersById = async (userId: number): Promise<User> => {
-      let users = await this.FetchUsers();
-      return users.find(user => user.id = userId)
+      let users = await this.FetchUsers();      
+      let result = users.find(user => user.id === userId);      
+      return result;
     }
 
     CreateUser = async (user: User) => {
