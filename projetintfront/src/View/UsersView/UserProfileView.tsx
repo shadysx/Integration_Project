@@ -17,7 +17,7 @@ export default function UserProfileView() {
 
   const { user, isLoading, setIsLoading ,setAlert } = React.useContext(AuthContext);
   const [ categoryNames, setCategoryNames] = useState([]);
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);  
   const [ currentUser , setCurrentUser ] = useState<User>({
     affiliationNumber: "",
     lastName: "",
@@ -112,15 +112,17 @@ export default function UserProfileView() {
     event.preventDefault();        
     const userService = new UserService();
     const { id, ...requestBody } = currentUser;
-
     console.log('Submited: ', requestBody)
+       
+
+    setAlert({open: true, type: 'success', description:'Account Successfully Updated' })
     userService.UpdateUser(requestBody, id);
     navigate("/");    
   };
 
   return (   
     <>     
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="editUserForm">
           <div className="left">
             <div>
@@ -128,50 +130,50 @@ export default function UserProfileView() {
             </div>
             <div className='divDescription'>
               <h3>{currentUser.firstName} {currentUser.lastName.toUpperCase()}</h3>
-              <p>Numéro d'affiliation : {currentUser.affiliationNumber}</p>
-              <p>Classement : {currentUser.categoryName}</p>
+              <p>Affiliation Number : {currentUser.affiliationNumber}</p>
+              <p>Category : {currentUser.categoryName}</p>
               <Button 
                 variant='contained' 
                 color={user.isAdmin ? "secondary" : 'primary'}
                 onClick={handleOpenEdit}> 
-                <KeyIcon/> &#8205; &#8205; {"Modifier Mot de passe"}
+                <KeyIcon/> &#8205; &#8205; {"Change Password"}
               </Button>
             </div>
               
           </div>
 
-          <div className="middle">
+          <div className="middle" >
             <h2>Edit Profile</h2>
             
-            <label htmlFor="dateOfBirth">Birthday:</label>
-            <input type="dateOfBirth" id="dateOfBirth" name="dateOfBirth" value={currentUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
+            <label htmlFor="dateOfBirth">Birthday :</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" value={currentUser?.dateOfBirth} onChange={handleChange} required /><br /><br />
 
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email">Email :</label>
             <input type="email" id="email" name="email" value={currentUser?.email} onChange={handleChange} required /><br /><br />
       
-            <label htmlFor="gender">Gender:</label>
+            <label htmlFor="gender">Gender :</label>
             <select id="gender" name="gender" value={currentUser?.gender} onChange={handleGenderChange} required>            
               <option value="M">Male</option>
               <option value="F">Female</option>
               <option value="O">Other</option>
             </select><br /><br />
             
-            <label htmlFor="locality">Locality:</label>
+            <label htmlFor="locality">Locality :</label>
             <input type="text" id="locality" name="locality" value={currentUser?.locality} onChange={handleChange} required /><br /><br />
             
-            <label htmlFor="mobile">Mobile:</label>
+            <label htmlFor="mobile">Mobile :</label>
             <input type="tel" id="mobile" name="mobile" value={currentUser?.mobile} onChange={handleChange} required /><br /><br />
             
-            <label htmlFor="postalCode">Postal Code:</label>
+            <label htmlFor="postalCode">Postal Code :</label>
             <input type="text" id="postalCode" name="postalCode" value={currentUser?.postalCode} onChange={handleChange} required /><br /><br />
                               
-            <label htmlFor="categoryName">Categorie:</label>
+            <label htmlFor="categoryName">Category :</label>
             <ComboBox options={categoryNames} currentValue={currentUser?.categoryName} onChange={handleCategoryChange}/><br/><br/>
                         
-            <label htmlFor="street">Street:</label>
+            <label htmlFor="street">Street :</label>
             <input type="text" id="street" name="street" value={currentUser?.street} onChange={handleChange} required /><br /><br />
 
-            <Button className="buttonUpdate" variant='contained' color={user.isAdmin ? "secondary" : 'primary'} onClick={handleSubmit}>Update</Button>  
+            <Button type="submit" className={`buttonUpdate ${user.isAdmin ? 'secondary' : 'primary'}`} variant='contained'>Update</Button>  
             
               
           </div>    

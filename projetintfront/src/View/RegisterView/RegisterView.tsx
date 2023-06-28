@@ -13,7 +13,7 @@ import AlertPopup from '../../components/ErrorPopup/AlertPopup';
 
 
 const RegisterView = () => {
-  const [confirmationPassword, setConfirmationPassword] = useState('password');
+  const [confirmationPassword, setConfirmationPassword] = useState('');
   const [categoryNames, setCategoryNames] = useState([]);
 
   const { register } = useContext(AuthContext);
@@ -21,16 +21,32 @@ const RegisterView = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<User>({
-    lastName: 'Laurent',
-    firstName: 'Klein',
-    dateOfBirth: '1996-06-16',
-    email: 'john.doe@email.com',
+    // lastName: 'Laurent',
+    // firstName: 'Klein',
+    // dateOfBirth: '1996-06-16',
+    // email: 'john.doe@email.com',
+    // gender: 'M',
+    // locality: 'Verviers',
+    // mobile: '0498843317',
+    // postalCode: '4800',
+    // street: 'Rue Raymond',
+    // password: 'password',
+    // affiliationNumber: '',
+    // isAdmin: false,
+    // ranking: "Beginner",
+    // hasPaidDues: false,
+    // status: "Active"
+
+    lastName: '',
+    firstName: '',
+    dateOfBirth: '',
+    email: '',
     gender: 'M',
-    locality: 'Verviers',
-    mobile: '0498843317',
-    postalCode: '4800',
-    street: 'Rue Raymond',
-    password: 'password',
+    locality: '',
+    mobile: '',
+    postalCode: '',
+    street: '',
+    password: '',
     affiliationNumber: '',
     isAdmin: false,
     ranking: "Beginner",
@@ -45,7 +61,6 @@ const RegisterView = () => {
       [name]: value
     }));
   };
-
 
   React.useEffect(() => {
     const FetchCategoryNames = async () => {
@@ -107,64 +122,63 @@ const RegisterView = () => {
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <label>
-          Last Name:
+          Last Name :
           <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
-        </label>
-        <br />
+        </label>        
         <label>
-          First Name:
+          First Name :
           <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} />
+        </label>        
+        <label htmlFor="dateOfBirth">
+          Birthday :
+        <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
         </label>
-        <br />
-        <label htmlFor="dateOfBirth">Birthday:</label>
-        <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required /><br /><br />
-        <br />
         <label>
-          Email:
-          <input type="text" name="email" value={formData.email} onChange={handleChange} />
+          Email :
+          <input type="email" name="email" value={formData.email} onChange={handleChange} />
         </label>
-        <br />
+        
         <label htmlFor="gender">Gender:</label>
-      <select id="gender" name="gender" value={formData.gender} onChange={handleChange} required>        
-        <option value="M">Male</option>
-        <option value="F">Female</option>
-        <option value="O">Other</option>
-      </select><br /><br />
-        <br />
+        <select id="gender" name="gender" value={formData.gender} onChange={handleChange} required>        
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+          <option value="O">Other</option>
+        </select>
+        <br/>
+        
         <label>
-          Locality:
+          Locality :
           <input type="text" name="locality" value={formData.locality} onChange={handleChange} />
         </label>
-        <br />
+        
         <label>
-          Mobile:
+          Mobile :
           <input type="text" name="mobile" value={formData.mobile} onChange={handleChange} />
         </label>
-        <br />
+        
         <label>
-          Postal Code:
+          Postal Code :
           <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} />
         </label>
-        <br />
+      
         <label>
-          Street:
+          Street :
           <input type="text" name="street" value={formData.street} onChange={handleChange} />
         </label>
-        <br />
+        
         <label>
-          Password:
+          Password :
           <input type="password" name="password" value={formData.password} onChange={handleChange} />
         </label>
         <label>
-          Password confirmation:
+          Password confirmation :
           <input type="password" name="passwordConfirmation" value={confirmationPassword} onChange={(e) => setConfirmationPassword(e.target.value)} />
-        </label>
-        <br />
+        </label>        
 
-        <label htmlFor="categoryName">Categorie:</label>
+        <label htmlFor="categoryName">Category :</label>
         <ComboBox options={categoryNames} currentValue={formData?.categoryName} onChange={handleCategoryChange}/>
         <button type="submit">Register</button>
-        <h5 style={{cursor: "pointer"}} onClick={() => navigate('/')}>Already have an account?</h5>
+        <h5 style={{cursor: "pointer"}} onClick={() => navigate('/')}>Already have an account ?</h5>
       </form>
     </div>
   );

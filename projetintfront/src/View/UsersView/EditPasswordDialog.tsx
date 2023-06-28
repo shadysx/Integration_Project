@@ -1,9 +1,10 @@
 import { Button, Dialog, DialogTitle, Snackbar, TextField } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { User } from '../../Interfaces/Interface';
 import "./EditPasswordDialog.css"
 import bcrypt from 'bcryptjs';
 import { UserService } from '../../services/UserService';
+import { AuthContext } from '../../contexts/AuthContext';
 
 interface DialogProps{
     open: boolean;
@@ -13,6 +14,7 @@ interface DialogProps{
 
 export default function EditPasswordDialog(props : DialogProps) {
     const {open, user, onClose} = props;
+    const {setAlert} = useContext(AuthContext);
     
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -49,15 +51,13 @@ export default function EditPasswordDialog(props : DialogProps) {
       console.log("match : " + currentPassMatch)
       if(!currentPassMatch)
       {
-        setSnackbarMessage("L'ancien mot de passe est érroné !");
-        setSnackbarOpen(true);
+        setAlert({open: true, type: 'error', description:'Old password is wrong !' })        
         isCorrect = false;
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        setSnackbarMessage("Les nouveaux mot de passe ne correspondent pas !");
-        setSnackbarOpen(true);
+        setAlert({open: true, type: 'error', description:'New password aren\'t the same !' })           
         isCorrect = false;
         return;
       }      
@@ -65,8 +65,7 @@ export default function EditPasswordDialog(props : DialogProps) {
       const egalOldPass = await bcrypt.compare(newPassword, user.password);      
     
       if (egalOldPass) {
-        setSnackbarMessage("L'ancien et le nouveau mot de passe sont identiques !");
-        setSnackbarOpen(true);
+        setAlert({open: true, type: 'error', description:'Old and new password are the same !' })   
         isCorrect = false;
         return;
       }      
@@ -77,11 +76,9 @@ export default function EditPasswordDialog(props : DialogProps) {
         const userService = new UserService();
         await userService.UpdateUser(user, user.id);
       
-        setSnackbarMessage('Le mot de passe a bien été changé');
-        setSnackbarOpen(true);
+        setAlert({open: true, type: 'success', description:'Password Successfully Updated !' })          
 
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));        
+        //await new Promise((resolve) => setTimeout(resolve, 1500));        
       
         setCurrentPassword('');
         setNewPassword('');
@@ -106,7 +103,7 @@ export default function EditPasswordDialog(props : DialogProps) {
         <form className='passwordForm' onSubmit={handleSubmit}>
             <TextField
             type="password"
-            label="Ancien Mot de passe"
+            label="Old Password"
             value={currentPassword}
             onChange={handleCurrentPasswordChange}
             required
@@ -114,7 +111,7 @@ export default function EditPasswordDialog(props : DialogProps) {
             <br />
             <TextField
             type="password"
-            label="Nouveau Mot de passe"
+            label="New Password"
             value={newPassword}
             onChange={handleNewPasswordChange}
             required
@@ -122,21 +119,15 @@ export default function EditPasswordDialog(props : DialogProps) {
             <br />
             <TextField
             type="password"
-            label="Confirmation"
+            label="Confirm Password"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
             required
             />
             <br />
-            <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} type="submit">
+            <Button className={`buttonUpdate ${user.isAdmin ? 'secondary' : 'primary'}`} variant="contained" type="submit">
             Change Password
-            </Button>
-            <Snackbar
-            open={snackbarOpen}
-            message={snackbarMessage}
-            autoHideDuration={1500}
-            onClose={handleSnackbarClose}            
-            />
+            </Button>            
         </form>
     </Dialog>
     );
