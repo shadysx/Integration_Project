@@ -28,7 +28,6 @@ export default function EditPasswordDialog(props : DialogProps) {
       const result = hashedPassword.toString();      
       return result;
     };   
-
   
     const handleCurrentPasswordChange = (event) => {
       setCurrentPassword(event.target.value);
@@ -43,8 +42,7 @@ export default function EditPasswordDialog(props : DialogProps) {
     };
   
     const handleSubmit = async (event) => {
-      event.preventDefault();
-    
+      event.preventDefault();    
       let isCorrect = true;      
 
       const currentPassMatch = await bcrypt.compare(currentPassword, user.password);
@@ -58,7 +56,7 @@ export default function EditPasswordDialog(props : DialogProps) {
       }
 
       if (newPassword !== confirmPassword) {
-        setSnackbarMessage("Les nouveaux mots de passe ne correspondent pas !");
+        setSnackbarMessage("Les nouveaux mot de passe ne correspondent pas !");
         setSnackbarOpen(true);
         isCorrect = false;
         return;
@@ -77,14 +75,13 @@ export default function EditPasswordDialog(props : DialogProps) {
       {
         user.password = await hash(newPassword);
         const userService = new UserService();
-        userService.UpdateUser(user, user.id);
+        await userService.UpdateUser(user, user.id);
       
         setSnackbarMessage('Le mot de passe a bien été changé');
         setSnackbarOpen(true);
 
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1500));        
       
         setCurrentPassword('');
         setNewPassword('');

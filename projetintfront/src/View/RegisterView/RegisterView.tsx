@@ -125,10 +125,10 @@ const RegisterView = () => {
         </label>
         <br />
         <label htmlFor="gender">Gender:</label>
-      <select id="gender" name="gender" value={formData.gender} onChange={handleChange} required>
-        <option value="">Select</option>
+      <select id="gender" name="gender" value={formData.gender} onChange={handleChange} required>        
         <option value="M">Male</option>
         <option value="F">Female</option>
+        <option value="O">Other</option>
       </select><br /><br />
         <br />
         <label>

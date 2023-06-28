@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('affiliationNumber', 50)->unique();
             $table->string('lastName', 50);
             $table->string('firstName', 50);
-            $table->enum('gender', ['M', 'F']);
+            $table->enum('gender', ['M','F','O','X']);
             $table->string('ranking', 50);
             $table->date('dateOfBirth');
             $table->string('mobile', 15);

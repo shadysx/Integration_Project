@@ -62,7 +62,7 @@ class UserController extends Controller
         {
             return response()->json([
                 'status' => 200,
-                'message' => "Student Created Succesfully"
+                'message' => "User Created Succesfully"
             ], 200);
         }
         else

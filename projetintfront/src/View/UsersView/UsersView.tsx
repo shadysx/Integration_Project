@@ -11,7 +11,6 @@ import { CategoriesService } from '../../services/CategoriesService';
 import { Checkbox } from '@mui/material';
 import { AuthContext } from '../../contexts/AuthContext';
 
-
 function UserView() {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -19,9 +18,7 @@ function UserView() {
   const [users, setUsers] = React.useState<User[]>([]);
 
   const { user } = useContext(AuthContext)
-
-  
-  
+   
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
@@ -29,8 +26,6 @@ function UserView() {
   const handleCloseCreate = () => {
     setOpenCreate(false);
   };
-
-
 
   const FetchUsers = async () => {
     const userService = new UserService();

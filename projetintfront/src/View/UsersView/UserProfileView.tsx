@@ -69,18 +69,12 @@ export default function UserProfileView() {
     setOpenEdit(false);
   };
 
-
-
-
   const FetchUser = async () => {
     const userService = new UserService();
     const u = await userService.FetchUsersById(user.id);
     setCurrentUser(u);
-    console.log(u)
   }
-
-  
-  
+    
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCurrentUser((prevState) => ({
@@ -88,7 +82,6 @@ export default function UserProfileView() {
       [name]: value
     }));
   };
-
 
   const handleCategoryChange = async (categoryName: string) => {
     const categoryId = await Helper.ConvertCategoryNameToId(categoryName)
@@ -101,6 +94,15 @@ export default function UserProfileView() {
     });
   }
 
+  const handleGenderChange = (event) => {
+    const selectedGender = event.target.value;
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      gender: selectedGender,
+    }));
+  };
+  
+
   const handleHasPaidDuesChange = () => {
     setCurrentUser((prevState) => ({
       ...prevState,
@@ -110,13 +112,12 @@ export default function UserProfileView() {
 
   const handleSubmit = async (event) => {
     
-    event.preventDefault();    
-    // Add your logic to handle the form submission here
+    event.preventDefault();        
     const userService = new UserService();
     const { id, ...requestBody } = currentUser;
 
     console.log('Submited: ', requestBody)
-    await userService.UpdateUser(requestBody, id);
+    userService.UpdateUser(requestBody, id);
     navigate("/");
 
     
@@ -155,8 +156,7 @@ export default function UserProfileView() {
       
 
             <label htmlFor="gender">Gender:</label>
-            <select id="gender" name="gender" value={currentUser?.gender} onChange={handleChange} required>
-              <option value="">Select</option>
+            <select id="gender" name="gender" value={currentUser?.gender} onChange={handleGenderChange} required>            
               <option value="M">Male</option>
               <option value="F">Female</option>
               <option value="O">Other</option>
