@@ -17,9 +17,7 @@ export class ReservationService
     let usersService = new UserService();
     let courtsService = new CourtsService();
     let users: User[] = await usersService.FetchUsers();
-    let courts: Court[] = await courtsService.FetchCourts(); // assuming FetchCourts is a function in usersService
-  
-    let retVal: Reservation[] = [];
+    let courts: Court[] = await courtsService.FetchCourts(); 
   
     for (const res of reservations) {
       let user1 = users.find(user => user.id === res.user1_id);
@@ -33,11 +31,8 @@ export class ReservationService
       res.user3_name = user3 ? `${user3.lastName} ${user3.firstName}` : null;
       res.user4_name = user4 ? `${user4.lastName} ${user4.firstName}` : null;
       res.court_number = court ? court.number : null;
-  
-      retVal.push(res);
     }
   
-    console.log('reservations after fetch', retVal);
     return reservations;
   }
 
