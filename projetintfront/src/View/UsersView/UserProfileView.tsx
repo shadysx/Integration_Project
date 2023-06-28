@@ -37,8 +37,7 @@ export default function UserProfileView() {
     hasPaidDues: false
 })  
   
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate()  
 
 
   React.useEffect(() => {
@@ -60,7 +59,6 @@ export default function UserProfileView() {
   
     fetchData();
   }, []);
-
 
   const handleOpenEdit = () => {
     setOpenEdit(true);   
@@ -100,8 +98,7 @@ export default function UserProfileView() {
       ...prevUser,
       gender: selectedGender,
     }));
-  };
-  
+  };  
 
   const handleHasPaidDuesChange = () => {
     setCurrentUser((prevState) => ({
@@ -118,9 +115,7 @@ export default function UserProfileView() {
 
     console.log('Submited: ', requestBody)
     userService.UpdateUser(requestBody, id);
-    navigate("/");
-
-    
+    navigate("/");    
   };
 
   return (   
@@ -154,7 +149,6 @@ export default function UserProfileView() {
             <label htmlFor="email">Email:</label>
             <input type="email" id="email" name="email" value={currentUser?.email} onChange={handleChange} required /><br /><br />
       
-
             <label htmlFor="gender">Gender:</label>
             <select id="gender" name="gender" value={currentUser?.gender} onChange={handleGenderChange} required>            
               <option value="M">Male</option>
@@ -170,18 +164,13 @@ export default function UserProfileView() {
             
             <label htmlFor="postalCode">Postal Code:</label>
             <input type="text" id="postalCode" name="postalCode" value={currentUser?.postalCode} onChange={handleChange} required /><br /><br />
-            
-                  
+                              
             <label htmlFor="categoryName">Categorie:</label>
             <ComboBox options={categoryNames} currentValue={currentUser?.categoryName} onChange={handleCategoryChange}/><br/><br/>
                         
             <label htmlFor="street">Street:</label>
             <input type="text" id="street" name="street" value={currentUser?.street} onChange={handleChange} required /><br /><br />
 
-            <label htmlFor="hasPaidDues">Has paid: </label>
-            <input type="checkbox" id="hasPaidDues" name="hasPaidDues" checked={currentUser?.hasPaidDues} onChange={handleHasPaidDuesChange} /><br /><br />
-
-            
             <Button className="buttonUpdate" variant='contained' color={user.isAdmin ? "secondary" : 'primary'} onClick={handleSubmit}>Update</Button>  
             
               
