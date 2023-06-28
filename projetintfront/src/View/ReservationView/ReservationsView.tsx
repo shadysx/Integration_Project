@@ -224,11 +224,13 @@ function ReservationsView() {
     };
     
     const isReservationLegit = (isUpdate: boolean): boolean => {
+      //Check correct number of user
       if (usersInReservationCount() !== 2 && usersInReservationCount() !== 4) {
         setAlert({ type: "error", description: "Numbers of players incorrect (2,4)", open: true });
         return false;
       }
     
+      // Check durations
       const startingHour = parseInt(selectedReservation.starting_hour.slice(0, 2));
       const endingHour = parseInt(selectedReservation.ending_hour.slice(0, 2));
       const durationInMinutes = (endingHour - startingHour) * 60; // Convert to minutes
@@ -286,21 +288,24 @@ function ReservationsView() {
       }
     
       // Check if there is already a reservation for the selected court and time
-        const existingReservation = reservations.find((reservation) =>
-        (!isUpdate || (isUpdate && reservation.id !== selectedReservation.id)) &&
-        reservation.court_id === selectedReservation.court_id &&
-        reservation.date === selectedReservation.date &&
-        (
-          (reservation.starting_hour < selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
-          (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour < reservation.ending_hour)
-        )
-      );
+      const existingReservation = reservations.find((reservation) =>
+      (!isUpdate || (isUpdate && reservation.id !== selectedReservation.id)) &&
+      reservation.court_id === selectedReservation.court_id &&
+      reservation.date === selectedReservation.date &&
+      (
+        (reservation.starting_hour < selectedReservation.starting_hour && selectedReservation.starting_hour < reservation.ending_hour) ||
+        (reservation.starting_hour < selectedReservation.ending_hour && selectedReservation.ending_hour <= reservation.ending_hour) ||
+        (reservation.starting_hour >= selectedReservation.starting_hour && reservation.ending_hour <= selectedReservation.ending_hour)
+      )
+    );
 
       if (existingReservation) {
         console.log('Existing reservation: ', existingReservation)
         setAlert({ type: "error", description: "There is already a reservation for this court and time", open: true });
         return false;
       }
+
+      console.log('selecteed reservation')
     
       // Check if the current user will exceed reservation time
       if (!isReservationTimeExceeded(isUpdate) && !user.isAdmin) {
