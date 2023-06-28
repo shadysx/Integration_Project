@@ -156,7 +156,7 @@ function BlockedView() {
         };
     
         const handleClickDelete = async (e) => {
-          if (window.confirm("Are you sure you want to delete this reservation?")) {
+          if (window.confirm("Are you sure you want to delete this blocked ?")) {
             try {
               const blockedsService = new BlockedsService();
               await blockedsService.DeleteBlocked(params.row.id)

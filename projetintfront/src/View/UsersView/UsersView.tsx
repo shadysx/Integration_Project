@@ -17,7 +17,7 @@ function UserView() {
   const [selectedUser, setSelectedUser] = React.useState<User>();
   const [users, setUsers] = React.useState<User[]>([]);
 
-  const { user } = useContext(AuthContext)
+  const { user, setAlert } = useContext(AuthContext)
    
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -91,10 +91,16 @@ function UserView() {
             setSelectedUser(params.row)
           };
           const handleClickDelete = async (e) => {
-            const userService = new UserService();
-            await userService.DeleteUser(params.row.id)
-            await FetchUsers()
-  
+            if(params.row.id == user.id)
+            {              
+              setAlert({open: true, type: 'error', description:"You cannot delete your own account" })
+              return;
+            }
+            if (window.confirm("Are you sure you want to delete this Member ?")) {              
+              const userService = new UserService();
+              await userService.DeleteUser(params.row.id)
+              await FetchUsers()           
+            }          
           };
             
             return (

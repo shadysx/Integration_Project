@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Category } from '../../Interfaces/Interface';
 import { Dialog, DialogTitle } from '@mui/material';
 import { CategoriesService } from '../../services/CategoriesService';
@@ -16,7 +16,7 @@ import { stringify } from 'querystring';
 export default function CreateCategoryDialog(props: CategoryDialogProp){
     const { onClose, open, fetchCategories } = props; 
     const [selectedCategory, setSelectedCategory] = React.useState<Category>({name: "", ageMax: 0, ageMin: 0});
-
+    const { setAlert } = useContext(AuthContext);
 
     React.useEffect(() => {      
         
@@ -25,13 +25,35 @@ export default function CreateCategoryDialog(props: CategoryDialogProp){
     onClose(selectedCategory);
     };
 
-    const handleSubmit = async (event) => {
-      console.log(" TEST :" + selectedCategory);
-      event.preventDefault();
-      handleClose();
-      // Add your logic to handle the form submission here
+    const handleSubmit = async (event) => {      
+      event.preventDefault();      
+      
       const categoryService = new CategoriesService();
-      const { id, ...requestBody } = selectedCategory;      
+      const { id, ...requestBody } = selectedCategory;     
+      
+      if(requestBody.ageMin < 0)
+      {
+        setAlert({open:true, type:"error", description:"Age Min should be equal or bigger than 0"});
+        return;
+      }
+      if(requestBody.ageMin > 100)
+      {
+        setAlert({open:true, type:"error", description:"Age Min should be equal or smaller than 100"});
+        return;
+      }
+
+      if(requestBody.ageMax < 0)
+      {
+        setAlert({open:true, type:"error", description:"Age Max should be equal or bigger than 0"});
+        return;
+      }
+      if(requestBody.ageMax > 100)
+      {
+        setAlert({open:true, type:"error", description:"Age Max should be equal or smaller than 100"});
+        return;
+      }     
+
+      handleClose();
       await categoryService.CreateCategory(requestBody);
       await fetchCategories();
     };

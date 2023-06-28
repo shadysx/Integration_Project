@@ -15,7 +15,7 @@ function CategoriesView() {
   const [selectedCategory, setSelectedCategory] = React.useState<Category>();
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
-  
+   
      
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -58,10 +58,13 @@ function CategoriesView() {
       
       renderCell: (params) => {
           const handleClickDelete = async (e) => {
-            const currentRow = params.row;            
+            if (window.confirm("Are you sure you want to delete this category ?")) {           
+              const currentRow = params.row;            
             //return alert(JSON.stringify(currentRow, null, 4));
             await categoriesService.DeleteCategory(currentRow.id);
             await FetchCategories()
+	          }
+            
           };
 
           const handleClickEdit = (e) => {

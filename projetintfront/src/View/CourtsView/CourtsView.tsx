@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, Stack } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -9,12 +9,16 @@ import { CategoriesService } from '../../services/CategoriesService';
 import { CourtsService } from '../../services/CourtsService';
 import EditCourtDialog from './EditCourtDialog';
 import CreateCourtDialog from './CreateCourtDialog';
+import { BlockedsService } from '../../services/BlockedsService';
+import { ReservationService } from '../../services/ReservationService';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function CourtsView() {
   const [openCreate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [selectedCourt, setSelectedCourt] = React.useState<Court>();
   const [courts, setCourts] = React.useState<Court[]>([]);
+  const { setAlert } = useContext(AuthContext);
   
   const handleCloseEdit = () => {
     setOpenEdit(false);
@@ -57,9 +61,33 @@ const handleSetCourt = (court) => {
           setSelectedCourt(params.row)
         };
         const handleClickDelete = async (e) => {
-          const courtsService = new CourtsService();
-            await courtsService.DeleteCourt(params.row.id)
+
+          if (window.confirm("Are you sure you want to delete this court ?")) {       
+            const courtsService = new CourtsService();
+            const reservationService = new ReservationService();
+            const blockedsService = new BlockedsService();
+
+            const reservations = await reservationService.FetchReservations();
+            const blockeds = await blockedsService.FetchBlockeds();    
+
+            const blocked = blockeds.find(b => b.court_number == params.row.number)
+            const reservation = reservations.find(r => r.court_number == params.row.number)
+            
+            if(reservation?.court_number == params.row.number)
+            {
+              setAlert({open: true, type: 'error', description:'Cannot delete, there is at least one reservation on this court' })
+              return;
+            }
+            if(blocked?.court_number == params.row.number)
+            {
+              setAlert({open: true, type: 'error', description:'Cannot delete, this court have at least one blocked' })
+              return;
+            }
+
+            setAlert({open: true, type: 'success', description:'Delete Court Successfully' })
+            await courtsService.DeleteCourt(params.row.id);
             await FetchCourts()
+          } 
 
         };
           

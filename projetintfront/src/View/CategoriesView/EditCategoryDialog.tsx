@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Category } from '../../Interfaces/Interface';
 import { Dialog, DialogTitle } from '@mui/material';
 import { CategoriesService } from '../../services/CategoriesService';
@@ -16,6 +16,7 @@ interface CategoryDialogProps {
 
 export default function EditCategoryDialog(props: CategoryDialogProps){
     const { onClose, selectedCategory, setSelectedCategory, open, fetchCategories } = props;
+    const { setAlert } = useContext(AuthContext);
     
     React.useEffect(() => {
         console.log("Dialog: ", selectedCategory)
@@ -25,11 +26,33 @@ export default function EditCategoryDialog(props: CategoryDialogProps){
     };
 
     const handleSubmit = async (event) => {
-      event.preventDefault();
-      handleClose();
-      // Add your logic to handle the form submission here
+      event.preventDefault();      
       const categoryService = new CategoriesService();
       const { id, ...requestBody } = selectedCategory;
+
+      if(requestBody.ageMin < 0)
+      {
+        setAlert({open:true, type:"error", description:"Age Min should be equal or bigger than 0"});
+        return;
+      }
+      if(requestBody.ageMin > 100)
+      {
+        setAlert({open:true, type:"error", description:"Age Min should be equal or smaller than 100"});
+        return;
+      }
+
+      if(requestBody.ageMax < 0)
+      {
+        setAlert({open:true, type:"error", description:"Age Max should be equal or bigger than 0"});
+        return;
+      }
+      if(requestBody.ageMax > 100)
+      {
+        setAlert({open:true, type:"error", description:"Age Max should be equal or smaller than 100"});
+        return;
+      }     
+
+      handleClose();
       await categoryService.UpdateCategory(requestBody, id);
       await fetchCategories();
     };

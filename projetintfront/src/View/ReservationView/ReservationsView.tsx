@@ -353,7 +353,7 @@ function ReservationsView() {
         };
     
         const handleClickDelete = async (e) => {
-          if (window.confirm("Are you sure you want to delete this reservation?")) {
+          if (window.confirm("Are you sure you want to delete this reservation ?")) {
             try {
               const reservationService = new ReservationService();
               await reservationService.DeleteReservation(params.row.id)

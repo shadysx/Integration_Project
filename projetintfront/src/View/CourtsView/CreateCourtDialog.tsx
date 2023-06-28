@@ -9,6 +9,7 @@ import ComboBox from '../../components/ComboBox';
 import { CategoriesService } from '../../services/CategoriesService';
 import { Helper } from '../../Helpers/Helper';
 import { CourtsService } from '../../services/CourtsService';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -18,6 +19,7 @@ export interface SimpleDialogProps {
 
 export default function CreateCourtDialog(props: SimpleDialogProps) {
   const { onClose, open, fetchCourts } = props;
+  const { setAlert } = React.useContext(AuthContext);
   const [court, setCourt] = useState<Court>({
     number: 0
   });
@@ -39,11 +41,22 @@ export default function CreateCourtDialog(props: SimpleDialogProps) {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    handleClose();
-    // Add your logic to handle the form submission here
+    event.preventDefault();    
+    
     console.log('selected court ', court)
     const courtsService = new CourtsService();
+
+    const courts = await courtsService.FetchCourts();
+
+    const c = courts.find(c => c.number == court.number)
+
+    if(c?.number == court.number)
+    {
+      setAlert({open: true, type: 'error', description:'A existing court have already this number' })
+      return;
+    }
+    
+    handleClose();    
     await courtsService.CreateCourt(court);
     await fetchCourts();
   };

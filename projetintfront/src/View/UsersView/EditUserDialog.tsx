@@ -9,6 +9,7 @@ import ComboBox from '../../components/ComboBox';
 import { CategoriesService } from '../../services/CategoriesService';
 import { Helper } from '../../Helpers/Helper';
 import { AuthContext } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router';
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -20,9 +21,12 @@ export interface SimpleDialogProps {
 
 export default function EditUserDialog(props: SimpleDialogProps) {
   const { onClose, selectedUser, setSelectedUser, open, fetchUsers } = props;
-  const [categoryNames, setCategoryNames] = useState([]);
+  const [ categoryNames, setCategoryNames ] = useState([]);
+  const { user } = useContext(AuthContext);
 
   const { setAlert } = useContext(AuthContext);
+
+  const navigate = useNavigate();  
 
   React.useEffect(() => {
     const FetchCategoryNames = async () => {
@@ -62,18 +66,22 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       };
     });
   }
-
   const handleHasPaidDuesChange = () => {
     setSelectedUser((prevState) => ({
       ...prevState,
       hasPaidDues: !prevState.hasPaidDues
     }));
   }
-  const handleSubmit = async (event) => {
-    event.preventDefault();    
+  const handleIsAdminChange = () => {
+    setSelectedUser((prevState) => ({
+      ...prevState,
+      isAdmin: !prevState.isAdmin
+    }));
+  }  
 
-    
-    
+  const handleSubmit = async (event) => {
+    event.preventDefault();       
+       
     const userService = new UserService();
     const { id, ...requestBody } = selectedUser;    
 
@@ -82,17 +90,23 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       return;
     }
 
-    handleClose();
+    if(selectedUser.id == user.id && !requestBody.isAdmin)
+    {
+      console.log("True");
+      user.isAdmin = false;
+      await userService.UpdateUser(requestBody, id); 
+      await fetchUsers();
+      navigate("/");
+    }
+    else
+    {
+      await userService.UpdateUser(requestBody, id);
+      await fetchUsers();
+      handleClose();
+    }
+    
     setAlert({open: true, type: 'success', description:'Member Updated Successfully !' })
 
-    console.log('Submited: ', requestBody)
-    await userService.UpdateUser(requestBody, id);
-    await fetchUsers();
-    
-    
-    
-
-    
   };
 
   return (
@@ -136,6 +150,9 @@ export default function EditUserDialog(props: SimpleDialogProps) {
       </label>  
       <label htmlFor="hasPaidDues">Has paid : 
       <input type="checkbox" id="hasPaidDues" name="hasPaidDues" checked={selectedUser?.hasPaidDues} onChange={handleHasPaidDuesChange} />
+      </label>  
+      <label htmlFor="isAdmin">Is Admin: 
+      <input type="checkbox" id="isAdmin" name="isAdmin" checked={selectedUser?.isAdmin} onChange={handleIsAdminChange} />
       </label>  
       <label htmlFor="categoryName">Category :</label>
       <ComboBox options={categoryNames} currentValue={selectedUser?.categoryName} onChange={handleCategoryChange}/>
