@@ -62,6 +62,10 @@ const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
                   color="inherit"
                   onClick={() => navigate("/reservations")} 
                   >Reservations</Button>
+            <Button 
+                  color="inherit"
+                  onClick={() => navigate("/blockedCourts")} 
+                  >Blocked Courts</Button>
             {isAdmin == true && (
             <>
 

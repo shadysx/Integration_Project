@@ -11,6 +11,7 @@ import RegisterView from '../View/RegisterView/RegisterView';
 import CourtsView from '../View/CourtsView/CourtsView';
 import ReservationsView from '../View/ReservationView/ReservationsView';
 import UserProfileView from '../View/UsersView/UserProfileView';
+import BlockedView from '../View/BlockedView/BlockedView';
 
 
 
@@ -36,6 +37,7 @@ const AuthRoutes = () => {
             <Routes>
                 <Route path='/' element={<HomeView/>}/>
                 <Route path='/users' element={<UsersView/>}/>
+                <Route path='blockedCourts' element={<BlockedView/>} />
                 <Route path='/reservations' element={<ReservationsView/>}></Route>
                 <Route path='/profile' element={<UserProfileView/>}></Route>
                 {user.isAdmin && (

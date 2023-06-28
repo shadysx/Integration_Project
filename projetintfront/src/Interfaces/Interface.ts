@@ -64,7 +64,9 @@ export interface BlockedCourt{
     duration?: string
     reason?: string,    
     user_id: number,
-    court_id?: number   
+    court_id?: number,
+    court_number: number
+
 }
 
 export interface Alert {

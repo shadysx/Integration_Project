@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, SelectChangeEvent, Stack } from '@mui/material';
 import { UserService } from '../../services/UserService';
-import { Court, Reservation, User } from '../../Interfaces/Interface';
+import { BlockedCourt, Court, Reservation, User } from '../../Interfaces/Interface';
 import { ReservationService } from '../../services/ReservationService';
 import EditReservationDialog from './EditReservationDialog';
 import CreateReservationDialog from './CreateReservationDialog';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CourtsService } from '../../services/CourtsService';
 import moment from 'moment';
+import { BlockedsService } from '../../services/BlockedsService';
 //#endregion
 
 function ReservationsView() {
@@ -38,6 +39,7 @@ function ReservationsView() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [usersFullNames, setUsersFullNames] = useState<string[]>([]);
   const [selectedMembersId, setSelectedMembersId] = useState<string[]>([]);
+  const [blockedCourts, setBlockedCourts] = useState<BlockedCourt[]>([]);
 
   const { setAlert, user } = useContext(AuthContext);
   //#endregion
@@ -125,10 +127,17 @@ function ReservationsView() {
     setCourts(courts);
   };
 
+  const fetchBlockedCourts = async () => {
+    const blockedsService = new BlockedsService();
+    const blockedCourts: BlockedCourt[] = await blockedsService.FetchBlockeds();
+    setBlockedCourts(blockedCourts)
+  }
+
   useEffect(() => {
     fetchReservations();
     fetchUsers();
     fetchCourts();
+    fetchBlockedCourts()
   }, []);
   //#endregion
 
@@ -296,6 +305,15 @@ function ReservationsView() {
       // Check if the current user will exceed reservation time
       if (!isReservationTimeExceeded(isUpdate) && !user.isAdmin) {
         setAlert({ open: true, description: "You have reached your maximum reservation hours for the week.", type: "error" });
+        return false;
+      }
+
+      // Check if there is the court is blocked
+      const isBlocked = blockedCourts.some(blockedCourt => 
+      blockedCourt.date === selectedReservation.date && blockedCourt.court_id === selectedReservation.court_id)
+
+      if (isBlocked){
+        setAlert({ open: true, description: "The court is blocked this day", type: "error" });
         return false;
       }
     
