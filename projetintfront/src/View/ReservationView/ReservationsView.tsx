@@ -313,14 +313,28 @@ function ReservationsView() {
         return false;
       }
 
-      // Check if there is the court is blocked
-      const isBlocked = blockedCourts.some(blockedCourt => 
-      blockedCourt.date === selectedReservation.date && blockedCourt.court_id === selectedReservation.court_id)
+    // Check if the selected reservation falls within the blocked dates
+    const isBlocked = blockedCourts.some(blockedCourt => {
+      // Create a range of blocked dates
+      const startDate = new Date(blockedCourt.date);
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + Number(blockedCourt.duration));
 
-      if (isBlocked){
-        setAlert({ open: true, description: "The court is blocked this day", type: "error" });
-        return false;
-      }
+      // Create date object from reservation date string for comparison
+      const reservationDate = new Date(selectedReservation.date);
+
+      // Check if reservation date falls within the blocked date range
+      return (
+        blockedCourt.court_id === selectedReservation.court_id &&
+        reservationDate >= startDate &&
+        reservationDate < endDate
+      );
+    });
+
+    if (isBlocked){
+      setAlert({ open: true, description: "The court is blocked this day", type: "error" });
+      return false;
+    }
     
       return true;
     };
