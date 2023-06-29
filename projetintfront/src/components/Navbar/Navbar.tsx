@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Menu, MenuItem, Tab, Tabs } from '@mui/material';
+import { Menu, MenuItem, Tab, Tabs, createTheme } from '@mui/material';
 
 function Navbar({ isAdmin }) {
 const { logout, user} = useContext(AuthContext)
@@ -46,18 +46,19 @@ const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  
 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static" color={isAdmin ? "secondary" : 'primary'}>
+    <AppBar position="static" color={isAdmin ? 'secondary' : 'primary'}>
       <Toolbar style={{justifyContent: "space-between"}}>
         <div>            
             <Tabs
               value={value}
               onChange={handleChange}
               textColor="inherit"
-              indicatorColor="primary"
+              indicatorColor={isAdmin ? 'primary' : 'secondary'}
               aria-label="secondary tabs example"
             >             
               <Tab sx={{width: '10%'}} value="one" label= "" disableTouchRipple disabled disableFocusRipple aria-disabled />
