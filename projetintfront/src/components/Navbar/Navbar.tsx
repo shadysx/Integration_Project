@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Menu, MenuItem } from '@mui/material';
+import { Menu, MenuItem, Tab, Tabs } from '@mui/material';
 
 function Navbar({ isAdmin }) {
 const { logout, user} = useContext(AuthContext)
@@ -22,6 +22,7 @@ const navigate = useNavigate();
 
 const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [value, setValue] = React.useState('one');
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -35,26 +36,56 @@ const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
        
   }
 
+  const handleHomeButton = () => {
+    setValue("one");
+    navigate("/");  
+  }
+
+  
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+
   return (
     <Box sx={{ flexGrow: 1 }}>
     <AppBar position="static" color={isAdmin ? "secondary" : 'primary'}>
       <Toolbar style={{justifyContent: "space-between"}}>
-        <div>
-            <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ ml: 2, mr: 1 }}
-            onClick={() => navigate("/")} 
-            >
-            <HomeIcon />
-            </IconButton>
-            {/* <Button 
+        <div>            
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              textColor="inherit"
+              indicatorColor="primary"
+              aria-label="secondary tabs example"
+            >             
+              <Tab sx={{width: '10%'}} value="one" label= "" disableTouchRipple disabled disableFocusRipple aria-disabled />
+
+              <IconButton
+                sx={{marginLeft: '-65px', mr: 2}}
+                size="large"
+                edge="start"
                 color="inherit"
-                onClick={() => navigate("/")} 
-                >Home</Button> */}
-            <Button 
+                aria-label="menu"                
+                onClick={handleHomeButton}                 
+                >
+                <HomeIcon />
+              </IconButton>
+              
+                         
+              <Tab value="two" label="Members" onClick={() => navigate("/users")} />
+              <Tab value="three" label="Reservations" onClick={() => navigate("/reservations")} />
+              <Tab value="four" label="Blocked Courts" onClick={() => navigate("/blockedCourts")} />
+              {isAdmin && (                
+                  <Tab value="five" label="Categories" onClick={() => navigate("/categories")} />                                 
+              )}
+              {isAdmin && (                
+                  <Tab value="six" label="Courts" onClick={() => navigate("/courts")} />                               
+              )}
+            </Tabs>
+
+            {/* <Button 
                   color="inherit"
                   onClick={() => navigate("/users")} 
                   >Members</Button>
@@ -65,8 +96,8 @@ const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
             <Button 
                   color="inherit"
                   onClick={() => navigate("/blockedCourts")} 
-                  >Blocked Courts</Button>
-            {isAdmin == true && (
+                  >Blocked Courts</Button> */}
+            {/* {isAdmin == true && (
             <>
 
               <Button 
@@ -79,16 +110,11 @@ const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
                   >Courts</Button>
 
             </>
-            )}
+            )} */}
 
         </div>
 
-        <div>
-          {/* <Button 
-              style={{}}
-              color="inherit"
-              onClick={() => logout()} 
-              >Logout</Button> */}
+        <div>          
           <Button
               size="large"              
               color="inherit"                  
