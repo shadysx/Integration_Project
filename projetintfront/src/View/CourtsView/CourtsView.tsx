@@ -1,11 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { Button, Stack } from '@mui/material';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import { UserService } from '../../services/UserService';
 import { Court } from '../../Interfaces/Interface';
-import { CategoriesService } from '../../services/CategoriesService';
 import { CourtsService } from '../../services/CourtsService';
 import EditCourtDialog from './EditCourtDialog';
 import CreateCourtDialog from './CreateCourtDialog';
@@ -70,15 +66,15 @@ const handleSetCourt = (court) => {
             const reservations = await reservationService.FetchReservations();
             const blockeds = await blockedsService.FetchBlockeds();    
 
-            const blocked = blockeds.find(b => b.court_number == params.row.number)
-            const reservation = reservations.find(r => r.court_number == params.row.number)
+            const blocked = blockeds.find(b => b.court_number === params.row.number)
+            const reservation = reservations.find(r => r.court_number === params.row.number)
             
-            if(reservation?.court_number == params.row.number)
+            if(reservation?.court_number === params.row.number)
             {
               setAlert({open: true, type: 'error', description:'Cannot delete, there is at least one reservation on this court' })
               return;
             }
-            if(blocked?.court_number == params.row.number)
+            if(blocked?.court_number === params.row.number)
             {
               setAlert({open: true, type: 'error', description:'Cannot delete, this court have at least one blocked' })
               return;

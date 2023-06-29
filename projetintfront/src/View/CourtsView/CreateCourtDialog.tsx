@@ -29,7 +29,7 @@ export default function CreateCourtDialog(props: SimpleDialogProps) {
   };
 
   React.useEffect(() => {
-    console.log(court)
+    
   })
 
   const handleChange = (e) => {
@@ -54,6 +54,12 @@ export default function CreateCourtDialog(props: SimpleDialogProps) {
     {
       setAlert({open: true, type: 'error', description:'A existing court have already this number' })
       return;
+    }
+
+    if(court.number < 1)
+    {      
+        setAlert({open: true, type: 'error', description:'The court\'s number should be bigger than 0' })
+        return;
     }
     setAlert({ type: "success", description: "Court created successfully!", open: true });
     handleClose();    

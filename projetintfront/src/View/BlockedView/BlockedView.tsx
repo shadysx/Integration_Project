@@ -68,6 +68,13 @@ function BlockedView() {
     setSelectedBlockedCourt(prevBlocked => ({...prevBlocked, user_id: user.id}));
   }, []);
 
+  // useEffect(() => {    
+  //   console.log(first)
+  //   setSelectedBlockedCourt(prevBlocked => ({...prevBlocked, user_id: user.id}));
+  // }, [selectedBlockedCourt]);
+
+
+
   //#endregion
 
     //#region Methods
@@ -91,7 +98,7 @@ function BlockedView() {
       const handleCloseCreate = () => {
         setOpenCreate(false);
         // Reset the fields to avoid errors
-        setSelectedBlockedCourt(defaultBlockedCourt);
+        setSelectedBlockedCourt({...defaultBlockedCourt, user_id: user.id});       
       };
     
       // Handle members selection change

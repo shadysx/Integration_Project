@@ -104,11 +104,11 @@ export default function CreateReservationDialog(props: SimpleDialogProps) {
       <div className='dialog'>
         <form onSubmit={handleSubmit} className="dialog-form">
         <label htmlFor="date">Date:</label>
-        <input type="date" id="date" name="date" value={selectedReservation?.date} onChange={handleChange} required /><br /><br />
+        <input type="date" id="date" name="date" value={selectedReservation?.date} onChange={handleChange} required /><br />
           <label htmlFor="starting_hour">Starting Hour:</label>
-          <input type="time" id="starting_hour" name="starting_hour" value={selectedReservation?.starting_hour} onChange={handleChange} required /><br /><br />
+          <input type="time" id="starting_hour" name="starting_hour" value={selectedReservation?.starting_hour} onChange={handleChange} required />
           <label htmlFor="ending_hour">Ending Hour:</label>
-          <input type="time" id="ending_hour" name="ending_hour" value={selectedReservation?.ending_hour} onChange={handleChange} required /><br /><br />
+          <input type="time" id="ending_hour" name="ending_hour" value={selectedReservation?.ending_hour} onChange={handleChange} required /><br />
           <SelectCourtsComboBox courtsList={courts} handleChange={handleCourtChange} />
           <SelectMembersComboBox membersList={users} handleChange={handleSelectedMembersChange} membersSelected={selectedMembersId} />
           <input type="submit" value="Create" />

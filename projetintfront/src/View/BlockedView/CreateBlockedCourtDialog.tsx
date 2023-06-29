@@ -63,6 +63,8 @@ export default function CreateBlockedCourtDialog(props: SimpleDialogProps) {
     const blockedsService = new BlockedsService();
     const { id, ...requestBody } = selectedBlockedCourt;
 
+    console.log("rekest bady : " + requestBody.user_id);
+
     const response = await blockedsService.CreateBlocked(requestBody);
     if(response !== null) {
       let data;
@@ -91,15 +93,16 @@ export default function CreateBlockedCourtDialog(props: SimpleDialogProps) {
 
   return (
     <Dialog onClose={handleClose} open={open} >
-      <DialogTitle className="dialog-title">Create Reservation</DialogTitle>
+      <DialogTitle className="dialog-title">Create Blocked</DialogTitle>
       <div className='dialog'>
         <form onSubmit={handleSubmit} className="dialog-form">
-        <label htmlFor="date">Date:</label>
-        <input type="date" id="date" name="date" value={selectedBlockedCourt?.date} onChange={handleChange} required /><br /><br />
-          <label htmlFor="duration">Duration (days):</label>
-          <input type="number" id="duration" name="duration" value={selectedBlockedCourt?.duration} onChange={handleChange} required /><br /><br />
-          <label htmlFor="reason">Reason:</label>
-          <input type="text" id="reason" name="reason" value={selectedBlockedCourt?.reason} onChange={handleChange} required /><br /><br />
+        <label htmlFor="date">Date :</label>
+        <input type="date" id="date" name="date" value={selectedBlockedCourt?.date} onChange={handleChange} required />
+          <label htmlFor="duration">Duration (days) :</label>
+          <input type="number" id="duration" name="duration" value={selectedBlockedCourt?.duration} onChange={handleChange} required />
+          <label htmlFor="reason">Reason :</label>
+          <input type="text" id="reason" name="reason" value={selectedBlockedCourt?.reason} onChange={handleChange} required />
+          <label htmlFor="court">Court :</label>
           <SelectCourtsComboBox courtsList={courts} handleChange={handleCourtChange} />
           <input type="submit" value="Create" />
         </form>

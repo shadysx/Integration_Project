@@ -254,8 +254,14 @@ function ReservationsView() {
       const dayOfWeek = selectedDate.getDay();
     
       // Check if the selected date is a weekday (Monday to Friday)
-      if (dayOfWeek === 0 || dayOfWeek === 6) {
-        setAlert({ type: "error", description: "Reservations can only be made on weekdays", open: true });
+      // if (dayOfWeek === 0 || dayOfWeek === 6) {
+      //   setAlert({ type: "error", description: "Reservations can only be made on weekdays", open: true });
+      //   return false;
+      // }
+
+      // Check if the selected date is a  weekdend's days (Satuday And Sunday)
+      if (dayOfWeek === 1 || dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4 || dayOfWeek === 5) {
+        setAlert({ type: "error", description: "Reservations can only be made on weekdend's days", open: true });
         return false;
       }
     
