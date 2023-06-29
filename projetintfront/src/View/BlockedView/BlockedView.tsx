@@ -196,13 +196,14 @@ function BlockedView() {
         <DataGrid
           rows={blockedCourts}
           columns={columns}
+          sx={{height: '105.1%'}}
           editMode='row'
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },
           }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[5 ,10, 25, 100]}
         />
       </div>
     );

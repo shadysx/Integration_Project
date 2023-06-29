@@ -25,6 +25,7 @@ export default function EditPasswordDialog(props : DialogProps) {
     const bcrypt = require('bcryptjs');
     const saltRounds = 10;
 
+    // Hashes the given password using bcrypt
     const hash = async (password) => {      
       const hashedPassword = await bcrypt.hash(password, saltRounds);
       const result = hashedPassword.toString();      
@@ -47,6 +48,7 @@ export default function EditPasswordDialog(props : DialogProps) {
       event.preventDefault();    
       let isCorrect = true;      
 
+      // Compare the current password with the stored password
       const currentPassMatch = await bcrypt.compare(currentPassword, user.password);
       console.log("match : " + currentPassMatch)
       if(!currentPassMatch)
@@ -56,30 +58,32 @@ export default function EditPasswordDialog(props : DialogProps) {
         return;
       }
 
+      // Check if the new password and confirm password match
       if (newPassword !== confirmPassword) {
-        setAlert({open: true, type: 'error', description:'New password aren\'t the same !' })           
+        setAlert({open: true, type: 'error', description:'New passwords do not match !' })           
         isCorrect = false;
         return;
       }      
 
+      // Check if the new password is the same as the old password
       const egalOldPass = await bcrypt.compare(newPassword, user.password);      
     
       if (egalOldPass) {
-        setAlert({open: true, type: 'error', description:'Old and new password are the same !' })   
+        setAlert({open: true, type: 'error', description:'Old and new passwords are the same !' })   
         isCorrect = false;
         return;
       }      
 
       if(isCorrect)
       {
+        // Hash the new password and update the user's password in the database
         user.password = await hash(newPassword);
         const userService = new UserService();
         await userService.UpdateUser(user, user.id);
       
-        setAlert({open: true, type: 'success', description:'Password Successfully Updated !' })          
+        setAlert({open: true, type: 'success', description:'Password successfully updated !' })          
 
-        //await new Promise((resolve) => setTimeout(resolve, 1500));        
-      
+        // Clear the form inputs and close the dialog
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
@@ -132,5 +136,3 @@ export default function EditPasswordDialog(props : DialogProps) {
     </Dialog>
     );
 };
-
-

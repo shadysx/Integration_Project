@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 
 // MUI
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,11 +16,15 @@ import { useNavigate } from 'react-router-dom';
 import { Menu, MenuItem, Tab, Tabs, createTheme } from '@mui/material';
 
 function Navbar({ isAdmin }) {
-const { logout, user} = useContext(AuthContext)
-const navigate = useNavigate();
+  // Utilise le contexte d'authentification
+  const { logout, user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  // Gestion des états et des actions pour le menu déroulant
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  // Gestion de l'état et de l'action pour les onglets
   const [value, setValue] = React.useState('one');
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

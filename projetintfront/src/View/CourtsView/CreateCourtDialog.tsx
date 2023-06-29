@@ -11,27 +11,37 @@ import { Helper } from '../../Helpers/Helper';
 import { CourtsService } from '../../services/CourtsService';
 import { AuthContext } from '../../contexts/AuthContext';
 
+// Define the props for the component
 export interface SimpleDialogProps {
   open: boolean;
   onClose: (value: Court) => void;
   fetchCourts: () => void;
 }
 
+// Define and export the component
 export default function CreateCourtDialog(props: SimpleDialogProps) {
+  // Extract the props
   const { onClose, open, fetchCourts } = props;
+
+  // Access the alert state from AuthContext
   const { setAlert } = React.useContext(AuthContext);
+
+  // Define the local state for the court
   const [court, setCourt] = useState<Court>({
     number: 0
   });
 
+  // Handle the dialog close event
   const handleClose = () => {
     onClose(court);
   };
 
+  // useEffect hook can be used for any side effects, like fetching data
   React.useEffect(() => {
-    
-  })
+    // Add any side effects here if needed
+  });
 
+  // Handle the change event of the input fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCourt((prevState) => ({
@@ -40,33 +50,48 @@ export default function CreateCourtDialog(props: SimpleDialogProps) {
     }));
   };
 
+  // Handle the form submit event
   const handleSubmit = async (event) => {
     event.preventDefault();    
-    
+
+    // Log the selected court
     console.log('selected court ', court)
+
+    // Create an instance of the CourtsService
     const courtsService = new CourtsService();
 
+    // Fetch the existing courts
     const courts = await courtsService.FetchCourts();
 
+    // Check if a court with the same number already exists
     const c = courts.find(c => c.number == court.number)
 
-    if(c?.number == court.number)
-    {
-      setAlert({open: true, type: 'error', description:'A existing court have already this number' })
+    if (c?.number == court.number) {
+      // Display an error alert if a court with the same number already exists
+      setAlert({open: true, type: 'error', description:'An existing court already has this number' })
       return;
     }
 
-    if(court.number < 1)
-    {      
-        setAlert({open: true, type: 'error', description:'The court\'s number should be bigger than 0' })
-        return;
+    if (court.number < 1) {
+      // Display an error alert if the court's number is less than 1
+      setAlert({open: true, type: 'error', description:'The court\'s number should be bigger than 0' })
+      return;
     }
+
+    // Display a success alert for court creation
     setAlert({ type: "success", description: "Court created successfully!", open: true });
-    handleClose();    
+
+    // Close the dialog
+    handleClose();
+
+    // Create the court using the CourtsService
     await courtsService.CreateCourt(court);
+
+    // Fetch the updated courts
     await fetchCourts();
   };
 
+  // Render the component
   return (
     <Dialog onClose={handleClose} open={open} >
     <DialogTitle className="dialog-title">Create Court</DialogTitle>

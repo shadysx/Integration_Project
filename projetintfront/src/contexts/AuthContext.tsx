@@ -83,8 +83,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = () => {
-    // Perform logout logic, e.g., clear authentication token
+  const logout = () => {    
     setIsLoading(true); // Set loading to true before making the API request
     setTimeout(() => {
       navigate("/")

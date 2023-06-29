@@ -9,6 +9,7 @@ import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { ReservationService } from '../../services/ReservationService';
+import "./HomeView.css"
 
 function HomeView() {
   const { user, logout } = useContext(AuthContext);
@@ -38,74 +39,80 @@ function HomeView() {
   }
 
   return (
-    <Container>
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Welcome, {user.firstName}
-        </Typography>
+    <>
+      <image>
+        <img className="tennisImg" src="assets/tennis.jpg" alt="wallpaper" />
+      </image>
+      <Container className='containerr'>        
         <Box sx={{ my: 4 }}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={4}>
-              <Paper elevation={3} sx={{ p: 2, minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <Typography variant="h6" component="h2" gutterBottom>
-                    Your Reservations
-                  </Typography>
-                  <Typography variant="body1">
-                    {reservations.length ? reservations.map((reservation, index) => 
-                      <div key={index}>{reservation.date}</div>
-                    ) : "No reservations yet."}
-                  </Typography>
-                </div>
-                <div>
-                  <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} onClick={() => navigate('/reservations')}>
-                    Reserve a Court
-                  </Button>
-                </div>
-              </Paper>
-            </Grid>
-            {user.isAdmin == true && (
+          <Typography variant="h4" component="h1" gutterBottom sx={{color:'white', fontWeight:"bold", textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>
+            Welcome to Roland Gamos, {user.firstName}
+          </Typography>
+          <Box sx={{ my: 4 }}>
+            <Grid container spacing={4}>
               <Grid item xs={12} sm={6} md={4}>
                 <Paper elevation={3} sx={{ p: 2, minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
                     <Typography variant="h6" component="h2" gutterBottom>
-                      User Management
+                      Your Reservations
                     </Typography>
                     <Typography variant="body1">
-                      View and manage users.
+                      {reservations.length ? reservations.map((reservation, index) => 
+                        <div key={index}>{reservation.date}</div>
+                      ) : "No reservations yet."}
                     </Typography>
                   </div>
                   <div>
-                    <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} onClick={() => navigate('/users')}>
-                      Manage Users
+                    <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} onClick={() => navigate('/reservations')}>
+                      Reserve a Court
                     </Button>
                   </div>
                 </Paper>
               </Grid>
-            )}
-            <Grid item xs={12} sm={6} md={4}>
-              <Paper elevation={3} sx={{ p: 2, minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  <Typography variant="h6" component="h2" gutterBottom>
-                    Your Profile
-                  </Typography>
-                  <Typography variant="body1">
-                    Name: {user.firstName} {user.lastName} <br />
-                    Email: {user.email} <br />
-                    Role: {user.isAdmin ? "Admin" : "User"}
-                  </Typography>
-                </div>
-                <div>
-                  <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} onClick={() => navigate('/profile')}>
-                    Edit Profile
-                  </Button>
-                </div>
-              </Paper>
+              {user.isAdmin == true && (
+                <Grid item xs={12} sm={6} md={4}>
+                  <Paper elevation={3} sx={{ p: 2, minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <Typography variant="h6" component="h2" gutterBottom>
+                        User Management
+                      </Typography>
+                      <Typography variant="body1">
+                        View and manage users.
+                      </Typography>
+                    </div>
+                    <div>
+                      <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} onClick={() => navigate('/users')}>
+                        Manage Users
+                      </Button>
+                    </div>
+                  </Paper>
+                </Grid>
+              )}
+              <Grid item xs={12} sm={6} md={4}>
+                <Paper elevation={3} sx={{ p: 2, minHeight: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                      Your Profile
+                    </Typography>
+                    <Typography variant="body1">
+                      Name: {user.firstName} {user.lastName} <br />
+                      Email: {user.email} <br />
+                      Role: {user.isAdmin ? "Admin" : "User"}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Button variant="contained" color={user.isAdmin ? 'secondary' : 'primary'} onClick={() => navigate('/profile')}>
+                      Edit Profile
+                    </Button>
+                  </div>
+                </Paper>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
+    
   );
 }
 
